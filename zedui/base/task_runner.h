@@ -14,27 +14,17 @@
 
 #include "macros.h"
 #include "task_runner_window.h"
-
+#include "time_delta.h"
+#include "time_point.h"
 
 namespace zedui {
-
-typedef struct _ZedUiTaskRunner* ZedUiTaskRunner;
-
-typedef struct {
-  ZedUiTaskRunner runner;
-  uint64_t task;
-} ZedUiTask;
-
-typedef uint64_t (*CurrentTimeProc)();
 
 class TaskRunner : public TaskRunnerWindow::Delegate {
  public:
   using TaskTimePoint = std::chrono::steady_clock::time_point;
-  using TaskExpiredCallback = std::function<void(const ZedUiTask*)>;
   using TaskClosure = std::function<void()>;
 
-  TaskRunner(CurrentTimeProc get_current_time,
-             const TaskExpiredCallback& on_task_expired);
+  TaskRunner();
 
   virtual ~TaskRunner();
   virtual bool RunsTasksOnCurrentThread() const;
@@ -46,15 +36,15 @@ class TaskRunner : public TaskRunnerWindow::Delegate {
       PostTask(std::move(task));
     }
   }
+  void PostDelayedTask(TaskClosure task, const int64_t delay_ms);
 
   std::chrono::nanoseconds ProcessTasks();
 
  private:
-  typedef std::variant<ZedUiTask, TaskClosure> TaskVariant;
   struct Task {
     uint64_t order;
     TaskTimePoint fire_time;
-    TaskVariant variant;
+    TaskClosure closure;
     struct Comparer {
       bool operator()(const Task& a, const Task& b) {
         if (a.fire_time == b.fire_time) {
@@ -71,8 +61,6 @@ class TaskRunner : public TaskRunnerWindow::Delegate {
     return TaskTimePoint::clock::now();
   }
 
-  CurrentTimeProc get_current_time_;
-  TaskExpiredCallback on_task_expired_;
   std::mutex task_queue_mutex_;
   std::priority_queue<Task, std::deque<Task>, Task::Comparer> task_queue_;
   DWORD main_thread_id_;

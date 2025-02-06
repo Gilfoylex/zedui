@@ -5,10 +5,7 @@
 
 namespace zedui {
 
-TaskRunner::TaskRunner(CurrentTimeProc get_current_time,
-                       const TaskExpiredCallback& on_task_expired)
-    : get_current_time_(get_current_time),
-      on_task_expired_(std::move(on_task_expired)) {
+TaskRunner::TaskRunner() {
   main_thread_id_ = GetCurrentThreadId();
   task_runner_window_ = TaskRunnerWindow::GetSharedInstance();
   task_runner_window_->AddDelegate(this);
@@ -16,6 +13,14 @@ TaskRunner::TaskRunner(CurrentTimeProc get_current_time,
 
 TaskRunner::~TaskRunner() {
   task_runner_window_->RemoveDelegate(this);
+}
+
+void TaskRunner::PostDelayedTask(TaskClosure task, const int64_t delay_ms) {
+  Task delayed_task;
+  delayed_task.fire_time = GetCurrentTimeForTask() +
+                           std::chrono::milliseconds(delay_ms);
+  delayed_task.closure = std::move(task);
+  EnqueueTask(std::move(delayed_task));
 }
 
 std::chrono::nanoseconds TaskRunner::ProcessTasks() {
@@ -49,10 +54,9 @@ std::chrono::nanoseconds TaskRunner::ProcessTasks() {
   {
     // Flushing tasks here without holing onto the task queue mutex.
     for (const auto& task : expired_tasks) {
-      if (auto flutter_task = std::get_if<ZedUiTask>(&task.variant)) {
-        on_task_expired_(flutter_task);
-      } else if (auto closure = std::get_if<TaskClosure>(&task.variant))
-        (*closure)();
+      if (task.closure) {
+        task.closure();
+      }
     }
   }
 
@@ -69,7 +73,7 @@ std::chrono::nanoseconds TaskRunner::ProcessTasks() {
 void TaskRunner::PostTask(TaskClosure closure) {
   Task task;
   task.fire_time = GetCurrentTimeForTask();
-  task.variant = std::move(closure);
+  task.closure = std::move(closure);
   EnqueueTask(std::move(task));
 }
 

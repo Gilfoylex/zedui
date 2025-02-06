@@ -1,5 +1,10 @@
-#include "base/utils.h"
-#include "core/zedui_window.h"
+#include "zedui/base/task_runner.h"
+#include "zedui/base/time_point.h"
+#include "zedui/base/utils.h"
+#include "zedui/core/zedui_window.h"
+
+#include <iostream>
+#include <thread>
 
 
 int APIENTRY wWinMain(_In_ HINSTANCE instance,
@@ -14,7 +19,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance,
 
   // Initialize COM, so that it is available for use in the library and/or
   // plugins.
-  ::CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
+  auto hr = ::CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
+  if (FAILED(hr)) {
+    return EXIT_FAILURE;
+  }
 
   zedui::ZedUiWindow window;
   zedui::Win32Window::Point origin(10, 10);
@@ -23,6 +31,18 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance,
     return EXIT_FAILURE;
   }
   window.SetQuitOnClose(true);
+
+  auto task_runner =
+      std::make_unique<zedui::TaskRunner>();
+
+  std::thread task_thread([&task_runner] {
+    int i = 0;
+    while (i++ < 100) {
+      std::this_thread::sleep_for(std::chrono::seconds(1));
+      task_runner->PostTask(
+          [] { std::cout << "TaskRunner task executed" << std::endl; });
+    }
+  });
 
   ::MSG msg;
   while (::GetMessage(&msg, nullptr, 0, 0)) {

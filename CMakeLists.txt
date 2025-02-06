@@ -8,8 +8,7 @@ add_definitions(-DUNICODE -D_UNICODE)
 add_subdirectory(3rd/yoga)
 
 file(GLOB HEADERS CONFIGURE_DEPENDS
-    ${CMAKE_CURRENT_SOURCE_DIR}/zedui/**/*.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/zedui/**/*.hpp)
+    ${CMAKE_CURRENT_SOURCE_DIR}/zedui/**/*.h)
 
 file(GLOB SOURCES CONFIGURE_DEPENDS
     ${CMAKE_CURRENT_SOURCE_DIR}/zedui/*.cc
@@ -17,10 +16,12 @@ file(GLOB SOURCES CONFIGURE_DEPENDS
 
 add_executable(zedui WIN32
     ${HEADERS}
-    ${SOURCES}
-)
+    ${SOURCES})
 
 target_sources(zedui PRIVATE zedui/resources/zedui.rc)
+
+# Disable Windows macros that collide with C++ standard library functions.
+target_compile_definitions(zedui PRIVATE "NOMINMAX")
 
 # 添加头文件目录
 target_include_directories(zedui PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})

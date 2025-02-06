@@ -81,7 +81,7 @@ void TaskRunnerWindow::SetTimer(std::chrono::nanoseconds when) {
     KillTimer(window_handle_, 0);
   } else {
     auto millis = std::chrono::duration_cast<std::chrono::milliseconds>(when);
-    ::SetTimer(window_handle_, 0, millis.count() + 1, nullptr);
+    ::SetTimer(window_handle_, 0, (UINT)(millis.count() + 1), nullptr);
   }
 }
 

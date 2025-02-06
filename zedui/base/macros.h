@@ -24,4 +24,10 @@
   TypeName() = delete;                               \
   ZEDUI_DISALLOW_COPY_ASSIGN_AND_MOVE(TypeName)
 
+#ifdef _WIN32
+#define ZEDUI_EXPORT __declspec(dllexport)
+#else 
+#define ZEDUI_EXPORT
+#endif
+
 #endif  // MACROS_H_
