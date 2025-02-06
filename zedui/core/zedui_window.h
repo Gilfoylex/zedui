@@ -7,16 +7,17 @@
 
 namespace zedui {
 class ZedUiWindow : public Win32Window {
-  public:
-    virtual ~ZedUiWindow();
-    
-  protected:
-    bool OnCreate() override;
-    void OnDestroy() override;
-    LRESULT MessageHandler(HWND window, UINT const message, WPARAM const wparam,
+ public:
+  virtual ~ZedUiWindow();
+
+ protected:
+  bool OnCreate() override;
+  void OnDestroy() override;
+  LRESULT MessageHandler(HWND window,
+                         UINT const message,
+                         WPARAM const wparam,
                          LPARAM const lparam) noexcept override;
-
 };
-} // namespace zedui
+}  // namespace zedui
 
-#endif // ZEDUI_WINDOW_H
+#endif  // ZEDUI_WINDOW_H

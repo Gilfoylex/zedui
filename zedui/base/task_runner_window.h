@@ -53,6 +53,6 @@ class TaskRunnerWindow {
   ZEDUI_DISALLOW_COPY_AND_ASSIGN(TaskRunnerWindow);
 };
 
-} // namespace zedui
+}  // namespace zedui
 
 #endif  // TASK_RUNNER_WINDOW_H_

@@ -1,7 +1,7 @@
 #include "zedui_window.h"
 
 namespace zedui {
-  
+
 ZedUiWindow::~ZedUiWindow() {}
 
 bool ZedUiWindow::OnCreate() {
@@ -20,4 +20,4 @@ LRESULT ZedUiWindow::MessageHandler(HWND window,
   return Win32Window::MessageHandler(window, message, wparam, lparam);
 }
 
-} // namespace zedui
+}  // namespace zedui
