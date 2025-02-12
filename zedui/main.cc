@@ -32,18 +32,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance,
   }
   window.SetQuitOnClose(true);
 
-  auto task_runner =
-      std::make_unique<zedui::TaskRunner>();
-
-  std::thread task_thread([&task_runner] {
-    int i = 0;
-    while (i++ < 100) {
-      std::this_thread::sleep_for(std::chrono::seconds(1));
-      task_runner->PostTask(
-          [] { std::cout << "TaskRunner task executed" << std::endl; });
-    }
-  });
-
   ::MSG msg;
   while (::GetMessage(&msg, nullptr, 0, 0)) {
     ::TranslateMessage(&msg);
