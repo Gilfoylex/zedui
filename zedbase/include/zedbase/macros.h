@@ -1,5 +1,6 @@
 #ifndef ZED_MACROS_H_
 #define ZED_MACROS_H_
+
 #define ZED_DISALLOW_COPY(TypeName) TypeName(const TypeName&) = delete
 
 #define ZED_DISALLOW_ASSIGN(TypeName) \

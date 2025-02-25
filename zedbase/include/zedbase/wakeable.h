@@ -1,11 +1,11 @@
-#ifndef WEAKABLE_H_
-#define WEAKABLE_H_
+#ifndef WAKEABLE_H_
+#define WAKEABLE_H_
 
 #include "zedbase/time_point.h"
 
 namespace zedbase {
 
-class Weakable {
+class Wakeable {
  public:
   virtual ~Wakeable() {}
 
@@ -14,4 +14,4 @@ class Weakable {
 
 }  // namespace zedbase
 
-#endif  // WEAKABLE_H_
+#endif  // WAKEABLE_H_

@@ -5,7 +5,7 @@
 #include <functional>
 #include <iosfwd>
 
-#include "zedui/base/time_delta.h"
+#include "zedbase/time_delta.h"
 
 namespace zedbase {
 
