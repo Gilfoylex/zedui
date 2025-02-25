@@ -5,7 +5,7 @@
 #include <functional>
 #include <utility>
 
-#include "zedbase/ref_ptr_internal.h"
+#include "zedbase/memory/ref_ptr_internal.h"
 
 
 namespace zebbase {

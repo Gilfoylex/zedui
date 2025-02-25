@@ -1,21 +1,21 @@
-#include "zedbase/task_runner.h"
+#include "zedbase/ui_task_runner.h"
 
 #include <atomic>
 #include <utility>
 
 namespace zedbase {
 
-TaskRunner::TaskRunner() {
+UITaskRunner::UITaskRunner() {
   main_thread_id_ = GetCurrentThreadId();
   task_runner_window_ = TaskRunnerWindow::GetSharedInstance();
   task_runner_window_->AddDelegate(this);
 }
 
-TaskRunner::~TaskRunner() {
+UITaskRunner::~UITaskRunner() {
   task_runner_window_->RemoveDelegate(this);
 }
 
-void TaskRunner::PostDelayedTask(TaskClosure task, const int64_t delay_ms) {
+void UITaskRunner::PostDelayedTask(TaskClosure task, const int64_t delay_ms) {
   Task delayed_task;
   delayed_task.fire_time = GetCurrentTimeForTask() +
                            std::chrono::milliseconds(delay_ms);
@@ -23,7 +23,7 @@ void TaskRunner::PostDelayedTask(TaskClosure task, const int64_t delay_ms) {
   EnqueueTask(std::move(delayed_task));
 }
 
-std::chrono::nanoseconds TaskRunner::ProcessTasks() {
+std::chrono::nanoseconds UITaskRunner::ProcessTasks() {
   const TaskTimePoint now = GetCurrentTimeForTask();
 
   std::vector<Task> expired_tasks;
@@ -70,14 +70,14 @@ std::chrono::nanoseconds TaskRunner::ProcessTasks() {
   }
 }
 
-void TaskRunner::PostTask(TaskClosure closure) {
+void UITaskRunner::PostTask(TaskClosure closure) {
   Task task;
   task.fire_time = GetCurrentTimeForTask();
   task.closure = std::move(closure);
   EnqueueTask(std::move(task));
 }
 
-void TaskRunner::EnqueueTask(Task task) {
+void UITaskRunner::EnqueueTask(Task task) {
   static std::atomic_uint64_t sGlobalTaskOrder(0);
 
   task.order = ++sGlobalTaskOrder;
@@ -94,11 +94,11 @@ void TaskRunner::EnqueueTask(Task task) {
   WakeUp();
 }
 
-bool TaskRunner::RunsTasksOnCurrentThread() const {
+bool UITaskRunner::RunsTasksOnCurrentThread() const {
   return GetCurrentThreadId() == main_thread_id_;
 }
 
-void TaskRunner::WakeUp() {
+void UITaskRunner::WakeUp() {
   task_runner_window_->WakeUp();
 }
 

@@ -14,19 +14,23 @@
 
 #include "zedbase/macros.h"
 #include "zedbase/task_runner_window.h"
-#include "zedbase/time_delta.h"
-#include "zedbase/time_point.h"
+#include "zedbase/time/time_delta.h"
+#include "zedbase/time/time_point.h"
 
 namespace zedbase {
 
-class TaskRunner : public TaskRunnerWindow::Delegate {
+// A custom task runner that integrates with user32 GetMessage semantics so
+// that host app can own its own message loop and flutter still gets to process
+// tasks on a timely basis.
+
+class UITaskRunner : public TaskRunnerWindow::Delegate {
  public:
   using TaskTimePoint = std::chrono::steady_clock::time_point;
   using TaskClosure = std::function<void()>;
 
-  TaskRunner();
+  UITaskRunner();
 
-  virtual ~TaskRunner();
+  virtual ~UITaskRunner();
   virtual bool RunsTasksOnCurrentThread() const;
   void PostTask(TaskClosure task);
   void RunNowOrPostTask(TaskClosure task) {
@@ -66,7 +70,7 @@ class TaskRunner : public TaskRunnerWindow::Delegate {
   DWORD main_thread_id_;
   std::shared_ptr<TaskRunnerWindow> task_runner_window_;
 
-  ZED_DISALLOW_COPY_AND_ASSIGN(TaskRunner);
+  ZED_DISALLOW_COPY_AND_ASSIGN(UITaskRunner);
 };
 
 }  // namespace zedbase

@@ -1,5 +1,6 @@
 #include <chrono>
-#include "zedbase/time_point.h"
+#include <atomic>
+#include "zedbase/time/time_point.h"
 
 namespace zedbase {
 

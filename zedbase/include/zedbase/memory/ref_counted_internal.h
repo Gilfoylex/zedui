@@ -3,8 +3,8 @@
 
 #include <atomic>
 
-#include <zedbase/logging.h>
-#include <zedbase/macros.h>
+#include "zedbase/logging.h"
+#include "zedbase/macros.h"
 
 
 namespace zedbase {
