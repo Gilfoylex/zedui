@@ -1,5 +1,5 @@
-#ifndef ZED_MACROS_H_
-#define ZED_MACROS_H_
+#ifndef ZEDBASE_MACROS_H_
+#define ZEDBASE_MACROS_H_
 
 #define ZED_DISALLOW_COPY(TypeName) TypeName(const TypeName&) = delete
 
@@ -30,4 +30,4 @@
 #define ZED_EXPORT
 #endif
 
-#endif  // ZED_MACROS_H_
+#endif  // ZEDBASE_MACROS_H_

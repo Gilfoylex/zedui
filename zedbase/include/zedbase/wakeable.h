@@ -1,7 +1,7 @@
-#ifndef WAKEABLE_H_
-#define WAKEABLE_H_
+#ifndef ZEDBASE_WAKEABLE_H_
+#define ZEDBASE_WAKEABLE_H_
 
-#include "zedbase/time_point.h"
+#include "zedbase/time/time_point.h"
 
 namespace zedbase {
 
@@ -14,4 +14,4 @@ class Wakeable {
 
 }  // namespace zedbase
 
-#endif  // WAKEABLE_H_
+#endif  // ZEDBASE_WAKEABLE_H_
