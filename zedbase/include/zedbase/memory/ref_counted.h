@@ -116,13 +116,13 @@ class RefCountedThreadSafe : public internal::RefCountedThreadSafeBase {
 
 // If you subclass |RefCountedThreadSafe| and want to keep your destructor
 // private, use this. (See the example above |RefCountedThreadSafe|.)
-#define FML_FRIEND_REF_COUNTED_THREAD_SAFE(T) \
+#define ZED_FRIEND_REF_COUNTED_THREAD_SAFE(T) \
   friend class ::zedbase::RefCountedThreadSafe<T>
 
 // If you want to keep your constructor(s) private and still want to use
 // |MakeRefCounted<T>()|, use this. (See the example above
 // |RefCountedThreadSafe|.)
-#define FML_FRIEND_MAKE_REF_COUNTED(T) \
+#define ZED_FRIEND_MAKE_REF_COUNTED(T) \
   friend class ::zedbase::internal::MakeRefCountedHelper<T>
 }  // namespace zedbase
 

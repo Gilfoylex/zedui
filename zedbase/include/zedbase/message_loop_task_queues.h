@@ -26,7 +26,7 @@ static const TaskQueueId kUnmerged = TaskQueueId(TaskQueueId::kUnmerged);
 /// \p fml::MessageLoopTaskQueues::Merge.
 class TaskQueueEntry {
  public:
-  using TaskObservers = std::map<intptr_t, fml::closure>;
+  using TaskObservers = std::map<intptr_t, zedbase::closure>;
   Wakeable* wakeable;
   TaskObservers task_observers;
   std::unique_ptr<TaskSource> task_source;

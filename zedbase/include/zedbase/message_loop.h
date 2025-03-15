@@ -1,14 +1,12 @@
 #ifndef MESSAGE_LOOP_H_
 #define MESSAGE_LOOP_H_
 
-#include <functional>
 #include "zedbase/macros.h"
 #include "zedbase/task_runner.h"
-#include "zedbase/memory/ref_ptr.h"
 
 namespace zedbase {
 
-class UITaskRunner;
+class TaskRunner;
 class MessageLoopImpl;
 /// An event loop associated with a thread.
 ///
@@ -30,11 +28,11 @@ class MessageLoop {
 
   void Terminate();
 
-  void AddTaskObserver(intptr_t key, const fml::closure& callback);
+  void AddTaskObserver(intptr_t key, const zedbase::closure& callback);
 
   void RemoveTaskObserver(intptr_t key);
 
-  fml::RefPtr<fml::TaskRunner> GetTaskRunner() const;
+  zedbase::RefPtr<zedbase::TaskRunner> GetTaskRunner() const;
 
   // Exposed for the embedder shell which allows clients to poll for events
   // instead of dedicating a thread to the message loop.
@@ -54,11 +52,11 @@ class MessageLoop {
   static TaskQueueId GetCurrentTaskQueueId();
 
  private:
-  friend class UITaskRunner;
+  friend class TaskRunner;
   friend class MessageLoopImpl;
 
-  fml::RefPtr<MessageLoopImpl> loop_;
-  fml::RefPtr<fml::TaskRunner> task_runner_;
+  zedbase::RefPtr<MessageLoopImpl> loop_;
+  zedbase::RefPtr<zedbase::TaskRunner> task_runner_;
 
   MessageLoop();
 

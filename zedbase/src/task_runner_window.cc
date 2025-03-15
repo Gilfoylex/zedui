@@ -1,4 +1,5 @@
 #include "zedbase/task_runner_window.h"
+#include "zedbase/logging.h"
 
 #include <algorithm>
 
@@ -47,7 +48,7 @@ std::shared_ptr<TaskRunnerWindow> TaskRunnerWindow::GetSharedInstance() {
 
 void TaskRunnerWindow::WakeUp() {
   if (!PostMessage(window_handle_, WM_NULL, 0, 0)) {
-    // FML_LOG(ERROR) << "Failed to post message to main thread.";
+    ZED_LOG(ERROR) << "Failed to post message to main thread.";
   }
 }
 

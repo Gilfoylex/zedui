@@ -8,7 +8,7 @@
 #include "zedbase/memory/ref_ptr_internal.h"
 
 
-namespace zebbase {
+namespace zedbase {
     // A smart pointer class for intrusively reference-counted objects (e.g., those
 // subclassing |RefCountedThreadSafe| -- see ref_counted.h).
 //
@@ -246,7 +246,7 @@ RefPtr<T> MakeRefCounted(Args&&... args) {
 // Inject custom std::hash<> function object for |RefPtr<T>|.
 namespace std {
 template <typename T>
-struct hash<zebbase::RefPtr<T>> {
+struct hash<zedbase::RefPtr<T>> {
   using argument_type = fml::RefPtr<T>;
   using result_type = std::size_t;
 
