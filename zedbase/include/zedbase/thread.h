@@ -1,5 +1,5 @@
-#ifndef THREAD_H_
-#define THREAD_H_
+#ifndef ZEDBASE_THREAD_H_
+#define ZEDBASE_THREAD_H_
 
 #include <atomic>
 #include <functional>
@@ -7,7 +7,7 @@
 #include <string>
 
 #include "zedbase/macros.h"
-#include "zedbase/ref_ptr.h"
+#include "zedbase/memory/ref_ptr.h"
 #include "zedbase/task_runner.h"
 
 namespace zedbase {
@@ -71,4 +71,4 @@ class Thread {
 
 }
 
-#endif // THREAD_H_
+#endif // ZEDBASE_THREAD_H_
