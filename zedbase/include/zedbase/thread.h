@@ -69,6 +69,6 @@ class Thread {
   ZED_DISALLOW_COPY_AND_ASSIGN(Thread);
 };
 
-}
+}  // namespace zedbase
 
-#endif // ZEDBASE_THREAD_H_
+#endif  // ZEDBASE_THREAD_H_

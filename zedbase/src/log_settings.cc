@@ -41,4 +41,4 @@ ScopedSetLogSettings::~ScopedSetLogSettings() {
   SetLogSettings(old_settings_);
 }
 
-}
+}  // namespace zedbase

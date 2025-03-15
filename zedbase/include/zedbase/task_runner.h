@@ -8,7 +8,6 @@
 #include "zedbase/message_loop_task_queues.h"
 #include "zedbase/time/time_point.h"
 
-
 namespace zedbase {
 
 class MessageLoopImpl;

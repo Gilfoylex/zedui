@@ -36,6 +36,6 @@ class DelayedTask {
 using DelayedTaskQueue = std::priority_queue<DelayedTask,
                                              std::deque<DelayedTask>,
                                              std::greater<DelayedTask>>;
-} // namespace zedbase
+}  // namespace zedbase
 
-#endif // ZEDBASE_DELAYED_TASK_H_
+#endif  // ZEDBASE_DELAYED_TASK_H_

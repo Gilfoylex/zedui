@@ -61,7 +61,8 @@ zedbase::RefPtr<MessageLoopImpl> MessageLoop::GetLoopImpl() const {
   return loop_;
 }
 
-void MessageLoop::AddTaskObserver(intptr_t key, const zedbase::closure& callback) {
+void MessageLoop::AddTaskObserver(intptr_t key,
+                                  const zedbase::closure& callback) {
   loop_->AddTaskObserver(key, callback);
 }
 
@@ -81,4 +82,4 @@ TaskQueueId MessageLoop::GetCurrentTaskQueueId() {
   return loop->GetLoopImpl()->GetTaskQueueId();
 }
 
-}  // namespace fml
+}  // namespace zedbase

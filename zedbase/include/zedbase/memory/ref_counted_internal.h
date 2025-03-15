@@ -1,11 +1,10 @@
-#ifndef REF_COUNTED_INTERNAL_H_
-#define REF_COUNTED_INTERNAL_H_
+#ifndef ZEDBASE_MEMORY_REF_COUNTED_INTERNAL_H_
+#define ZEDBASE_MEMORY_REF_COUNTED_INTERNAL_H_
 
 #include <atomic>
 
 #include "zedbase/logging.h"
 #include "zedbase/macros.h"
-
 
 namespace zedbase {
 namespace internal {
@@ -96,4 +95,4 @@ inline RefCountedThreadSafeBase::~RefCountedThreadSafeBase() {
 }  // namespace internal
 }  // namespace zedbase
 
-#endif  // REF_COUNTED_INTERNAL_H_
+#endif  // ZEDBASE_MEMORY_REF_COUNTED_INTERNAL_H_

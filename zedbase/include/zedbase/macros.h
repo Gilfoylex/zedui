@@ -26,7 +26,7 @@
 
 #ifdef _WIN32
 #define ZED_EXPORT __declspec(dllexport)
-#else 
+#else
 #define ZED_EXPORT
 #endif
 

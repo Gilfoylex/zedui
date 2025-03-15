@@ -17,8 +17,8 @@ UITaskRunner::~UITaskRunner() {
 
 void UITaskRunner::PostDelayedTask(TaskClosure task, const int64_t delay_ms) {
   Task delayed_task;
-  delayed_task.fire_time = GetCurrentTimeForTask() +
-                           std::chrono::milliseconds(delay_ms);
+  delayed_task.fire_time =
+      GetCurrentTimeForTask() + std::chrono::milliseconds(delay_ms);
   delayed_task.closure = std::move(task);
   EnqueueTask(std::move(delayed_task));
 }

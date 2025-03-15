@@ -1,9 +1,10 @@
-#ifndef LOGGING_H_
-#define LOGGING_H_
+#ifndef ZEDBASE_LOGGING_H_
+#define ZEDBASE_LOGGING_H_
 
 #include <sstream>
-#include "zedbase/macros.h"
 #include "zedbase/log_level.h"
+#include "zedbase/macros.h"
+
 
 namespace zedbase {
 
@@ -78,8 +79,10 @@ constexpr bool ShouldCreateLogMessageConstexpr(LogSeverity severity,
 
 }  // namespace zedbase
 
-#define ZED_LOG_STREAM(severity) \
-  ::zedbase::LogMessage(::zedbase::LOG_##severity, __FILE__, __LINE__, nullptr).stream()
+#define ZED_LOG_STREAM(severity)                                       \
+  ::zedbase::LogMessage(::zedbase::LOG_##severity, __FILE__, __LINE__, \
+                        nullptr)                                       \
+      .stream()
 
 #define ZED_LAZY_STREAM(stream, condition) \
   !(condition) ? (void)0 : ::zedbase::LogMessageVoidify() & (stream)
@@ -87,7 +90,7 @@ constexpr bool ShouldCreateLogMessageConstexpr(LogSeverity severity,
 #define ZED_EAT_STREAM_PARAMETERS(ignored) \
   true || (ignored)                        \
       ? (void)0                            \
-      : ::zedbase::LogMessageVoidify() &       \
+      : ::zedbase::LogMessageVoidify() &   \
             ::zedbase::LogMessage(::fml::kLogFatal, 0, 0, nullptr).stream()
 
 #define ZED_LOG_IS_ON(severity) \
@@ -96,11 +99,11 @@ constexpr bool ShouldCreateLogMessageConstexpr(LogSeverity severity,
 #define ZED_LOG(severity) \
   ZED_LAZY_STREAM(ZED_LOG_STREAM(severity), ZED_LOG_IS_ON(severity))
 
-#define ZED_CHECK(condition)                                              \
-  ZED_LAZY_STREAM(                                                        \
-      ::zedbase::LogMessage(::zedbase::kLogFatal, __FILE__, __LINE__, #condition) \
-          .stream(),                                                      \
-      !(condition))
+#define ZED_CHECK(condition)                                            \
+  ZED_LAZY_STREAM(::zedbase::LogMessage(::zedbase::kLogFatal, __FILE__, \
+                                        __LINE__, #condition)           \
+                      .stream(),                                        \
+                  !(condition))
 
 #define ZED_VLOG_IS_ON(verbose_level) \
   ((verbose_level) <= ::zedbase::GetVlogVerbosity())
@@ -123,7 +126,7 @@ constexpr bool ShouldCreateLogMessageConstexpr(LogSeverity severity,
 #define ZED_UNREACHABLE()                          \
   {                                                \
     ZED_LOG(ERROR) << "Reached unreachable code."; \
-    ::zedbase::KillProcessConstexpr(true);             \
+    ::zedbase::KillProcessConstexpr(true);         \
   }
 
-#endif // LOGGING_H_
+#endif  // ZEDBASE_LOGGING_H_

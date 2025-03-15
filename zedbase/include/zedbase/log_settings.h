@@ -1,5 +1,5 @@
-#ifndef LOG_SETTINGS_H_
-#define LOG_SETTINGS_H_
+#ifndef ZEDBASE_LOG_SETTINGS_H_
+#define ZEDBASE_LOG_SETTINGS_H_
 
 #include <zedbase/log_level.h>
 
@@ -38,4 +38,4 @@ class ScopedSetLogSettings {
 
 }  // namespace zedbase
 
-#endif // LOG_SETTINGS_H_
+#endif  // ZEDBASE_LOG_SETTINGS_H_

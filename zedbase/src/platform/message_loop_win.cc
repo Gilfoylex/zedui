@@ -57,4 +57,4 @@ void MessageLoopWin::WakeUp(zedbase::TimePoint time_point) {
   ZED_CHECK(SetWaitableTimer(timer_.get(), &due_time, 0, NULL, NULL, FALSE));
 }
 
-}  // namespace fml
+}  // namespace zedbase

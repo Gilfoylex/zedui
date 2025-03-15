@@ -1,10 +1,9 @@
-#ifndef UNIQUE_OBJECT_H_
-#define UNIQUE_OBJECT_H_
+#ifndef ZEDBASE_UNIQUE_OBJECT_H_
+#define ZEDBASE_UNIQUE_OBJECT_H_
 
 #include <utility>
-#include "zedbase/macros.h"
 #include "zedbase/logging.h"
-
+#include "zedbase/macros.h"
 
 namespace zedbase {
 
@@ -127,6 +126,6 @@ bool operator!=(const T& value, const UniqueObject<T, Traits>& object) {
   return !(value == object.get());
 }
 
-}
+}  // namespace zedbase
 
-#endif // UNIQUE_OBJECT_H_
+#endif  // ZEDBASE_UNIQUE_OBJECT_H_

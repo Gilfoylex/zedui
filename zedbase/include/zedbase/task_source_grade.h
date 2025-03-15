@@ -19,6 +19,6 @@ enum class TaskSourceGrade {
   kUnspecified,
 };
 
-} // namespace zedbase
+}  // namespace zedbase
 
-#endif // ZEDBASE_TASK_SOURCE_GRADE_H_
+#endif  // ZEDBASE_TASK_SOURCE_GRADE_H_

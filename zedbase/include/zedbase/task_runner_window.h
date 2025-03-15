@@ -1,5 +1,5 @@
-#ifndef TASK_RUNNER_WINDOW_H_
-#define TASK_RUNNER_WINDOW_H_
+#ifndef ZEDBASE_ASK_RUNNER_WINDOW_H_
+#define ZEDBASE_ASK_RUNNER_WINDOW_H_
 
 #include <windows.h>
 
@@ -55,4 +55,4 @@ class TaskRunnerWindow {
 
 }  // namespace zedbase
 
-#endif  // TASK_RUNNER_WINDOW_H_
+#endif  // ZEDBASE_ASK_RUNNER_WINDOW_H_

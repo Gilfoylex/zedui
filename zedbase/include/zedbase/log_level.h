@@ -1,8 +1,8 @@
-#ifndef LOG_LEVEL_H_
-#define LOG_LEVEL_H_
+#ifndef ZEDBASE_LOG_LEVEL_H_
+#define ZEDBASE_LOG_LEVEL_H_
 
 namespace zedbase {
-    // Default log levels. Negative values can be used for verbose log levels.
+// Default log levels. Negative values can be used for verbose log levels.
 typedef int LogSeverity;
 
 constexpr LogSeverity kLogInfo = 0;
@@ -27,6 +27,6 @@ const LogSeverity kLogDFatal = kLogError;
 #else
 const LogSeverity kLogDFatal = kLogFatal;
 #endif
-}
+}  // namespace zedbase
 
-#endif //LOG_LEVEL_H_
+#endif  // ZEDBASE_LOG_LEVEL_H_

@@ -24,6 +24,6 @@ class TaskQueueId {
   size_t value_ = kUnmerged;
 };
 
-} // namespace zedbase
+}  // namespace zedbase
 
-#endif // ZEBASE_TASK_QUEUE_ID_H_
+#endif  // ZEBASE_TASK_QUEUE_ID_H_

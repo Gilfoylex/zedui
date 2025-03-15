@@ -1,5 +1,5 @@
-#ifndef TASK_RUNNER_H_
-#define TASK_RUNNER_H_
+#ifndef ZEDBASE_UI_TASK_RUNNER_H_
+#define ZEDBASE_UI_TASK_RUNNER_H_
 
 #include <windows.h>
 
@@ -10,7 +10,6 @@
 #include <mutex>
 #include <queue>
 #include <variant>
-
 
 #include "zedbase/macros.h"
 #include "zedbase/task_runner_window.h"
@@ -75,4 +74,4 @@ class UITaskRunner : public TaskRunnerWindow::Delegate {
 
 }  // namespace zedbase
 
-#endif  // TASK_RUNNER_H_
+#endif  // ZEDBASE_UI_TASK_RUNNER_H_

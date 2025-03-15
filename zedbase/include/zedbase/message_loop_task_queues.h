@@ -3,9 +3,10 @@
 
 #include <map>
 #include <memory>
+#include <mutex>
 #include <set>
 #include <vector>
-#include <mutex>
+
 
 #include "zedbase/closure.h"
 #include "zedbase/delayed_task.h"
@@ -72,11 +73,11 @@ class MessageLoopTaskQueues {
 
   // Tasks methods.
 
-  void RegisterTask(TaskQueueId queue_id,
-                    const closure& task,
-                    TimePoint target_time,
-                    TaskSourceGrade task_source_grade =
-                        TaskSourceGrade::kUnspecified);
+  void RegisterTask(
+      TaskQueueId queue_id,
+      const closure& task,
+      TimePoint target_time,
+      TaskSourceGrade task_source_grade = TaskSourceGrade::kUnspecified);
 
   bool HasPendingTasks(TaskQueueId queue_id) const;
 
@@ -157,6 +158,6 @@ class MessageLoopTaskQueues {
   ZED_DISALLOW_COPY_ASSIGN_AND_MOVE(MessageLoopTaskQueues);
 };
 
-} // namespace zedbase
+}  // namespace zedbase
 
-#endif // ZEDBASE_MESSAGE_LOOP_TASK_QUEUES_H
+#endif  // ZEDBASE_MESSAGE_LOOP_TASK_QUEUES_H

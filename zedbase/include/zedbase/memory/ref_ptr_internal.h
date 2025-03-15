@@ -1,5 +1,5 @@
-#ifndef REF_PTR_INTERNAL_H_
-#define REF_PTR_INTERNAL_H_
+#ifndef ZEDBASE_MEMORY_REF_PTR_INTERNAL_H_
+#define ZEDBASE_MEMORY_REF_PTR_INTERNAL_H_
 
 namespace zedbase {
     
@@ -28,4 +28,4 @@ class MakeRefCountedHelper final {
 }  // namespace internal
 }  // namespace zedbase
 
-#endif // REF_PTR_INTERNAL_H_
+#endif // ZEDBASE_MEMORY_REF_PTR_INTERNAL_H_

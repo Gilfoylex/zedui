@@ -1,5 +1,5 @@
-#ifndef CLOSURE_H_
-#define CLOSURE_H_
+#ifndef ZEDBASE_CLOSURE_H_
+#define ZEDBASE_CLOSURE_H_
 
 #include <functional>
 #include "zedbase/macros.h"
@@ -66,6 +66,6 @@ class ScopedCleanupClosure final {
   ZED_DISALLOW_COPY_AND_ASSIGN(ScopedCleanupClosure);
 };
 
-}
+}  // namespace zedbase
 
-#endif  // CLOSURE_H_
+#endif  // ZEDBASE_CLOSURE_H_

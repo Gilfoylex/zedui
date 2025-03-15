@@ -2,8 +2,9 @@
 #include <cstring>
 #include <iostream>
 
-#include "zedbase/logging.h"
 #include "zedbase/log_settings.h"
+#include "zedbase/logging.h"
+
 
 namespace zedbase {
 namespace {

@@ -65,6 +65,6 @@ class MessageLoop {
   ZED_DISALLOW_COPY_AND_ASSIGN(MessageLoop);
 };
 
-} // namespace zedbase
+}  // namespace zedbase
 
-#endif // MESSAGE_LOOP_H_
+#endif  // MESSAGE_LOOP_H_
