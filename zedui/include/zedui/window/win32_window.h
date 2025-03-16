@@ -1,12 +1,11 @@
-#ifndef WIN32_WINDOW_H_
-#define WIN32_WINDOW_H_
+#ifndef ZEDUI_WINDOW_WIN32_WINDOW_H_
+#define ZEDUI_WINDOW_WIN32_WINDOW_H_
 
 #include <Windows.h>
 
 #include <functional>
 #include <memory>
 #include <string>
-
 
 namespace zedui {
 class Win32Window {
@@ -57,4 +56,4 @@ class Win32Window {
 };
 }  // namespace zedui
 
-#endif  // WIN32_WINDOW_H_
+#endif  // ZEDUI_WINDOW_WIN32_WINDOW_H_

@@ -1,5 +1,5 @@
-#include "dpi_utils.h"
-#include "zebbase/macros.h"
+#include "zedui/utils/dpi_utils.h"
+#include "zedbase/macros.h"
 
 namespace zedui {
 

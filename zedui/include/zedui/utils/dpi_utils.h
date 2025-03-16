@@ -1,5 +1,5 @@
-#ifndef DPI_UTILS_H_
-#define DPI_UTILS_H_
+#ifndef ZEDUI_UTILS_DPI_UTILS_H_
+#define ZEDUI_UTILS_DPI_UTILS_H_
 
 #include <Windows.h>
 
@@ -8,4 +8,4 @@ UINT GetDpiForHWND(HWND hwnd);
 UINT GetDpiForMonitor(HMONITOR monitor);
 }  // namespace zedui
 
-#endif  // DPI_UTILS_H_
+#endif  // ZEDUI_UTILS_DPI_UTILS_H_

@@ -1,8 +1,8 @@
-#include "zedui/win32_window.h"
+#include "zedui/window/win32_window.h"
 
 #include <dwmapi.h>
 
-#include "zedui/dpi_utils.h"
+#include "zedui/utils/dpi_utils.h"
 
 
 namespace {
