@@ -88,7 +88,7 @@ class ThreadChecker final {
 #if !defined(NDEBUG)
 #define ZED_DECLARE_THREAD_CHECKER(c) zedbase::ThreadChecker c
 #define ZED_DCHECK_CREATION_THREAD_IS_CURRENT(c) \
-  FML_DCHECK((c).IsCreationThreadCurrent())
+  ZED_DCHECK((c).IsCreationThreadCurrent())
 #else
 #define ZED_DECLARE_THREAD_CHECKER(c)
 #define ZED_DCHECK_CREATION_THREAD_IS_CURRENT(c) ((void)0)
