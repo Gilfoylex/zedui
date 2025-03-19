@@ -9,6 +9,7 @@
 #include "zedbase/synchronization/waitable_event.h"
 
 // #if defined(FML_OS_WIN)
+#include <process.h>
 #include <windows.h>
 // #elif defined(OS_FUCHSIA)
 // #include <lib/zx/thread.h>
