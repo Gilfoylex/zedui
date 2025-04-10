@@ -13,6 +13,7 @@ class ElapsedTimer {
 
   TimeDelta Elapsed() const;
   TimePoint Begin() const;
+  void Reset();
 
  private:
   TimePoint begin_;

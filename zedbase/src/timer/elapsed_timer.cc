@@ -21,4 +21,8 @@ TimePoint ElapsedTimer::Begin() const {
   return begin_;
 }
 
+void ElapsedTimer::Reset() {
+  begin_ = TimePoint::Now();
+}
+
 }  // namespace zedbase

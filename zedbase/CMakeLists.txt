@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.10)
 project(zedbase)
 
 set(CMAKE_CXX_STANDARD 20)
-add_definitions(-DUNICODE -D_UNICODE)
+add_definitions(-DUNICODE -D_UNICODE -DNOMINMAX)
 
 file(GLOB HEADERS CONFIGURE_DEPENDS
     ${CMAKE_CURRENT_SOURCE_DIR}/include/**/*.h)
