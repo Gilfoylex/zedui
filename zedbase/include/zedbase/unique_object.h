@@ -54,7 +54,7 @@ class UniqueObject {
   }
 
   void reset(const T& value = Traits::InvalidValue()) {
-    FML_CHECK(data_.generic == Traits::InvalidValue() ||
+    ZED_CHECK(data_.generic == Traits::InvalidValue() ||
               data_.generic != value);
     FreeIfNecessary();
     data_.generic = value;

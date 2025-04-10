@@ -21,7 +21,7 @@ bool WaitWithTimeoutImpl(std::unique_lock<std::mutex>* locker,
                          std::condition_variable* cv,
                          ConditionFn condition,
                          TimeDelta timeout) {
-  FML_DCHECK(locker->owns_lock());
+  ZED_DCHECK(locker->owns_lock());
 
   if (condition()) {
     return false;
@@ -44,7 +44,7 @@ bool WaitWithTimeoutImpl(std::unique_lock<std::mutex>* locker,
 
     // Or the wakeup may have been spurious.
     TimePoint now = TimePoint::Now();
-    FML_DCHECK(now >= start);
+    ZED_DCHECK(now >= start);
     TimeDelta elapsed = now - start;
     // It's possible that we may have timed out anyway.
     if (elapsed >= timeout) {
