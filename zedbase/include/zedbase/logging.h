@@ -80,7 +80,7 @@ constexpr bool ShouldCreateLogMessageConstexpr(LogSeverity severity,
 }  // namespace zedbase
 
 #define ZED_LOG_STREAM(severity)                                       \
-  ::zedbase::LogMessage(::zedbase::LOG_##severity, __FILE__, __LINE__, \
+  ::zedbase::LogMessage(::zedbase::##severity, __FILE__, __LINE__, \
                         nullptr)                                       \
       .stream()
 
@@ -94,7 +94,7 @@ constexpr bool ShouldCreateLogMessageConstexpr(LogSeverity severity,
             ::zedbase::LogMessage(::fml::kLogFatal, 0, 0, nullptr).stream()
 
 #define ZED_LOG_IS_ON(severity) \
-  (::zedbase::ShouldCreateLogMessageConstexpr(::zedbase::LOG_##severity, true))
+  (::zedbase::ShouldCreateLogMessageConstexpr(::zedbase::##severity, true))
 
 #define ZED_LOG(severity) \
   ZED_LAZY_STREAM(ZED_LOG_STREAM(severity), ZED_LOG_IS_ON(severity))

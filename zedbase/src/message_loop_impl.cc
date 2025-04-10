@@ -71,7 +71,7 @@ void MessageLoopImpl::AddTaskObserver(intptr_t key,
   if (callback != nullptr) {
     task_queue_->AddTaskObserver(queue_id_, key, callback);
   } else {
-    ZED_LOG(ERROR) << "Tried to add a null TaskObserver.";
+    ZED_LOG(kLogError) << "Tried to add a null TaskObserver.";
   }
 }
 

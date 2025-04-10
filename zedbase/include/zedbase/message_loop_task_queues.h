@@ -7,7 +7,6 @@
 #include <set>
 #include <vector>
 
-
 #include "zedbase/closure.h"
 #include "zedbase/delayed_task.h"
 #include "zedbase/macros.h"
