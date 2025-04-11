@@ -3,7 +3,6 @@ cmake_minimum_required(VERSION 3.10)
 project(zedbase)
 
 set(CMAKE_CXX_STANDARD 20)
-add_definitions(-DUNICODE -D_UNICODE -DNOMINMAX)
 
 file(GLOB HEADERS CONFIGURE_DEPENDS
     ${CMAKE_CURRENT_SOURCE_DIR}/include/**/*.h)
@@ -16,8 +15,9 @@ add_library(zedbase STATIC
     ${HEADERS}
     ${SOURCES})
 
-# Disable Windows macros that collide with C++ standard library functions.
-target_compile_definitions(zedbase PRIVATE "NOMINMAX")
+if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    target_compile_definitions(zedbase PRIVATE "NOMINMAX" "UNICODE" "_UNICODE")
+endif()
 
 # 添加头文件目录
 target_include_directories(zedbase PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
