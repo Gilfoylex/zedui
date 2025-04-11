@@ -1,5 +1,6 @@
-#include "zedbase/task_runner_window.h"
 #include "zedbase/logging.h"
+#include "zedbase/task_runner_window.h"
+
 
 #include <algorithm>
 
@@ -54,7 +55,7 @@ void TaskRunnerWindow::WakeUp() {
 
 void TaskRunnerWindow::AddDelegate(Delegate* delegate) {
   delegates_.push_back(delegate);
-  SetTimer(std::chrono::nanoseconds::zero());
+  SetTimer(TimeDelta::Zero());
 }
 
 void TaskRunnerWindow::RemoveDelegate(Delegate* delegate) {
@@ -65,7 +66,7 @@ void TaskRunnerWindow::RemoveDelegate(Delegate* delegate) {
 }
 
 void TaskRunnerWindow::ProcessTasks() {
-  auto next = std::chrono::nanoseconds::max();
+  auto next = TimeDelta::Max();
   auto delegates_copy(delegates_);
   for (auto delegate : delegates_copy) {
     // if not removed in the meanwhile
@@ -77,12 +78,12 @@ void TaskRunnerWindow::ProcessTasks() {
   SetTimer(next);
 }
 
-void TaskRunnerWindow::SetTimer(std::chrono::nanoseconds when) {
-  if (when == std::chrono::nanoseconds::max()) {
+void TaskRunnerWindow::SetTimer(TimeDelta when) {
+  if (when == TimeDelta::Max()) {
     KillTimer(window_handle_, 0);
   } else {
-    auto millis = std::chrono::duration_cast<std::chrono::milliseconds>(when);
-    ::SetTimer(window_handle_, 0, (UINT)(millis.count() + 1), nullptr);
+    auto millis = when.ToMilliseconds();
+    ::SetTimer(window_handle_, 0, static_cast<UINT>(millis + 1), nullptr);
   }
 }
 

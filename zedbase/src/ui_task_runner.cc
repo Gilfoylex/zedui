@@ -15,16 +15,17 @@ UITaskRunner::~UITaskRunner() {
   task_runner_window_->RemoveDelegate(this);
 }
 
-void UITaskRunner::PostDelayedTask(TaskClosure task, const int64_t delay_ms) {
+void UITaskRunner::PostDelayedTask(zedbase::closure task,
+                                   const int64_t delay_ms) {
   Task delayed_task;
   delayed_task.fire_time =
-      GetCurrentTimeForTask() + std::chrono::milliseconds(delay_ms);
+      GetCurrentTimeForTask() + TimeDelta::FromMilliseconds(delay_ms);
   delayed_task.closure = std::move(task);
   EnqueueTask(std::move(delayed_task));
 }
 
-std::chrono::nanoseconds UITaskRunner::ProcessTasks() {
-  const TaskTimePoint now = GetCurrentTimeForTask();
+TimeDelta UITaskRunner::ProcessTasks() {
+  const TimePoint now = GetCurrentTimeForTask();
 
   std::vector<Task> expired_tasks;
 
@@ -63,14 +64,14 @@ std::chrono::nanoseconds UITaskRunner::ProcessTasks() {
   // Calculate duration to sleep for on next iteration.
   {
     std::lock_guard<std::mutex> lock(task_queue_mutex_);
-    const auto next_wake = task_queue_.empty() ? TaskTimePoint::max()
-                                               : task_queue_.top().fire_time;
+    const auto next_wake =
+        task_queue_.empty() ? TimePoint::Max() : task_queue_.top().fire_time;
 
-    return std::min(next_wake - now, std::chrono::nanoseconds::max());
+    return std::min(next_wake - now, TimeDelta::Max());
   }
 }
 
-void UITaskRunner::PostTask(TaskClosure closure) {
+void UITaskRunner::PostTask(zedbase::closure closure) {
   Task task;
   task.fire_time = GetCurrentTimeForTask();
   task.closure = std::move(closure);

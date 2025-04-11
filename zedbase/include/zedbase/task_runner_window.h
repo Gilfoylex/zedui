@@ -3,12 +3,12 @@
 
 #include <windows.h>
 
-#include <chrono>
 #include <memory>
 #include <string>
 #include <vector>
 
 #include "zedbase/macros.h"
+#include "zedbase/time/time_delta.h"
 
 namespace zedbase {
 
@@ -16,7 +16,7 @@ class TaskRunnerWindow {
  public:
   class Delegate {
    public:
-    virtual std::chrono::nanoseconds ProcessTasks() = 0;
+    virtual TimeDelta ProcessTasks() = 0;
   };
 
   static std::shared_ptr<TaskRunnerWindow> GetSharedInstance();
@@ -32,7 +32,7 @@ class TaskRunnerWindow {
   TaskRunnerWindow();
 
   void ProcessTasks();
-  void SetTimer(std::chrono::nanoseconds when);
+  void SetTimer(zedbase::TimeDelta when);
 
   WNDCLASS RegisterWindowClass();
 
