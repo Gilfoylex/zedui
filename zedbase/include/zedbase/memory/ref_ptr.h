@@ -6,10 +6,10 @@
 #include <utility>
 
 #include "zedbase/memory/ref_ptr_internal.h"
-
+#include "zedbase/logging.h"
 
 namespace zedbase {
-    // A smart pointer class for intrusively reference-counted objects (e.g., those
+// A smart pointer class for intrusively reference-counted objects (e.g., those
 // subclassing |RefCountedThreadSafe| -- see ref_counted.h).
 //
 // Such objects require *adoption* to obtain the first |RefPtr|, which is
@@ -108,12 +108,12 @@ class RefPtr final {
   T* get() const { return ptr_; }
 
   T& operator*() const {
-    FML_DCHECK(ptr_);
+    ZED_DCHECK(ptr_);
     return *ptr_;
   }
 
   T* operator->() const {
-    FML_DCHECK(ptr_);
+    ZED_DCHECK(ptr_);
     return ptr_;
   }
 
@@ -199,7 +199,7 @@ class RefPtr final {
   friend RefPtr<T> AdoptRef<T>(T*);
 
   enum AdoptTag { kAdopt };
-  RefPtr(T* ptr, AdoptTag) : ptr_(ptr) { FML_DCHECK(ptr_); }
+  RefPtr(T* ptr, AdoptTag) : ptr_(ptr) { ZED_DCHECK(ptr_); }
 
   T* ptr_;
 };
@@ -241,13 +241,13 @@ RefPtr<T> MakeRefCounted(Args&&... args) {
   return internal::MakeRefCountedHelper<T>::MakeRefCounted(
       std::forward<Args>(args)...);
 }
-} // namespace zedbase
+}  // namespace zedbase
 
 // Inject custom std::hash<> function object for |RefPtr<T>|.
 namespace std {
 template <typename T>
 struct hash<zedbase::RefPtr<T>> {
-  using argument_type = fml::RefPtr<T>;
+  using argument_type = zedbase::RefPtr<T>;
   using result_type = std::size_t;
 
   result_type operator()(const argument_type& ptr) const {
@@ -256,4 +256,4 @@ struct hash<zedbase::RefPtr<T>> {
 };
 }  // namespace std
 
-#endif // ZEDBASE_MEMORY_REF_PTR_H_
+#endif  // ZEDBASE_MEMORY_REF_PTR_H_

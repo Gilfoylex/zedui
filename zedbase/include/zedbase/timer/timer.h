@@ -40,11 +40,11 @@ class DelayTimerBase {
   zedbase::closure user_task_;
   zedbase::TimeDelta delay_;
 
-  ZED_DISALLOW_COPY_AND_ASSIGN(DelayTimerBase);
+  ZED_DISALLOW_COPY_ASSIGN_AND_MOVE(DelayTimerBase);
 };
 }  // namespace internal
 
-class ThreadTimer : public internal::DelayTimerBase {
+class ThreadTimer final : public internal::DelayTimerBase {
  public:
   ThreadTimer();
   ~ThreadTimer() override;
@@ -53,7 +53,7 @@ class ThreadTimer : public internal::DelayTimerBase {
   void Stop() override;
 
  protected:
-  void RunUserTask() override final;
+  void RunUserTask() override;
 
  private:
   std::unique_ptr<zedbase::Thread> thread_;

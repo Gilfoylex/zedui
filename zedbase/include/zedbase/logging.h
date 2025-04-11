@@ -5,7 +5,6 @@
 #include "zedbase/log_level.h"
 #include "zedbase/macros.h"
 
-
 namespace zedbase {
 
 namespace testing {
@@ -79,9 +78,8 @@ constexpr bool ShouldCreateLogMessageConstexpr(LogSeverity severity,
 
 }  // namespace zedbase
 
-#define ZED_LOG_STREAM(severity)                                       \
-  ::zedbase::LogMessage(::zedbase::##severity, __FILE__, __LINE__, \
-                        nullptr)                                       \
+#define ZED_LOG_STREAM(severity)                                            \
+  ::zedbase::LogMessage(::zedbase::##severity, __FILE__, __LINE__, nullptr) \
       .stream()
 
 #define ZED_LAZY_STREAM(stream, condition) \

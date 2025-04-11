@@ -50,7 +50,7 @@ void ThreadTimer::Start(TimeDelta interval, const closure& user_task) {
   if (running_)
     Stop();
   running_ = true;
-  thread_ = std::make_unique<zedbase::Thread>("thread_timer");
+  thread_ = std::make_unique<zedbase::Thread>("timer_thread");
   user_task_ = user_task;
   SetTaskRunner(thread_->GetTaskRunner());
   StartInternal(interval);

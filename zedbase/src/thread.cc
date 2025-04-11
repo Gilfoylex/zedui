@@ -39,7 +39,7 @@ class ThreadHandle {
 // #if defined(FML_OS_WIN)
 ThreadHandle::ThreadHandle(ThreadFunction&& function) {
   thread_ = (HANDLE*)_beginthreadex(
-      nullptr, Thread::GetDefaultStackSize(),
+      nullptr, static_cast<unsigned int>(Thread::GetDefaultStackSize()),
       [](void* arg) -> unsigned {
         std::unique_ptr<ThreadFunction> function(
             reinterpret_cast<ThreadFunction*>(arg));

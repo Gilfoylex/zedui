@@ -48,7 +48,7 @@ std::shared_ptr<TaskRunnerWindow> TaskRunnerWindow::GetSharedInstance() {
 
 void TaskRunnerWindow::WakeUp() {
   if (!PostMessage(window_handle_, WM_NULL, 0, 0)) {
-    ZED_LOG(ERROR) << "Failed to post message to main thread.";
+    ZED_LOG(kLogError) << "Failed to post message to main thread.";
   }
 }
 
