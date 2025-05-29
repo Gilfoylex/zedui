@@ -44,7 +44,20 @@ YGNodeRef Control::GetNode() const {
   return node_;
 }
 
+bool Control::NeedRedraw() const {
+  return need_redraw_;
+}
+
+std::shared_ptr<zedui::Layer> Control::GetLayer() {
+  return layer_;
+}
+
 void Control::Draw(const DrawContext& draw_context) {}
+
+void Control::DrawFinished() {
+  need_redraw_ = false;
+}
+
 void Control::OnSizeChanged(const Size& old_size, const Size& new_size) {}
-// todo
+
 }  // namespace zedui

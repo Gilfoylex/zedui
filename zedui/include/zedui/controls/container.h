@@ -9,6 +9,7 @@ class Container : public Control {
  public:
   void AddChild(std::shared_ptr<Control> child);
   void RemoveChild(std::shared_ptr<Control> child);
+  const std::list<std::shared_ptr<Control>>& GetChildrens() const;
 
  private:
   std::list<std::shared_ptr<Control>> childrens_;

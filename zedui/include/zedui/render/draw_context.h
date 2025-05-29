@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ZEDUI_RENDER_DRAW_CONTEXT_H_
+#define ZEDUI_RENDER_DRAW_CONTEXT_H_
 
 #include <memory>
 
@@ -22,3 +23,5 @@ class DrawContext {
 };
 
 }  // namespace zedui
+
+#endif  // ZEDUI_RENDER_DRAW_CONTEXT_H_

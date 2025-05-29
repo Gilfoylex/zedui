@@ -12,6 +12,10 @@ void Container::RemoveChild(std::shared_ptr<Control> child) {
     YGNodeRemoveChild(node_, child->GetNode());
 }
 
+const std::list<std::shared_ptr<Control>>& Container::GetChildrens() const {
+  return childrens_;
+}
+
 }  // namespace zedui
 
 
