@@ -1,4 +1,3 @@
-#include "control.h"
 #include "zedui/controls/control.h"
 
 namespace zedui {

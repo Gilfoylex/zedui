@@ -10,6 +10,8 @@ class RenderView : public Container {
   RenderView() = default;
 
   void Render();
+private:
+  
 };
 
 } // namespace zedui
