@@ -4,7 +4,6 @@
 
 #include "zedui/utils/dpi_utils.h"
 
-
 namespace {
 
 /// Window attribute that enables dark mode window decorations.
@@ -201,18 +200,13 @@ Win32Window::MessageHandler(HWND hwnd,
     }
     case WM_SIZE: {
       RECT rect = GetClientArea();
-      if (child_content_ != nullptr) {
-        // Size and position the child window.
-        MoveWindow(child_content_, rect.left, rect.top, rect.right - rect.left,
-                   rect.bottom - rect.top, TRUE);
-      }
+      if (window_delegate_)
+        window_delegate_->OnResized(rect.right - rect.left,
+                                    rect.bottom - rect.top);
       return 0;
     }
 
     case WM_ACTIVATE:
-      if (child_content_ != nullptr) {
-        SetFocus(child_content_);
-      }
       return 0;
 
     case WM_DWMCOLORIZATIONCOLORCHANGED:
@@ -240,17 +234,6 @@ Win32Window* Win32Window::GetThisFromHandle(HWND const window) noexcept {
       GetWindowLongPtr(window, GWLP_USERDATA));
 }
 
-void Win32Window::SetChildContent(HWND content) {
-  child_content_ = content;
-  SetParent(content, window_handle_);
-  RECT frame = GetClientArea();
-
-  MoveWindow(content, frame.left, frame.top, frame.right - frame.left,
-             frame.bottom - frame.top, true);
-
-  SetFocus(child_content_);
-}
-
 RECT Win32Window::GetClientArea() {
   RECT frame;
   GetClientRect(window_handle_, &frame);
@@ -266,12 +249,14 @@ void Win32Window::SetQuitOnClose(bool quit_on_close) {
 }
 
 bool Win32Window::OnCreate() {
-  // No-op; provided for subclasses.
+  if (window_delegate_)
+    window_delegate_->OnCreated();
   return true;
 }
 
 void Win32Window::OnDestroy() {
-  // No-op; provided for subclasses.
+  if (window_delegate_)
+    window_delegate_->OnDestroyed();
 }
 
 void Win32Window::UpdateTheme(HWND const window) {
@@ -287,6 +272,10 @@ void Win32Window::UpdateTheme(HWND const window) {
     DwmSetWindowAttribute(window, DWMWA_USE_IMMERSIVE_DARK_MODE,
                           &enable_dark_mode, sizeof(enable_dark_mode));
   }
+}
+
+void zedui::Win32Window::SetWindowDelegate(WindowDelegate* window_delegate) {
+  window_delegate_ = window_delegate;
 }
 
 }  // namespace zedui

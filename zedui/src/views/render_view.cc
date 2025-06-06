@@ -2,5 +2,4 @@
 
 namespace zedui {
 
-void RenderView::Render() {}
 }  // namespace zedui

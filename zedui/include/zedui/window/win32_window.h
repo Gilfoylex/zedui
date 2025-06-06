@@ -7,6 +7,9 @@
 #include <memory>
 #include <string>
 
+#include "zedbase/macros.h"
+#include "zedui/window/window_delegate.h"
+
 namespace zedui {
 class Win32Window {
  public:
@@ -29,10 +32,10 @@ class Win32Window {
   bool Create(const std::wstring& title, const Point& origin, const Size& size);
   bool Show();
   void Destroy();
-  void SetChildContent(HWND content);
   HWND GetHandle();
   void SetQuitOnClose(bool quit_on_close);
   RECT GetClientArea();
+  void SetWindowDelegate(WindowDelegate* window_delegate);
 
  protected:
   virtual LRESULT MessageHandler(HWND window,
@@ -52,7 +55,9 @@ class Win32Window {
   static void UpdateTheme(HWND const window);
   bool quit_on_close_ = false;
   HWND window_handle_ = nullptr;
-  HWND child_content_ = nullptr;
+  WindowDelegate* window_delegate_ = nullptr;
+
+  ZED_DISALLOW_COPY_ASSIGN_AND_MOVE(Win32Window);
 };
 }  // namespace zedui
 

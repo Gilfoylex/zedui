@@ -2,18 +2,14 @@
 #define ZEDUI_VIEWS_RENDER_VIEW_H_
 
 #include <memory>
-#include "zedui/controls/container.h"
+#include "zedui/controls/ui_container.h"
 
 namespace zedui {
-class RenderView : public Container {
+class RenderView : public UIContainer {
  public:
-  RenderView() = default;
-
-  void Render();
-private:
-  
+ private:
 };
 
-} // namespace zedui
+}  // namespace zedui
 
-#endif // ZEDUI_VIEWS_RENDER_VIEW_H_
+#endif  // ZEDUI_VIEWS_RENDER_VIEW_H_

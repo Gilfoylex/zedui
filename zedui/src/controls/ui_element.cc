@@ -43,19 +43,22 @@ YGNodeRef UIElement::GetNode() const {
   return node_;
 }
 
-bool UIElement::NeedRedraw() const {
-  return need_redraw_;
+void zedui::UIElement::MarkDirty() {
+  is_dirty_ = true;
 }
 
-std::shared_ptr<zedui::Layer> UIElement::GetLayer() {
-  return layer_;
+bool UIElement::IsDirty() const {
+  return is_dirty_;
+}
+
+std::shared_ptr<zedui::PictureLayer> UIElement::GetPictureLayer() {
+  return picture_layer_;
 }
 
 void UIElement::Draw(const DrawContext& draw_context) {}
 
-void UIElement::DrawFinished() {
-  need_redraw_ = false;
+void UIElement::EndDraw() {
+  is_dirty_ = false;
 }
 
-void UIElement::OnSizeChanged(const Size& old_size, const Size& new_size) {}
 }  // namespace zedui

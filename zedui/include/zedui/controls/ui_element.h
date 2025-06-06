@@ -8,7 +8,7 @@
 #include "zedui/geometry/rect.h"
 #include "zedui/geometry/size.h"
 #include "zedui/render/draw_context.h"
-#include "zedui/render/layer.h"
+#include "zedui/render/picture_layer.h"
 
 namespace zedui {
 class UIElement {
@@ -17,6 +17,7 @@ class UIElement {
   explicit UIElement(std::shared_ptr<UIElement> parent);
   virtual ~UIElement();
   std::shared_ptr<UIElement> GetParent() const;
+
   YGNodeRef GetNode() const;
 
   Rect GetRect() const;
@@ -24,19 +25,19 @@ class UIElement {
   void SetWidth(float width);
   float GetHeight() const;
   void SetHeight(float height);
-  bool NeedRedraw() const;
-  void DrawFinished();
 
  public:
-  virtual std::shared_ptr<zedui::Layer> GetLayer();
+  virtual std::shared_ptr<zedui::PictureLayer> GetPictureLayer();
+  virtual void MarkDirty();
   virtual void Draw(const DrawContext& draw_context);
-  virtual void OnSizeChanged(const Size& old_size, const Size& new_size);
+  virtual bool IsDirty() const;
+  virtual void EndDraw();
 
  protected:
   std::weak_ptr<UIElement> parent_;
   YGNodeRef node_;
-  bool need_redraw_ = false;
-  std::shared_ptr<zedui::Layer> layer_;
+  bool is_dirty_ = false;
+  std::shared_ptr<zedui::PictureLayer> picture_layer_;
  
   ZED_DISALLOW_COPY_ASSIGN_AND_MOVE(UIElement);
 };
