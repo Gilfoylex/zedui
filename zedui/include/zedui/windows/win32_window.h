@@ -1,5 +1,5 @@
-#ifndef ZEDUI_WINDOW_WIN32_WINDOW_H_
-#define ZEDUI_WINDOW_WIN32_WINDOW_H_
+#ifndef ZEDUI_WINDOWS_WIN32_WINDOW_H_
+#define ZEDUI_WINDOWS_WIN32_WINDOW_H_
 
 #include <Windows.h>
 
@@ -8,7 +8,7 @@
 #include <string>
 
 #include "zedbase/macros.h"
-#include "zedui/window/window_delegate.h"
+#include "zedui/windows/window_delegate.h"
 
 namespace zedui {
 class Win32Window {
@@ -61,4 +61,4 @@ class Win32Window {
 };
 }  // namespace zedui
 
-#endif  // ZEDUI_WINDOW_WIN32_WINDOW_H_
+#endif  // ZEDUI_WINDOWS_WIN32_WINDOW_H_

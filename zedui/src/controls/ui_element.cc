@@ -43,6 +43,10 @@ Rect UIElement::GetRect() const {
   return Rect::MakeLTRB(left, top, width, height);
 }
 
+Size UIElement::GetSize() const {
+  return Size::MakeWH(GetWidth(), GetHeight());
+}
+
 void zedui::UIElement::MarkDirty() {
   is_dirty_ = true;
 }

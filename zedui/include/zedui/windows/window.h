@@ -1,18 +1,18 @@
-#ifndef ZEDUI_WINDOW_ZED_WINDOW_H_
-#define ZEDUI_WINDOW_ZED_WINDOW_H_
+#ifndef ZEDUI_WINDOWS_WINDOW_H_
+#define ZEDUI_WINDOWS_WINDOW_H_
 
 #include <memory>
 
-#include "zedui/window/win32_window.h"
-#include "zedui/window/window_delegate.h"
+#include "zedui/windows/win32_window.h"
+#include "zedui/windows/window_delegate.h"
 #include "zedui/views/render_view.h"
 
 namespace zedui {
 
-class ZedWindow : public WindowDelegate {
+class Window : public WindowDelegate {
  public:
-  ZedWindow() = default;
-  virtual ~ZedWindow() = default;
+  Window();
+  virtual ~Window();
 
   // WindowDelegate overrides
   void OnCreated() override;
@@ -30,4 +30,4 @@ class ZedWindow : public WindowDelegate {
 
 }  // namespace zedui
 
-#endif  // ZEDUI_WINDOW_ZED_WINDOW_H_
+#endif  // ZEDUI_WINDOWS_WINDOW_H_

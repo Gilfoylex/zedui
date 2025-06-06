@@ -25,6 +25,7 @@ class UIElement {
   float GetWidth() const;
   float GetHeight() const;
   Rect GetRect() const;
+  Size GetSize() const;
 
  public:
   virtual void MarkDirty();

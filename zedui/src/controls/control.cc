@@ -9,4 +9,4 @@ void Control::SetHeight(float height) {
   YGNodeStyleSetHeight(node_, height);
 }
 
-} // namespace zedui
+}  // namespace zedui

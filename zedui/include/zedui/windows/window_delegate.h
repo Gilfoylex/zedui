@@ -1,5 +1,5 @@
-#ifndef ZEDUI_WINDOW_WINDOW_DELEGATE_H_
-#define ZEDUI_WINDOW_WINDOW_DELEGATE_H_
+#ifndef ZEDUI_WINDOWS_WINDOW_DELEGATE_H_
+#define ZEDUI_WINDOWS_WINDOW_DELEGATE_H_
 
 namespace zedui {
 class WindowDelegate{
@@ -10,4 +10,4 @@ class WindowDelegate{
 };
 } // namespace zedui
 
-#endif  // ZEDUI_WINDOW_WINDOW_DELEGATE_H_
+#endif  // ZEDUI_WINDOWS_WINDOW_DELEGATE_H_
