@@ -201,7 +201,7 @@ Win32Window::MessageHandler(HWND hwnd,
     case WM_SIZE: {
       RECT rect = GetClientArea();
       if (window_delegate_)
-        window_delegate_->OnResized(rect.right - rect.left,
+        window_delegate_->OnSizeChanged(rect.right - rect.left,
                                     rect.bottom - rect.top);
       return 0;
     }

@@ -2,24 +2,33 @@
 #define ZEDUI_RENDER_DRAW_CONTEXT_H_
 
 #include <memory>
+#include <queue>
 
-#include "zedui/render/layer.h"
+#include "zedbase/macros.h"
+
+#include "zedui/render/container_layer.h"
+#include "zedui/render/picture_layer.h"
 
 namespace zedui {
-class DrawContext {
+class DrawContext final {
  public:
-  DrawContext(std::shared_ptr<Layer> layer) : layer_(layer) {};
+  DrawContext();
 
-  void DrawCircle(float x, float y, float radius) {
-    // Implementation for drawing a circle using the layer
-  }
+  // draw methods
+  void DrawCircle(float x, float y, float radius);
+  void DrawRectangle(float x, float y, float width, float height);
 
-  void DrawRectangle(float x, float y, float width, float height) {
-    // Implementation for drawing a rectangle using the layer
-  }
+  // layer management
+  std::shared_ptr<ContainerLayer> GetLayerContainer() const;
+  void AddLayerContainer(std::shared_ptr<ContainerLayer> layer_container);
+  void PushPictureLayer(std::shared_ptr<PictureLayer> picture_layer);
+  void PopPictureLayer();
 
  private:
-  std::shared_ptr<Layer> layer_;
+  std::shared_ptr<ContainerLayer> layer_container_ = nullptr;
+  std::queue<std::shared_ptr<PictureLayer>> picture_layers_;
+
+  ZED_DISALLOW_COPY_ASSIGN_AND_MOVE(DrawContext);
 };
 
 }  // namespace zedui

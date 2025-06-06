@@ -3,7 +3,7 @@
 namespace zedui {
 UIElement::UIElement() : UIElement(nullptr) {}
 
-UIElement::UIElement(std::shared_ptr<UIElement> parent)
+UIElement::UIElement(std::shared_ptr<UIContainer> parent)
     : parent_(parent), node_(YGNodeNew()) {}
 UIElement::~UIElement() {
   if (node_) {
@@ -11,36 +11,36 @@ UIElement::~UIElement() {
   }
 }
 
-Rect UIElement::GetRect() const {
-  auto left = YGNodeLayoutGetLeft(node_);
-  auto top = YGNodeLayoutGetTop(node_);
-  auto width = YGNodeLayoutGetWidth(node_);
-  auto height = YGNodeLayoutGetHeight(node_);
-  return Rect::MakeLTRB(left, top, width, height);
+std::shared_ptr<UIContainer> UIElement::GetParent() const {
+  return parent_.lock();
+}
+
+YGNodeRef UIElement::GetNode() const {
+  return node_;
+}
+
+float UIElement::GetLeft() const {
+  return YGNodeLayoutGetLeft(node_);
+}
+
+float UIElement::GetTop() const {
+  return YGNodeLayoutGetTop(node_);
 }
 
 float UIElement::GetWidth() const {
   return YGNodeLayoutGetWidth(node_);
 }
 
-void UIElement::SetWidth(float width) {
-  YGNodeStyleSetWidth(node_, width);
-}
-
 float UIElement::GetHeight() const {
   return YGNodeLayoutGetHeight(node_);
 }
 
-void UIElement::SetHeight(float height) {
-  YGNodeStyleSetHeight(node_, height);
-}
-
-std::shared_ptr<UIElement> UIElement::GetParent() const {
-  return parent_.lock();
-}
-
-YGNodeRef UIElement::GetNode() const {
-  return node_;
+Rect UIElement::GetRect() const {
+  auto left = GetLeft();
+  auto top = GetTop();
+  auto width = GetWidth();
+  auto height = GetHeight();
+  return Rect::MakeLTRB(left, top, width, height);
 }
 
 void zedui::UIElement::MarkDirty() {
@@ -51,13 +51,9 @@ bool UIElement::IsDirty() const {
   return is_dirty_;
 }
 
-std::shared_ptr<zedui::PictureLayer> UIElement::GetPictureLayer() {
-  return picture_layer_;
-}
+void UIElement::Draw(DrawContext& draw_context) {}
 
-void UIElement::Draw(const DrawContext& draw_context) {}
-
-void UIElement::EndDraw() {
+void UIElement::DrawCompleted() {
   is_dirty_ = false;
 }
 

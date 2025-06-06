@@ -11,33 +11,31 @@
 #include "zedui/render/picture_layer.h"
 
 namespace zedui {
+class UIContainer; // Forward declaration for UIContainer
 class UIElement {
  public:
   UIElement();
-  explicit UIElement(std::shared_ptr<UIElement> parent);
+  explicit UIElement(std::shared_ptr<UIContainer> parent);
   virtual ~UIElement();
-  std::shared_ptr<UIElement> GetParent() const;
-
+  std::shared_ptr<UIContainer> GetParent() const;
   YGNodeRef GetNode() const;
-
-  Rect GetRect() const;
+  
+  float GetLeft() const;
+  float GetTop() const;
   float GetWidth() const;
-  void SetWidth(float width);
   float GetHeight() const;
-  void SetHeight(float height);
+  Rect GetRect() const;
 
  public:
-  virtual std::shared_ptr<zedui::PictureLayer> GetPictureLayer();
   virtual void MarkDirty();
-  virtual void Draw(const DrawContext& draw_context);
+  virtual void Draw(DrawContext& draw_context);
   virtual bool IsDirty() const;
-  virtual void EndDraw();
+  virtual void DrawCompleted();
 
  protected:
-  std::weak_ptr<UIElement> parent_;
+  std::weak_ptr<UIContainer> parent_;
   YGNodeRef node_;
   bool is_dirty_ = false;
-  std::shared_ptr<zedui::PictureLayer> picture_layer_;
  
   ZED_DISALLOW_COPY_ASSIGN_AND_MOVE(UIElement);
 };

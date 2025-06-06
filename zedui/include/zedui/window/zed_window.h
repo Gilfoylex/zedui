@@ -19,7 +19,7 @@ class ZedWindow : public WindowDelegate {
 
   void OnDestroyed() override;
 
-  void OnResized(int width, int height) override;
+  void OnSizeChanged(int width, int height) override;
 
   // Additional methods specific to ZedWindow can be added here
 

@@ -8,17 +8,29 @@ void UIContainer::Add(std::shared_ptr<UIElement> child) {
 }
 
 void UIContainer::Remove(std::shared_ptr<UIElement> child) {
-  childrens_.remove(child);
   YGNodeRemoveChild(node_, child->GetNode());
+  childrens_.remove(child);
 }
 
-void UIContainer::Draw(const DrawContext& draw_context) {
+void UIContainer::Draw(DrawContext& draw_context) {
+  auto cur_picture_layer = GetPictureLayer();
+  draw_context.PushPictureLayer(cur_picture_layer);
   for (const auto& child : childrens_) {
-    if (child->IsDirty()) {
-      child->Draw(draw_context);
-      child->EndDraw();
-    }
+    // container was dirty， we need drawing all children
+    child->Draw(draw_context);
+    child->DrawCompleted();
   }
+  draw_context.PopPictureLayer();
+}
+
+std::shared_ptr<zedui::PictureLayer> UIContainer::GetPictureLayer() {
+  // create new pictureLayer if it is dirty or not created
+  if (IsDirty() || !picture_layer_) {
+    picture_layer_ = std::make_shared<zedui::PictureLayer>();
+  }
+
+  // else, return the existing PictureLayer(cached)
+  return picture_layer_;
 }
 
 }  // namespace zedui

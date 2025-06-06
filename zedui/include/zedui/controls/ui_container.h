@@ -12,10 +12,14 @@ class UIContainer : public UIElement {
   void Remove(std::shared_ptr<UIElement> child);
 
  public:
-  void Draw(const DrawContext& draw_context) override;
+  void Draw(DrawContext& draw_context) override;
 
- private:
+ public:
+  virtual std::shared_ptr<zedui::PictureLayer> GetPictureLayer();
+
+ protected:
   std::list<std::shared_ptr<UIElement>> childrens_;
+  std::shared_ptr<zedui::PictureLayer> picture_layer_;
 };
 }  // namespace zedui
 
