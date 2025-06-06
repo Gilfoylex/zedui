@@ -3,9 +3,10 @@
 
 #include <memory>
 
+#include "zedui/views/render_view.h"
 #include "zedui/windows/win32_window.h"
 #include "zedui/windows/window_delegate.h"
-#include "zedui/views/render_view.h"
+
 
 namespace zedui {
 
@@ -25,7 +26,7 @@ class Window : public WindowDelegate {
 
  private:
   Win32Window win32_window_;
-  std::shared_ptr<RenderView> render_view_;
+  std::shared_ptr<RenderView> render_view_ = nullptr;
 };
 
 }  // namespace zedui

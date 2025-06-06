@@ -1,4 +1,4 @@
-#include "zedui/window/win32_window.h"
+#include "zedui/windows/win32_window.h"
 
 #include <dwmapi.h>
 
