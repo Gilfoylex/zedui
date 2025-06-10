@@ -33,4 +33,11 @@ std::shared_ptr<zedui::PictureLayer> UIContainer::GetPictureLayer() {
   return picture_layer_;
 }
 
+void UIContainer::MarkDirtyChild() {
+  auto parent = GetParent();
+  if (parent) {
+    parent->MarkDirtyChild();
+  }
+}
+
 }  // namespace zedui

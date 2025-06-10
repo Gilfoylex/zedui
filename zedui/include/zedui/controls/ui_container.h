@@ -16,6 +16,7 @@ class UIContainer : public UIElement {
 
  public:
   virtual std::shared_ptr<zedui::PictureLayer> GetPictureLayer();
+  virtual void MarkDirtyChild();
 
  protected:
   std::list<std::shared_ptr<UIElement>> childrens_;
