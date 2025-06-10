@@ -2,7 +2,7 @@
 #define ZEDUI_RENDER_DRAW_CONTEXT_H_
 
 #include <memory>
-#include <queue>
+#include <stack>
 
 #include "zedbase/macros.h"
 
@@ -26,7 +26,7 @@ class DrawContext final {
 
  private:
   std::shared_ptr<ContainerLayer> layer_container_ = nullptr;
-  std::queue<std::shared_ptr<PictureLayer>> picture_layers_;
+  std::stack<std::shared_ptr<PictureLayer>> picture_layers_;
 
   ZED_DISALLOW_COPY_ASSIGN_AND_MOVE(DrawContext);
 };

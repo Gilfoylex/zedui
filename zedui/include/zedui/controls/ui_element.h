@@ -37,6 +37,7 @@ class UIElement {
   std::weak_ptr<UIContainer> parent_;
   YGNodeRef node_;
   bool is_dirty_ = false;
+  Rect last_render_rect_;
  
   ZED_DISALLOW_COPY_ASSIGN_AND_MOVE(UIElement);
 };

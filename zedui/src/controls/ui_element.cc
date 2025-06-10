@@ -4,7 +4,9 @@ namespace zedui {
 UIElement::UIElement() : UIElement(nullptr) {}
 
 UIElement::UIElement(std::shared_ptr<UIContainer> parent)
-    : parent_(parent), node_(YGNodeNew()) {}
+    : parent_(parent),
+      node_(YGNodeNew()),
+      last_render_rect_(Rect::MakeLTRB(0.0, 0.0, 0.0, 0.0)) {}
 UIElement::~UIElement() {
   if (node_) {
     YGNodeFree(node_);
@@ -52,13 +54,17 @@ void zedui::UIElement::MarkDirty() {
 }
 
 bool UIElement::IsDirty() const {
-  return is_dirty_;
+  if (GetRect() != last_render_rect_ || is_dirty_) {
+    return true;
+  }
+  return false;
 }
 
 void UIElement::Draw(DrawContext& draw_context) {}
 
 void UIElement::DrawCompleted() {
   is_dirty_ = false;
+  last_render_rect_ = GetRect();
 }
 
 }  // namespace zedui
