@@ -6,7 +6,7 @@
 namespace zedui {
 class PictureLayer : public Layer {
  public:
-  virtual void RenderToScreen() override;
+  void RenderToScreen() override;
 };
 }  // namespace zedui
 

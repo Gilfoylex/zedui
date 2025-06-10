@@ -3,14 +3,17 @@
 
 #include <memory>
 
-#include "zedui/views/render_view.h"
+#include "yoga/Yoga.h"
+
+#include "zedbase/macros.h"
+
+#include "zedui/controls/container.h"
 #include "zedui/windows/win32_window.h"
 #include "zedui/windows/window_delegate.h"
 
-
 namespace zedui {
 
-class Window : public WindowDelegate {
+class Window : public WindowDelegate, Container {
  public:
   Window();
   virtual ~Window();
@@ -22,11 +25,17 @@ class Window : public WindowDelegate {
 
   void OnSizeChanged(int width, int height) override;
 
-  // Additional methods specific to ZedWindow can be added here
+
+  // Container overrides
+  void NotifyParentForRedraw() override;
+
+ private:
+  void PerformLayout(float width, float height, YGDirection direction);
 
  private:
   Win32Window win32_window_;
-  std::shared_ptr<RenderView> render_view_ = nullptr;
+
+  ZED_DISALLOW_COPY_ASSIGN_AND_MOVE(Window);
 };
 
 }  // namespace zedui

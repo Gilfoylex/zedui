@@ -2,6 +2,10 @@
 
 namespace zedui {
 
+UIContainer::UIContainer() : UIElement(nullptr) {}
+UIContainer::UIContainer(std::shared_ptr<UIContainer> parent)
+    : UIElement(parent), picture_layer_(nullptr) {}
+
 void UIContainer::Add(std::shared_ptr<UIElement> child) {
   childrens_.push_back(child);
   YGNodeInsertChild(node_, child->GetNode(), YGNodeGetChildCount(node_));
@@ -33,10 +37,10 @@ std::shared_ptr<zedui::PictureLayer> UIContainer::GetPictureLayer() {
   return picture_layer_;
 }
 
-void UIContainer::MarkDirtyChild() {
+void UIContainer::NotifyParentForRedraw() {
   auto parent = GetParent();
   if (parent) {
-    parent->MarkDirtyChild();
+    parent->NotifyParentForRedraw();
   }
 }
 

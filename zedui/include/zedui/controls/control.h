@@ -6,8 +6,8 @@
 namespace zedui {
 class Control : public UIElement {
  public:
-  Control() = default;
-  explicit Control(std::shared_ptr<UIContainer> parent) : UIElement(parent) {}
+  Control();
+  explicit Control(std::shared_ptr<UIContainer> parent);
   virtual ~Control() = default;
   void SetWidth(float width);
   void SetHeight(float height);

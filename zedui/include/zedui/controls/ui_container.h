@@ -8,6 +8,8 @@
 namespace zedui {
 class UIContainer : public UIElement {
  public:
+ UIContainer();
+  explicit UIContainer(std::shared_ptr<UIContainer> parent);
   void Add(std::shared_ptr<UIElement> child);
   void Remove(std::shared_ptr<UIElement> child);
 
@@ -16,7 +18,7 @@ class UIContainer : public UIElement {
 
  public:
   virtual std::shared_ptr<zedui::PictureLayer> GetPictureLayer();
-  virtual void MarkDirtyChild();
+  virtual void NotifyParentForRedraw();
 
  protected:
   std::list<std::shared_ptr<UIElement>> childrens_;
