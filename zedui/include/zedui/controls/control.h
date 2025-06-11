@@ -11,6 +11,9 @@ class Control : public UIElement {
   virtual ~Control() = default;
   void SetWidth(float width);
   void SetHeight(float height);
+
+  // Override UIElement methods
+  void MarkDirty() override;
 };
 }  // namespace zedui
 

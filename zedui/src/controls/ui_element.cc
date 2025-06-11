@@ -1,4 +1,5 @@
 #include "zedui/controls/ui_element.h"
+#include "zedui/controls/ui_container.h"
 
 namespace zedui {
 UIElement::UIElement() : UIElement(nullptr) {}
@@ -49,6 +50,15 @@ Size UIElement::GetSize() const {
   return Size::MakeWH(GetWidth(), GetHeight());
 }
 
+void UIElement::Invalidate() {
+  MarkDirty();
+  auto parent = GetParent();
+  if (parent){
+    parent->MarkDirty();
+    parent->NotifyParentForRedraw();
+  }
+}
+
 void zedui::UIElement::MarkDirty() {
   is_dirty_ = true;
 }
@@ -58,6 +68,10 @@ bool UIElement::IsDirty() const {
     return true;
   }
   return false;
+}
+
+void UIElement::Build(std::shared_ptr<ContainerLayer> layer_tree) {
+  // Need UIContainer to build the layer tree
 }
 
 void UIElement::Draw(DrawContext& draw_context) {}

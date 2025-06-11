@@ -8,12 +8,14 @@
 namespace zedui {
 class UIContainer : public UIElement {
  public:
- UIContainer();
+  UIContainer();
   explicit UIContainer(std::shared_ptr<UIContainer> parent);
   void Add(std::shared_ptr<UIElement> child);
   void Remove(std::shared_ptr<UIElement> child);
 
  public:
+  void MarkDirty() override;
+  void Build(std::shared_ptr<ContainerLayer> layer_tree) override;
   void Draw(DrawContext& draw_context) override;
 
  public:

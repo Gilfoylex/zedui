@@ -8,10 +8,10 @@
 #include "zedui/geometry/rect.h"
 #include "zedui/geometry/size.h"
 #include "zedui/render/draw_context.h"
-#include "zedui/render/picture_layer.h"
+#include "zedui/render/container_layer.h"
 
 namespace zedui {
-class UIContainer; // Forward declaration for UIContainer
+class UIContainer;  // Forward declaration for UIContainer
 class UIElement {
  public:
   UIElement();
@@ -19,7 +19,7 @@ class UIElement {
   virtual ~UIElement();
   std::shared_ptr<UIContainer> GetParent() const;
   YGNodeRef GetNode() const;
-  
+
   float GetLeft() const;
   float GetTop() const;
   float GetWidth() const;
@@ -27,10 +27,11 @@ class UIElement {
   Rect GetRect() const;
   Size GetSize() const;
 
- public:
+  virtual void Invalidate();
   virtual void MarkDirty();
-  virtual void Draw(DrawContext& draw_context);
   virtual bool IsDirty() const;
+  virtual void Build(std::shared_ptr<ContainerLayer> layer_tree);
+  virtual void Draw(DrawContext& draw_context);
   virtual void DrawCompleted();
 
  protected:
@@ -38,10 +39,10 @@ class UIElement {
   YGNodeRef node_;
   bool is_dirty_ = false;
   Rect last_render_rect_;
- 
+
   ZED_DISALLOW_COPY_ASSIGN_AND_MOVE(UIElement);
 };
 
-} // namespace zedui
+}  // namespace zedui
 
 #endif  // ZEDUI_CONTROLS_UI_ELEMENT_H_

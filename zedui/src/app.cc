@@ -22,4 +22,26 @@ std::shared_ptr<zedbase::UITaskRunner> App::GetUITaskRunner() {
   return ui_task_runner_;
 }
 
+void App::PostVsyncTask(zedbase::closure task) {
+  std::lock_guard<std::mutex> lock(vsync_mutex_);
+  vsync_tasks_.push(std::move(task));
+}
+
+void App::OnVsync() {
+  std::queue<zedbase::closure> tasks;
+  {
+    std::lock_guard<std::mutex> lock(vsync_mutex_);
+    std::swap(tasks, vsync_tasks_);
+  }
+
+  if (tasks.empty()) {
+    return;
+  }
+
+  while (!tasks.empty()) {
+    ui_task_runner_->PostTask(std::move(tasks.front()));
+    tasks.pop();
+  }
+}
+
 }  // namespace zedui

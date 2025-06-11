@@ -16,15 +16,31 @@ void UIContainer::Remove(std::shared_ptr<UIElement> child) {
   childrens_.remove(child);
 }
 
-void UIContainer::Draw(DrawContext& draw_context) {
-  auto cur_picture_layer = GetPictureLayer();
-  draw_context.PushPictureLayer(cur_picture_layer);
-  for (const auto& child : childrens_) {
-    // container was dirty， we need drawing all children
-    child->Draw(draw_context);
-    child->DrawCompleted();
+void UIContainer::MarkDirty() {
+  is_dirty_ = true;
+  for (auto const& child : childrens_) {
+    child->MarkDirty();
   }
-  draw_context.PopPictureLayer();
+}
+
+void UIContainer::Build(std::shared_ptr<ContainerLayer> layer_tree) {
+  auto container_layer = std::make_shared<zedui::ContainerLayer>();
+  layer_tree->Add(container_layer);
+  auto picture_layer = GetPictureLayer();
+  if (picture_layer) {
+    container_layer->Add(picture_layer);
+  }
+  if (IsDirty()){
+    auto draw_context = DrawContext();
+    Draw(draw_context);
+  }
+  for (const auto& child : childrens_) {
+    child->Build(container_layer);
+  }
+}
+
+void UIContainer::Draw(DrawContext& draw_context) {
+  // todo
 }
 
 std::shared_ptr<zedui::PictureLayer> UIContainer::GetPictureLayer() {

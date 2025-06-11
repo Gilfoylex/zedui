@@ -28,13 +28,15 @@ class Window : public WindowDelegate, Container {
 
   // Container overrides
   void NotifyParentForRedraw() override;
-
+  void Draw(DrawContext& draw_context) override;
+  void DrawCompleted() override;
  private:
   void PerformLayout(float width, float height, YGDirection direction);
+  void DoFrame();
 
  private:
   Win32Window win32_window_;
-
+  bool in_redraw_;
   ZED_DISALLOW_COPY_ASSIGN_AND_MOVE(Window);
 };
 

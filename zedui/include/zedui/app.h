@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <queue>
+#include <mutex>
 
 #include "zedbase/macros.h"
 #include "zedbase/thread.h"
@@ -19,6 +20,7 @@ class App {
   App();
   ~App();
   std::shared_ptr<zedbase::UITaskRunner> GetUITaskRunner();
+  void PostVsyncTask(zedbase::closure task);
 
  private:
   void OnVsync();
@@ -27,6 +29,7 @@ class App {
   std::unique_ptr<zedbase::Thread> render_thread_;
   std::shared_ptr<zedbase::UITaskRunner> ui_task_runner_;
   std::unique_ptr<zedbase::ThreadTimer> vsync_timer_;
+  std::mutex vsync_mutex_;
   std::queue<zedbase::closure> vsync_tasks_;
 
   ZED_DISALLOW_COPY_ASSIGN_AND_MOVE(App);

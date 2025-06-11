@@ -15,4 +15,12 @@ void Control::SetHeight(float height) {
   YGNodeStyleSetHeight(node_, height);
 }
 
+void Control::MarkDirty() {
+  is_dirty_ = true;
+  auto parent = GetParent();
+  if (parent){
+    
+  }
+}
+
 }  // namespace zedui
