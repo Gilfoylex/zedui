@@ -50,6 +50,11 @@ Size UIElement::GetSize() const {
   return Size::MakeWH(GetWidth(), GetHeight());
 }
 
+std::shared_ptr<zedui::PictureLayer> UIElement::GetPictureLayer() {
+  // use the parent container's picture layer if available
+  return GetParent()->GetPictureLayer();
+}
+
 void UIElement::Invalidate() {
   MarkDirty();
   auto parent = GetParent();
@@ -64,7 +69,7 @@ void zedui::UIElement::MarkDirty() {
 }
 
 bool UIElement::IsDirty() const {
-  if (GetRect() != last_render_rect_ || is_dirty_) {
+  if (is_dirty_ || GetRect() != last_render_rect_) {
     return true;
   }
   return false;
@@ -72,6 +77,10 @@ bool UIElement::IsDirty() const {
 
 void UIElement::Build(std::shared_ptr<ContainerLayer> layer_tree) {
   // Need UIContainer to build the layer tree
+  if (IsDirty()) {
+    auto draw_context = DrawContext(GetLeft(), GetTop(), GetPictureLayer());
+    Draw(draw_context);
+  }
 }
 
 void UIElement::Draw(DrawContext& draw_context) {}

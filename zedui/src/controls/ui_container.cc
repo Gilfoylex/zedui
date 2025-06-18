@@ -9,11 +9,18 @@ UIContainer::UIContainer(std::shared_ptr<UIContainer> parent)
 void UIContainer::Add(std::shared_ptr<UIElement> child) {
   childrens_.push_back(child);
   YGNodeInsertChild(node_, child->GetNode(), YGNodeGetChildCount(node_));
+  Invalidate();
 }
 
 void UIContainer::Remove(std::shared_ptr<UIElement> child) {
   YGNodeRemoveChild(node_, child->GetNode());
   childrens_.remove(child);
+  Invalidate();
+}
+
+void UIContainer::Invalidate() {
+  MarkDirty();
+  NotifyParentForRedraw();
 }
 
 void UIContainer::MarkDirty() {
@@ -31,7 +38,7 @@ void UIContainer::Build(std::shared_ptr<ContainerLayer> layer_tree) {
     container_layer->Add(picture_layer);
   }
   if (IsDirty()){
-    auto draw_context = DrawContext();
+    auto draw_context = DrawContext(GetLeft(), GetTop(), picture_layer);
     Draw(draw_context);
   }
   for (const auto& child : childrens_) {
@@ -40,7 +47,7 @@ void UIContainer::Build(std::shared_ptr<ContainerLayer> layer_tree) {
 }
 
 void UIContainer::Draw(DrawContext& draw_context) {
-  // todo
+  // do nothing
 }
 
 std::shared_ptr<zedui::PictureLayer> UIContainer::GetPictureLayer() {

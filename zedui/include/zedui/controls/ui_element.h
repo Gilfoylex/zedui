@@ -9,6 +9,7 @@
 #include "zedui/geometry/size.h"
 #include "zedui/render/draw_context.h"
 #include "zedui/render/container_layer.h"
+#include "zedui/render/picture_layer.h"
 
 namespace zedui {
 class UIContainer;  // Forward declaration for UIContainer
@@ -20,13 +21,14 @@ class UIElement {
   std::shared_ptr<UIContainer> GetParent() const;
   YGNodeRef GetNode() const;
 
-  float GetLeft() const;
-  float GetTop() const;
-  float GetWidth() const;
-  float GetHeight() const;
-  Rect GetRect() const;
-  Size GetSize() const;
+  virtual float GetLeft() const;
+  virtual float GetTop() const;
+  virtual float GetWidth() const;
+  virtual float GetHeight() const;
+  virtual Rect GetRect() const;
+  virtual Size GetSize() const;
 
+  virtual std::shared_ptr<zedui::PictureLayer> GetPictureLayer();
   virtual void Invalidate();
   virtual void MarkDirty();
   virtual bool IsDirty() const;

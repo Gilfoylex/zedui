@@ -14,12 +14,13 @@ class UIContainer : public UIElement {
   void Remove(std::shared_ptr<UIElement> child);
 
  public:
+  std::shared_ptr<zedui::PictureLayer> GetPictureLayer() override;
+  void Invalidate() override;
   void MarkDirty() override;
   void Build(std::shared_ptr<ContainerLayer> layer_tree) override;
   void Draw(DrawContext& draw_context) override;
 
  public:
-  virtual std::shared_ptr<zedui::PictureLayer> GetPictureLayer();
   virtual void NotifyParentForRedraw();
 
  protected:

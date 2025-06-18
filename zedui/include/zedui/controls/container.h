@@ -8,8 +8,9 @@ class Container : public UIContainer {
  public:
   Container();
   explicit Container(std::shared_ptr<UIContainer> parent);
-  void SetWidth(float width);
-  void SetHeight(float height);
+  virtual void SetWidth(float width);
+  virtual void SetHeight(float height);
+  virtual void SetSize(const Size& size);
 
   void Draw(DrawContext& draw_context) override;
 };

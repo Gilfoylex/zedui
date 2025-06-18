@@ -21,6 +21,7 @@ class App {
   ~App();
   std::shared_ptr<zedbase::UITaskRunner> GetUITaskRunner();
   void PostVsyncTask(zedbase::closure task);
+  void Run();
 
  private:
   void OnVsync();

@@ -1,3 +1,5 @@
+#include <Windows.h>
+
 #include "zedui/app.h"
 
 namespace zedui {
@@ -41,6 +43,14 @@ void App::OnVsync() {
   while (!tasks.empty()) {
     ui_task_runner_->PostTask(std::move(tasks.front()));
     tasks.pop();
+  }
+}
+
+void App::Run() {
+  MSG msg;
+  while (::GetMessage(&msg, nullptr, 0, 0)) {
+    ::TranslateMessage(&msg);
+    ::DispatchMessage(&msg);
   }
 }
 

@@ -6,6 +6,7 @@
 namespace zedui {
 class Layer {
  public:
+  Layer() = default;
   virtual void RenderToScreen() = 0;
 
   ZED_DISALLOW_COPY_ASSIGN_AND_MOVE(Layer);
