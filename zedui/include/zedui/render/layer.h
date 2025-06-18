@@ -6,10 +6,8 @@
 namespace zedui {
 class Layer {
  public:
-  Layer() = default;
+  virtual ~Layer();
   virtual void RenderToScreen() = 0;
-
-  ZED_DISALLOW_COPY_ASSIGN_AND_MOVE(Layer);
 };
 }  // namespace zedui
 

@@ -330,12 +330,12 @@ struct Matrix {
                    GetBasisZ().GetLength());
   }
 
-  constexpr Scalar GetDirectionScale(Vector3 direction) const {
+  /*constexpr*/ Scalar GetDirectionScale(Vector3 direction) const {
     return 1.0f / (this->Basis().Invert() * direction.Normalize()).GetLength() *
            direction.GetLength();
   }
 
-  constexpr bool IsFinite() const {
+  /*constexpr*/ bool IsFinite() const {
     return vec[0].IsFinite() && vec[1].IsFinite() && vec[2].IsFinite() &&
            vec[3].IsFinite();
   }
@@ -559,7 +559,7 @@ struct Matrix {
     return translate * scale;
   }
 
-  static constexpr Matrix MakePerspective(Radians fov_y,
+  static /*constexpr*/ Matrix MakePerspective(Radians fov_y,
                                           Scalar aspect_ratio,
                                           Scalar z_near,
                                           Scalar z_far) {
@@ -577,7 +577,7 @@ struct Matrix {
   }
 
   template <class T>
-  static constexpr Matrix MakePerspective(Radians fov_y,
+  static /*constexpr*/ Matrix MakePerspective(Radians fov_y,
                                           TSize<T> size,
                                           Scalar z_near,
                                           Scalar z_far) {
@@ -585,7 +585,7 @@ struct Matrix {
                            z_near, z_far);
   }
 
-  static constexpr Matrix MakeLookAt(Vector3 position,
+  static /*constexpr*/ Matrix MakeLookAt(Vector3 position,
                                      Vector3 target,
                                      Vector3 up) {
     Vector3 forward = (target - position).Normalize();
@@ -602,7 +602,7 @@ struct Matrix {
     // clang-format on
   }
 
-  static constexpr Vector2 CosSin(Radians radians) {
+  static /*constexpr*/ Vector2 CosSin(Radians radians) {
     // The precision of a float around 1.0 is much lower than it is
     // around 0.0, so we end up with cases on quadrant rotations where
     // we get a +/-1.0 for one of the values and a non-zero value for

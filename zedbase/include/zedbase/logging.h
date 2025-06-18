@@ -121,10 +121,10 @@ constexpr bool ShouldCreateLogMessageConstexpr(LogSeverity severity,
 #define ZED_DCHECK(condition) ZED_EAT_STREAM_PARAMETERS(condition)
 #endif
 
-#define ZED_UNREACHABLE()                          \
-  {                                                \
-    ZED_LOG(ERROR) << "Reached unreachable code."; \
-    ::zedbase::KillProcessConstexpr(true);         \
+#define ZED_UNREACHABLE()                              \
+  {                                                    \
+    ZED_LOG(kLogError) << "Reached unreachable code."; \
+    ::fml::KillProcessConstexpr(true);                 \
   }
 
 #endif  // ZEDBASE_LOGGING_H_

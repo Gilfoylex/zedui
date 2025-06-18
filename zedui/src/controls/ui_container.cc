@@ -37,7 +37,7 @@ void UIContainer::Build(std::shared_ptr<ContainerLayer> layer_tree) {
   if (picture_layer) {
     container_layer->Add(picture_layer);
   }
-  if (IsDirty()){
+  if (IsDirty()) {
     auto draw_context = DrawContext(GetLeft(), GetTop(), picture_layer);
     Draw(draw_context);
   }
@@ -53,7 +53,8 @@ void UIContainer::Draw(DrawContext& draw_context) {
 std::shared_ptr<zedui::PictureLayer> UIContainer::GetPictureLayer() {
   // create new pictureLayer if it is dirty or not created
   if (IsDirty() || !picture_layer_) {
-    picture_layer_ = std::make_shared<zedui::PictureLayer>();
+    picture_layer_ = std::make_shared<zedui::PictureLayer>(
+        GetLeft(), GetTop(), GetWidth(), GetHeight());
   }
 
   // else, return the existing PictureLayer(cached)

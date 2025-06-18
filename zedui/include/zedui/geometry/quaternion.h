@@ -14,15 +14,15 @@ namespace zedui {
 struct Quaternion {
   union {
     struct {
-      Scalar x = 0.0;
-      Scalar y = 0.0;
-      Scalar z = 0.0;
-      Scalar w = 1.0;
+      Scalar x;
+      Scalar y;
+      Scalar z;
+      Scalar w;
     };
     Scalar e[4];
   };
 
-  Quaternion() {}
+  Quaternion() : x(0.0f), y(0.0f), z(0.0f), w(1.0f) {}
 
   Quaternion(Scalar px, Scalar py, Scalar pz, Scalar pw)
       : x(px), y(py), z(pz), w(pw) {}

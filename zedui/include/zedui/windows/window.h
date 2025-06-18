@@ -16,7 +16,6 @@ namespace zedui {
 class Window : public WindowDelegate, Container {
  public:
   Window();
-  Window();
   virtual ~Window();
 
   void Show();

@@ -10,7 +10,6 @@
 namespace zedui {
 class PictureLayer final : public Layer {
  public:
-  PictureLayer() = delete;
   PictureLayer(float left, float top, float width, float height);
   void PushDrawCommand(const std::shared_ptr<DrawCommand>& command);
   float GetLeft() const;

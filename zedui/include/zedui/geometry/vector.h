@@ -5,9 +5,10 @@
 #ifndef ZEDUI_GEOMETRY_VECTOR_H_
 #define ZEDUI_GEOMETRY_VECTOR_H_
 
-#include <cmath>
-#include <string>
 #include <array>
+#include <cmath>
+#include <limits>
+#include <string>
 
 // #include "impeller/geometry/color.h"
 #include "zedui/geometry/point.h"
@@ -21,14 +22,14 @@ namespace zedui {
 struct Vector3 {
   union {
     struct {
-      Scalar x = 0.0f;
-      Scalar y = 0.0f;
-      Scalar z = 0.0f;
+      Scalar x;
+      Scalar y;
+      Scalar z;
     };
     Scalar e[3];
   };
 
-  constexpr Vector3() {};
+  constexpr Vector3() : x(0.0f), y(0.0f), z(0.0f) {};
 
   // constexpr Vector3(const Color& c) : x(c.red), y(c.green), z(c.blue) {}
 
@@ -45,9 +46,11 @@ struct Vector3 {
    *
    *  @return the calculated length.
    */
-  constexpr Scalar GetLength() const { return sqrt(x * x + y * y + z * z); }
+  /* constexpr */ Scalar GetLength() const {
+    return sqrt(x * x + y * y + z * z);
+  }
 
-  constexpr Vector3 Normalize() const {
+  /* constexpr */ Vector3 Normalize() const {
     const auto len = GetLength();
     return {x / len, y / len, z / len};
   }
@@ -233,15 +236,15 @@ constexpr Vector3 operator/(U s, const Vector3& p) {
 struct Vector4 {
   union {
     struct {
-      Scalar x = 0.0f;
-      Scalar y = 0.0f;
-      Scalar z = 0.0f;
-      Scalar w = 1.0f;
+      Scalar x;
+      Scalar y;
+      Scalar z;
+      Scalar w;
     };
     Scalar e[4];
   };
 
-  constexpr Vector4() {}
+  constexpr Vector4() : x(0.0f), y(0.0f), z(0.0f), w(1.0f) {}
 
   //   constexpr Vector4(const Color& c)
   //       : x(c.red), y(c.green), z(c.blue), w(c.alpha) {}
@@ -256,7 +259,7 @@ struct Vector4 {
   constexpr Vector4(std::array<Scalar, 4> values)
       : x(values[0]), y(values[1]), z(values[2]), w(values[3]) {}
 
-  constexpr bool IsFinite() const {
+  /*constexpr*/ bool IsFinite() const {
     return std::isfinite(x) && std::isfinite(y) && std::isfinite(z) &&
            std::isfinite(w);
   }

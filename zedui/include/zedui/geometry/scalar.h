@@ -22,9 +22,14 @@ constexpr T Absolute(const T& val) {
   return val >= T{} ? val : -val;
 }
 
+// template <>
+// constexpr Scalar Absolute<Scalar>(const float& val) {
+//   return fabsf(val);
+// }
+
 template <>
 constexpr Scalar Absolute<Scalar>(const float& val) {
-  return fabsf(val);
+  return val < 0.0f ? -val : val;
 }
 
 constexpr inline bool ScalarNearlyZero(Scalar x,
