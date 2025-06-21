@@ -1,5 +1,4 @@
-#ifndef ZEDUI_RENDER_RENDER_CONTEXT_H_
-#define ZEDUI_RENDER_RENDER_CONTEXT_H_
+#pragma once
 
 #include "zedbase/macros.h"
 
@@ -8,5 +7,3 @@ class RenderContext {
  public:
 };
 }  // namespace zedui
-
-#endif  // ZEDUI_RENDER_RENDER_CONTEXT_H_

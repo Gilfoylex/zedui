@@ -1,5 +1,4 @@
-#ifndef ZEDUI_CONTROLS_UI_ELEMENT_H_
-#define ZEDUI_CONTROLS_UI_ELEMENT_H_
+#pragma once
 
 #include <memory>
 
@@ -46,5 +45,3 @@ class UIElement {
 };
 
 }  // namespace zedui
-
-#endif  // ZEDUI_CONTROLS_UI_ELEMENT_H_

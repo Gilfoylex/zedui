@@ -1,5 +1,4 @@
-#ifndef ZEDUI_VIEWS_RENDER_VIEW_H_
-#define ZEDUI_VIEWS_RENDER_VIEW_H_
+#pragma once
 
 #include <memory>
 
@@ -15,5 +14,3 @@ class RenderView : public UIContainer {
 };
 
 }  // namespace zedui
-
-#endif  // ZEDUI_VIEWS_RENDER_VIEW_H_

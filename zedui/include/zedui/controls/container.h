@@ -1,5 +1,4 @@
-#ifndef ZEDUI_CONTROLS_CONTAINER_H_
-#define ZEDUI_CONTROLS_CONTAINER_H_
+#pragma once
 
 #include "zedui/controls/ui_container.h"
 
@@ -11,9 +10,5 @@ class Container : public UIContainer {
   virtual void SetWidth(float width);
   virtual void SetHeight(float height);
   virtual void SetSize(const Size& size);
-
-  void Draw(DrawContext& draw_context) override;
 };
 }  // namespace zedui
-
-#endif  // ZEDUI_CONTROLS_CONTAINER_H_

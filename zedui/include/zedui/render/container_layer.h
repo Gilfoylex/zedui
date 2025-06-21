@@ -1,5 +1,4 @@
-#ifndef ZEDUI_RENDER_CONTAINER_LAYER_H_
-#define ZEDUI_RENDER_CONTAINER_LAYER_H_
+#pragma once
 
 #include <memory>
 #include <vector>
@@ -18,5 +17,3 @@ class ContainerLayer : public Layer {
 };
 
 }  // namespace zedui
-
-#endif  // ZEDUI_RENDER_CONTAINER_LAYER_H_

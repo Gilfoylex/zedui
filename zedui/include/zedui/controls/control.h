@@ -1,5 +1,4 @@
-#ifndef ZEDUI_CONTROLS_CONTROL_H_
-#define ZEDUI_CONTROLS_CONTROL_H_
+#pragma once
 
 #include <memory>
 #include "zedui/controls/ui_element.h"
@@ -16,5 +15,3 @@ class Control : public UIElement {
   void MarkDirty() override;
 };
 }  // namespace zedui
-
-#endif  // ZEDUI_CONTROLS_CONTROL_H_

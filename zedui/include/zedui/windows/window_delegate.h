@@ -1,5 +1,4 @@
-#ifndef ZEDUI_WINDOWS_WINDOW_DELEGATE_H_
-#define ZEDUI_WINDOWS_WINDOW_DELEGATE_H_
+#pragma once
 
 namespace zedui {
 class WindowDelegate {
@@ -9,5 +8,3 @@ class WindowDelegate {
   virtual void OnSizeChanged(int width, int height) = 0;
 };
 }  // namespace zedui
-
-#endif  // ZEDUI_WINDOWS_WINDOW_DELEGATE_H_

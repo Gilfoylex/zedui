@@ -19,9 +19,12 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     target_compile_definitions(zedui PRIVATE "NOMINMAX" "UNICODE" "_UNICODE")
 endif()
 
-# 链接 zedbase 静态库
+# zedbase
 target_link_libraries(zedui PRIVATE zedbase)
+# yoga
 target_link_libraries(zedui PRIVATE yogacore)
+# Dwmapi.lib
+target_link_libraries(zedui PRIVATE Dwmapi)
 
 # 添加头文件目录
 target_include_directories(zedui PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)

@@ -1,5 +1,4 @@
-#ifndef ZEDUI_WINDOWS_WINDOW_H_
-#define ZEDUI_WINDOWS_WINDOW_H_
+#pragma once
 
 #include <memory>
 
@@ -50,5 +49,3 @@ class Window : public WindowDelegate, Container {
 };
 
 }  // namespace zedui
-
-#endif  // ZEDUI_WINDOWS_WINDOW_H_

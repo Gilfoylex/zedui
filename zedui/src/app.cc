@@ -3,6 +3,8 @@
 #include "zedui/app.h"
 
 namespace zedui {
+
+App* App::Current = nullptr;
 App::App() {
   render_thread_ = std::make_unique<zedbase::Thread>("RenderThread");
   ui_task_runner_ = std::make_shared<zedbase::UITaskRunner>();

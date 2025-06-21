@@ -1,5 +1,4 @@
-#ifndef ZEDUI_APP_H_
-#define ZEDUI_APP_H_
+#pragma once
 
 #include <memory>
 #include <queue>
@@ -37,5 +36,3 @@ class App {
 };
 
 }  // namespace zedui
-
-#endif  // ZEDUI_APP_H_

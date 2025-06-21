@@ -1,5 +1,4 @@
-#ifndef ZEDUI_RENDER_PICTURE_LAYER_H_
-#define ZEDUI_RENDER_PICTURE_LAYER_H_
+#pragma once
 
 #include <memory>
 #include <vector>
@@ -28,5 +27,3 @@ class PictureLayer final : public Layer {
   std::vector<std::shared_ptr<DrawCommand>> draw_commands_;
 };
 }  // namespace zedui
-
-#endif  // ZEDUI_RENDER_PICTURE_LAYER_H_

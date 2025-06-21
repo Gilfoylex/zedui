@@ -19,5 +19,8 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     target_compile_definitions(zedbase PRIVATE "NOMINMAX" "UNICODE" "_UNICODE")
 endif()
 
+# Winmm.lib
+target_link_libraries(zedbase PRIVATE Winmm)
+
 # 添加头文件目录
 target_include_directories(zedbase PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)

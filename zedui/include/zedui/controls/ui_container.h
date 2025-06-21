@@ -1,5 +1,4 @@
-#ifndef ZEDUI_CONTROLS_UI_CONTAINER_H_
-#define ZEDUI_CONTROLS_UI_CONTAINER_H_
+#pragma once
 
 #include <list>
 #include <memory>
@@ -28,5 +27,3 @@ class UIContainer : public UIElement {
   std::shared_ptr<zedui::PictureLayer> picture_layer_;
 };
 }  // namespace zedui
-
-#endif  // ZEDUI_CONTROLS_CONTAINER_H_

@@ -3,7 +3,7 @@
 
 namespace zedui {
   
-Window::Window() : in_redraw_(false) {
+Window::Window() : Container(), in_redraw_(false) {
   Win32Window::Point origin(10, 10);
   Win32Window::Size size(width_, height_);
   auto ret = win32_window_.Create(L"ZedUI Window", origin, size);
@@ -21,7 +21,7 @@ void Window::OnCreated() {
 void Window::OnDestroyed() {}
 void Window::OnSizeChanged(int width, int height) {
   auto size =
-      Size::MakeWH(static_cast<Scalar>(width), static_cast<Scalar>(height));
+      Size::MakeWH(static_cast<Float>(width), static_cast<Float>(height));
   SetSize(size);
 }
 
@@ -101,6 +101,10 @@ void Window::DoFrame() {
 
 void Window::Build(std::shared_ptr<ContainerLayer> layer_tree) {
   // window's build is done in DoFrame
+}
+
+void Window::Draw(DrawContext& draw_context){
+  // todo 
 }
 
 }  // namespace zedui

@@ -1,5 +1,4 @@
-#ifndef ZEDUI_WINDOWS_WIN32_WINDOW_H_
-#define ZEDUI_WINDOWS_WIN32_WINDOW_H_
+#pragma once
 
 #include <Windows.h>
 
@@ -60,5 +59,3 @@ class Win32Window {
   ZED_DISALLOW_COPY_ASSIGN_AND_MOVE(Win32Window);
 };
 }  // namespace zedui
-
-#endif  // ZEDUI_WINDOWS_WIN32_WINDOW_H_

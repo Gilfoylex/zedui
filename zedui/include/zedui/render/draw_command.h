@@ -1,5 +1,4 @@
-#ifndef ZEDUI_RENDER_DRAW_COMMAND_H_
-#define ZEDUI_RENDER_DRAW_COMMAND_H_
+#pragma once
 
 namespace zedui {
 
@@ -45,5 +44,3 @@ struct DrawCircleCommand final : public DrawCommand {
 
 
 }  // namespace zedui
-
-#endif  // ZEDUI_RENDER_DRAW_COMMAND_H_

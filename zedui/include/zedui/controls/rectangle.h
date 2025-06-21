@@ -1,5 +1,4 @@
-#ifndef ZEDUI_CONTROLS_RECTANGLE_H_
-#define ZEDUI_CONTROLS_RECTANGLE_H_
+#pragma once
 
 #include <memory>
 #include "zedui/controls/control.h"
@@ -11,5 +10,3 @@ class Rectangle : public Control {
   void Draw(DrawContext& draw_context) override;
 };
 }  // namespace zedui
-
-#endif  // ZEDUI_CONTROLS_RECTANGLE_H_
