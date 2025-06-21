@@ -2,16 +2,19 @@
 #include "zedui/controls/ui_container.h"
 
 namespace zedui {
-UIElement::UIElement() : UIElement(nullptr) {}
-
-UIElement::UIElement(std::shared_ptr<UIContainer> parent)
-    : parent_(parent),
-      node_(YGNodeNew()),
+UIElement::UIElement()
+    : node_(YGNodeNew()),
+      is_dirty_(false),
       last_render_rect_(Rect::MakeLTRB(0.0, 0.0, 0.0, 0.0)) {}
+
 UIElement::~UIElement() {
   if (node_) {
     YGNodeFree(node_);
   }
+}
+
+void UIElement::SetParent(std::shared_ptr<UIContainer> parent) {
+  parent_ = parent;
 }
 
 std::shared_ptr<UIContainer> UIElement::GetParent() const {
@@ -58,7 +61,7 @@ std::shared_ptr<zedui::PictureLayer> UIElement::GetPictureLayer() {
 void UIElement::Invalidate() {
   MarkDirty();
   auto parent = GetParent();
-  if (parent){
+  if (parent) {
     parent->MarkDirty();
     parent->NotifyParentForRedraw();
   }
@@ -80,6 +83,7 @@ void UIElement::Build(std::shared_ptr<ContainerLayer> layer_tree) {
   if (IsDirty()) {
     auto draw_context = DrawContext(GetLeft(), GetTop(), GetPictureLayer());
     Draw(draw_context);
+    DrawCompleted();
   }
 }
 

@@ -1,12 +1,17 @@
-#include "zedui/app.h"
 #include "zedui/windows/window.h"
+#include "zedui/app.h"
+#include "zedui/render/d2d_renderer.h"
 
 namespace zedui {
-  
-Window::Window() : Container(), in_redraw_(false) {
+
+Window::Window() : Container(), in_redraw_(false), created_(false) {
   Win32Window::Point origin(10, 10);
   Win32Window::Size size(width_, height_);
+  win32_window_.SetWindowDelegate(this);
+  win32_window_.SetQuitOnClose(true);
   auto ret = win32_window_.Create(L"ZedUI Window", origin, size);
+  win32_window_.SetWindowDelegate(this);
+  SetFlexDirection();
 }
 
 Window::~Window() {}
@@ -17,16 +22,24 @@ void Window::Show() {
 
 void Window::OnCreated() {
   // create render target
+  HWND hwnd = win32_window_.GetHandle();
+  App::Current->GetRenderTaskRunner()->PostTask([this, hwnd]() {
+    renderer_ = std::make_shared<D2DRenderer>(hwnd);
+    renderer_->CreateRenderTarget(Size::MakeWH(0, 0));
+  });
+  created_ = true;
 }
 void Window::OnDestroyed() {}
 void Window::OnSizeChanged(int width, int height) {
   auto size =
       Size::MakeWH(static_cast<Float>(width), static_cast<Float>(height));
+  App::Current->GetRenderTaskRunner()->PostTask(
+      [this]() { renderer_->ResizeRenderTarget(Size::MakeWH(0, 0)); });
   SetSize(size);
 }
 
 void Window::NotifyParentForRedraw() {
-  if (in_redraw_) {
+  if (in_redraw_ || !created_) {
     return;
   }
   in_redraw_ = true;
@@ -90,6 +103,7 @@ void Window::DoFrame() {
   if (IsDirty()) {
     auto draw_context = DrawContext(GetLeft(), GetTop(), picture_layer);
     Draw(draw_context);
+    DrawCompleted();
   }
   for (const auto& child : childrens_) {
     child->Build(container_layer);
@@ -97,14 +111,16 @@ void Window::DoFrame() {
   // build logic end
 
   // todo: post render task to render thread
+  App::Current->GetRenderTaskRunner()->PostTask(
+      [this, container_layer]() { renderer_->RenderFrame(container_layer); });
 }
 
 void Window::Build(std::shared_ptr<ContainerLayer> layer_tree) {
   // window's build is done in DoFrame
 }
 
-void Window::Draw(DrawContext& draw_context){
-  // todo 
+void Window::Draw(DrawContext& draw_context) {
+  // todo
 }
 
 }  // namespace zedui

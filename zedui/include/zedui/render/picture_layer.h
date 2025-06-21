@@ -17,7 +17,7 @@ class PictureLayer final : public Layer {
   float GetHeight() const;
 
  public:
-  void RenderToScreen() override;
+  void RenderToScreen(const std::shared_ptr<Renderer>& renderer) override;
 
  private:
   float left_;

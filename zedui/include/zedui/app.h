@@ -19,6 +19,7 @@ class App {
   App();
   ~App();
   std::shared_ptr<zedbase::UITaskRunner> GetUITaskRunner();
+  zedbase::RefPtr<zedbase::TaskRunner> GetRenderTaskRunner();
   void PostVsyncTask(zedbase::closure task);
   void Run();
 

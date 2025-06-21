@@ -15,7 +15,6 @@ class UIContainer;  // Forward declaration for UIContainer
 class UIElement {
  public:
   UIElement();
-  explicit UIElement(std::shared_ptr<UIContainer> parent);
   virtual ~UIElement();
   std::shared_ptr<UIContainer> GetParent() const;
   YGNodeRef GetNode() const;
@@ -38,8 +37,12 @@ class UIElement {
  protected:
   std::weak_ptr<UIContainer> parent_;
   YGNodeRef node_;
-  bool is_dirty_ = false;
+  bool is_dirty_;
   Rect last_render_rect_;
+
+private:
+  void SetParent(std::shared_ptr<UIContainer> parent);
+  friend class UIContainer;
 
   ZED_DISALLOW_COPY_ASSIGN_AND_MOVE(UIElement);
 };

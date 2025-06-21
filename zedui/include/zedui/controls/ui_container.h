@@ -5,10 +5,9 @@
 #include "zedui/controls/ui_element.h"
 
 namespace zedui {
-class UIContainer : public UIElement {
+class UIContainer : public UIElement, public std::enable_shared_from_this<UIContainer> {
  public:
   UIContainer();
-  explicit UIContainer(std::shared_ptr<UIContainer> parent);
   void Add(std::shared_ptr<UIElement> child);
   void Remove(std::shared_ptr<UIElement> child);
 

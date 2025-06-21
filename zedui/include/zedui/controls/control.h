@@ -2,16 +2,16 @@
 
 #include <memory>
 #include "zedui/controls/ui_element.h"
+#include "zedui/geometry/size.h"
 namespace zedui {
 class Control : public UIElement {
  public:
   Control();
-  explicit Control(std::shared_ptr<UIContainer> parent);
-  virtual ~Control() = default;
+  virtual ~Control();
   void SetWidth(float width);
   void SetHeight(float height);
+  void SetSize(Size size);
 
-  // Override UIElement methods
-  void MarkDirty() override;
+  void SetFlexGrow(float flex_grow);
 };
 }  // namespace zedui

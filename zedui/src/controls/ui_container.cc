@@ -2,17 +2,17 @@
 
 namespace zedui {
 
-UIContainer::UIContainer() : UIElement(nullptr) {}
-UIContainer::UIContainer(std::shared_ptr<UIContainer> parent)
-    : UIElement(parent), picture_layer_(nullptr) {}
+UIContainer::UIContainer() : UIElement(), picture_layer_(nullptr) {}
 
 void UIContainer::Add(std::shared_ptr<UIElement> child) {
   childrens_.push_back(child);
   YGNodeInsertChild(node_, child->GetNode(), YGNodeGetChildCount(node_));
+  child->SetParent(shared_from_this());
   Invalidate();
 }
 
 void UIContainer::Remove(std::shared_ptr<UIElement> child) {
+  child->SetParent(nullptr);
   YGNodeRemoveChild(node_, child->GetNode());
   childrens_.remove(child);
   Invalidate();

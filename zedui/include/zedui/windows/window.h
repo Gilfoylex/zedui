@@ -9,10 +9,11 @@
 #include "zedui/controls/container.h"
 #include "zedui/windows/win32_window.h"
 #include "zedui/windows/window_delegate.h"
+#include "zedui/render/renderer.h"
 
 namespace zedui {
 
-class Window : public WindowDelegate, Container {
+class Window : public WindowDelegate, public Container {
  public:
   Window();
   virtual ~Window();
@@ -43,8 +44,10 @@ class Window : public WindowDelegate, Container {
  private:
   Win32Window win32_window_;
   bool in_redraw_;
+  bool created_;
   unsigned int width_ = 400;
   unsigned int height_ = 300;
+  std::shared_ptr<Renderer> renderer_;
   ZED_DISALLOW_COPY_ASSIGN_AND_MOVE(Window);
 };
 

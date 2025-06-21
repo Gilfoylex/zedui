@@ -26,5 +26,8 @@ target_link_libraries(zedui PRIVATE yogacore)
 # Dwmapi.lib
 target_link_libraries(zedui PRIVATE Dwmapi)
 
+# d2d1.lib
+target_link_libraries(zedui PRIVATE d2d1)
+
 # 添加头文件目录
 target_include_directories(zedui PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)

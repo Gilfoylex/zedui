@@ -26,6 +26,10 @@ std::shared_ptr<zedbase::UITaskRunner> App::GetUITaskRunner() {
   return ui_task_runner_;
 }
 
+zedbase::RefPtr<zedbase::TaskRunner> App::GetRenderTaskRunner() {
+  return render_thread_->GetTaskRunner();
+}
+
 void App::PostVsyncTask(zedbase::closure task) {
   std::lock_guard<std::mutex> lock(vsync_mutex_);
   vsync_tasks_.push(std::move(task));

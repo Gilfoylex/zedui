@@ -1,4 +1,5 @@
 #include "zedui/render/picture_layer.h"
+#include "zedui/render/renderer.h"
 
 namespace zedui {
 PictureLayer::PictureLayer(float left, float top, float width, float height)
@@ -22,8 +23,8 @@ void PictureLayer::PushDrawCommand(
   draw_commands_.push_back(command);
 }
 
-void PictureLayer::RenderToScreen() {
-  // todo on screen
+void PictureLayer::RenderToScreen(const std::shared_ptr<Renderer>& renderer) {
+  renderer->ExecuteDrawCommands(draw_commands_);
 }
 
 }  // namespace zedui

@@ -10,7 +10,7 @@ class ContainerLayer : public Layer {
   void Add(std::shared_ptr<Layer> layer);
 
  public:
-  void RenderToScreen() override;
+  void RenderToScreen(const std::shared_ptr<Renderer>& renderer) override;
 
  protected:
   std::vector<std::shared_ptr<Layer>> child_layers_;
