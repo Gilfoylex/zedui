@@ -1,6 +1,4 @@
 #include "zedui/render/d2d_renderer.h"
-#include "zedui/render/container_layer.h"
-#include "zedui/render/draw_command.h"
 
 namespace zedui {
 
@@ -74,6 +72,7 @@ void D2DRenderer::DestroyRenderTarget() {
 }
 
 void D2DRenderer::ExecuteDrawCommands(
+    Layer* key,
     const std::vector<std::shared_ptr<DrawCommand>>& commands) {
   Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> brush;
   render_target_->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Blue),
@@ -82,12 +81,38 @@ void D2DRenderer::ExecuteDrawCommands(
     if (command->type == DrawType::Rect) {
       auto rectCommandPtr = std::dynamic_pointer_cast<DrawRectCommand>(command);
       D2D1_RECT_F rect =
-          D2D1::RectF(rectCommandPtr->x, rectCommandPtr->y,
-                      rectCommandPtr->x + rectCommandPtr->width, rectCommandPtr->y + rectCommandPtr->height);
+          D2D1::RectF(rectCommandPtr->left, rectCommandPtr->top,
+                      rectCommandPtr->right, rectCommandPtr->bottom);
       // render_target_->DrawRectangle(rect, brush.Get(), 3.0f);
       render_target_->FillRectangle(rect, brush.Get());
     }
   }
+}
+
+void zedui::D2DRenderer::DeleteLayerCache(Layer* key) {
+  if (layer_caches_.empty()) {
+    return;
+  }
+
+  layer_caches_.erase(key);
+}
+
+Microsoft::WRL::ComPtr<ID2D1Bitmap> D2DRenderer::GetLayerCache(Layer* key) {
+  if (layer_caches_.empty()) {
+    return nullptr;
+  }
+
+  auto it = layer_caches_.find(key);
+  if (it == layer_caches_.end()) {
+    return nullptr;
+  }
+
+  return it->second;
+}
+
+void zedui::D2DRenderer::CacheLayer(Layer* key,
+                                    Microsoft::WRL::ComPtr<ID2D1Bitmap> value) {
+  layer_caches_[key] = value;
 }
 
 }  // namespace zedui

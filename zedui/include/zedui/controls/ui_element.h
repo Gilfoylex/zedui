@@ -21,6 +21,8 @@ class UIElement {
 
   virtual float GetLeft() const;
   virtual float GetTop() const;
+  virtual float GetRight() const;
+  virtual float GetBottom() const;
   virtual float GetWidth() const;
   virtual float GetHeight() const;
   virtual Rect GetRect() const;

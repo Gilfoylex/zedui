@@ -16,29 +16,29 @@ struct DrawCommand {
 
 struct DrawRectCommand final : public DrawCommand {
   DrawRectCommand() = delete;
-  DrawRectCommand(float x, float y, float width, float height) {
+  DrawRectCommand(float left, float top, float width, float height) {
     type = DrawType::Rect;
-    this->x = x;
-    this->y = y;
-    this->width = width;
-    this->height = height;
+    this->left = left;
+    this->top = top;
+    this->right = left + width;
+    this->bottom = top + height;
   }
-  float x;
-  float y;
-  float width;
-  float height;
+  float left;
+  float top;
+  float right;
+  float bottom;
 };
 
 struct DrawCircleCommand final : public DrawCommand {
   DrawCircleCommand() = delete;
-  DrawCircleCommand(float x, float y, float radius) {
+  DrawCircleCommand(float left, float top, float radius) {
     type = DrawType::Circle;
-    this->x = x;
-    this->y = y;
+    this->left = left;
+    this->top = top;
     this->radius = radius;
   }
-  float x;
-  float y;
+  float left;
+  float top;
   float radius;
 };
 

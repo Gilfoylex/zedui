@@ -16,15 +16,12 @@ void zedui::DrawContext::DrawCircle(float x, float y, float radius) {
   picture_layer_->PushDrawCommand(draw_command);
 }
 
-void zedui::DrawContext::DrawRectangle(float x,
-                                       float y,
+void zedui::DrawContext::DrawRectangle(float left,
+                                       float top,
                                        float width,
                                        float height) {
-  // auto draw_command = std::make_shared<DrawRectCommand>(
-  //     x + left_offset_, y + top_offset_, width, height);
-
-      auto draw_command = std::make_shared<DrawRectCommand>(
-      x, y, width, height);
+  auto draw_command =
+      std::make_shared<DrawRectCommand>(left, top, width, height);
   picture_layer_->PushDrawCommand(draw_command);
 }
 

@@ -2,7 +2,10 @@
 
 #include <list>
 #include <memory>
+
 #include "zedui/controls/ui_element.h"
+#include "zedui/render/container_layer.h"
+#include "zedui/render/picture_layer.h"
 
 namespace zedui {
 class UIContainer : public UIElement, public std::enable_shared_from_this<UIContainer> {

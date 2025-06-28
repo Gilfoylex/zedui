@@ -23,8 +23,8 @@ void PictureLayer::PushDrawCommand(
   draw_commands_.push_back(command);
 }
 
-void PictureLayer::RenderToScreen(const std::shared_ptr<Renderer>& renderer) {
-  renderer->ExecuteDrawCommands(draw_commands_);
+void PictureLayer::RenderToScreen(std::shared_ptr<Renderer> renderer) {
+  renderer->ExecuteDrawCommands(this, draw_commands_);
 }
 
 }  // namespace zedui

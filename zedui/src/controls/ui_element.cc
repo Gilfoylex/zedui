@@ -33,6 +33,14 @@ float UIElement::GetTop() const {
   return YGNodeLayoutGetTop(node_);
 }
 
+float UIElement::GetRight() const {
+  return YGNodeLayoutGetRight(node_);
+}
+
+float UIElement::GetBottom() const {
+  return YGNodeLayoutGetBottom(node_);
+}
+
 float UIElement::GetWidth() const {
   return YGNodeLayoutGetWidth(node_);
 }
@@ -46,7 +54,7 @@ Rect UIElement::GetRect() const {
   auto top = GetTop();
   auto width = GetWidth();
   auto height = GetHeight();
-  return Rect::MakeLTRB(left, top, width, height);
+  return Rect::MakeXYWH(left, top, width, height);
 }
 
 Size UIElement::GetSize() const {

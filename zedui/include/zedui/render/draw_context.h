@@ -14,8 +14,8 @@ class DrawContext final {
               std::shared_ptr<zedui::PictureLayer> picture_layer);
 
   // draw methods
-  void DrawCircle(float x, float y, float radius);
-  void DrawRectangle(float x, float y, float width, float height);
+  void DrawCircle(float left, float top, float radius);
+  void DrawRectangle(float left, float top, float width, float height);
 
  private:
   float left_offset_;

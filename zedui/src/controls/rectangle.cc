@@ -14,9 +14,9 @@ Rectangle::Rectangle(float width, float height) {
 void Rectangle::Draw(DrawContext& draw_context) {
   auto left = GetLeft();
   auto top = GetTop();
-  auto w = GetWidth();
-  auto h = GetHeight();
-  draw_context.DrawRectangle(left, top, w, h);
+  auto width = GetWidth();
+  auto height = GetHeight();
+  draw_context.DrawRectangle(left, top, width, height);
 }
 
 }  // namespace zedui

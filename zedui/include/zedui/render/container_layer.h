@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <vector>
+
 #include "zedui/render/layer.h"
 
 namespace zedui {
@@ -10,7 +11,7 @@ class ContainerLayer : public Layer {
   void Add(std::shared_ptr<Layer> layer);
 
  public:
-  void RenderToScreen(const std::shared_ptr<Renderer>& renderer) override;
+  void RenderToScreen(std::shared_ptr<Renderer> renderer) override;
 
  protected:
   std::vector<std::shared_ptr<Layer>> child_layers_;

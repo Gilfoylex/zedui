@@ -5,7 +5,6 @@
 #include "zedui/render/draw_command.h"
 #include "zedui/render/layer.h"
 
-
 namespace zedui {
 class PictureLayer final : public Layer {
  public:
@@ -17,7 +16,7 @@ class PictureLayer final : public Layer {
   float GetHeight() const;
 
  public:
-  void RenderToScreen(const std::shared_ptr<Renderer>& renderer) override;
+  void RenderToScreen(std::shared_ptr<Renderer> renderer) override;
 
  private:
   float left_;
