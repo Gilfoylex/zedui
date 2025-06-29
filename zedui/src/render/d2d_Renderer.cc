@@ -73,9 +73,20 @@ void D2DRenderer::DestroyRenderTarget() {
 
 void D2DRenderer::ExecuteDrawCommands(
     Layer* key,
+    Rect rect,
     const std::vector<std::shared_ptr<DrawCommand>>& commands) {
+  auto cache_bitmap = GetLayerCache(key);
+  D2D1_RECT_F bitmap_rect = D2D1::RectF(rect.GetMinX(), rect.GetMinY(), rect.GetMaxX(), rect.GetMaxY());
+  if (cache_bitmap){
+    render_target_->DrawBitmap(cache_bitmap.Get(), bitmap_rect);
+    return;
+  }
+  
+  Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> bitmap_rt;
+  auto hr = render_target_->CreateCompatibleRenderTarget(D2D1::SizeF(rect.size.width, rect.size.height), &bitmap_rt);
+  bitmap_rt->BeginDraw();
   Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> brush;
-  render_target_->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Blue),
+  bitmap_rt->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Blue),
                                         &brush);
   for (const auto& command : commands) {
     if (command->type == DrawType::Rect) {
@@ -84,9 +95,14 @@ void D2DRenderer::ExecuteDrawCommands(
           D2D1::RectF(rectCommandPtr->left, rectCommandPtr->top,
                       rectCommandPtr->right, rectCommandPtr->bottom);
       // render_target_->DrawRectangle(rect, brush.Get(), 3.0f);
-      render_target_->FillRectangle(rect, brush.Get());
+      bitmap_rt->FillRectangle(rect, brush.Get());
     }
   }
+
+  bitmap_rt->EndDraw();
+  bitmap_rt->GetBitmap(&cache_bitmap);
+  render_target_->DrawBitmap(cache_bitmap.Get(), bitmap_rect);
+  CacheLayer(key, cache_bitmap);
 }
 
 void zedui::D2DRenderer::DeleteLayerCache(Layer* key) {

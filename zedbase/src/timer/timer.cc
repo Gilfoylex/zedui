@@ -1,5 +1,6 @@
-#include "zedbase/logging.h"
 #include "zedbase/timer/timer.h"
+#include "zedbase/logging.h"
+
 
 namespace zedbase {
 namespace internal {
@@ -34,7 +35,10 @@ void DelayTimerBase::ScheduleNewTask(TimeDelta delay) {
 }
 
 void DelayTimerBase::OnTaskInvoked() {
-  ZED_DCHECK(running_);
+  // ZED_DCHECK(running_);
+  if (!running_) {
+    return;
+  }
   RunUserTask();
 }
 

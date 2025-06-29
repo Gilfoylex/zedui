@@ -5,6 +5,7 @@
 #include "zedui/geometry/size.h"
 #include "zedui/render/container_layer.h"
 #include "zedui/render/draw_command.h"
+#include "zedui/geometry/rect.h"
 
 namespace zedui {
 class Renderer : public std::enable_shared_from_this<Renderer> {
@@ -15,6 +16,7 @@ class Renderer : public std::enable_shared_from_this<Renderer> {
   virtual void DestroyRenderTarget() = 0;
   virtual void ExecuteDrawCommands(
       Layer* key,
+      Rect rect,
       const std::vector<std::shared_ptr<DrawCommand>>& commands) = 0;
   virtual void DeleteLayerCache(Layer* key) = 0;
   virtual ~Renderer() = default;

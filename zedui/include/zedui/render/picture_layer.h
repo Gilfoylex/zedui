@@ -6,9 +6,11 @@
 #include "zedui/render/layer.h"
 
 namespace zedui {
+
 class PictureLayer final : public Layer {
  public:
   PictureLayer(float left, float top, float width, float height);
+  ~PictureLayer();
   void PushDrawCommand(const std::shared_ptr<DrawCommand>& command);
   float GetLeft() const;
   float GetTop() const;
@@ -24,5 +26,7 @@ class PictureLayer final : public Layer {
   float width_;
   float height_;
   std::vector<std::shared_ptr<DrawCommand>> draw_commands_;
+  std::shared_ptr<Renderer> renderer_;
 };
+
 }  // namespace zedui
