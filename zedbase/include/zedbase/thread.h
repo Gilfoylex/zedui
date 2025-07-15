@@ -1,5 +1,4 @@
-#ifndef ZEDBASE_THREAD_H_
-#define ZEDBASE_THREAD_H_
+#pragma once
 
 #include <atomic>
 #include <functional>
@@ -70,5 +69,3 @@ class Thread {
 };
 
 }  // namespace zedbase
-
-#endif  // ZEDBASE_THREAD_H_

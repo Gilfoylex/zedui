@@ -1,5 +1,4 @@
-#ifndef ZEDBASE_MEMORY_WEAK_PTR_INTERNAL_H_
-#define ZEDBASE_MEMORY_WEAK_PTR_INTERNAL_H_
+#pragma once
 
 #include "zedbase/macros.h"
 #include "zedbase/memory/ref_counted.h"
@@ -33,5 +32,3 @@ class WeakPtrFlag : public zedbase::RefCountedThreadSafe<WeakPtrFlag> {
 
 }  // namespace internal
 }  // namespace zedbase
-
-#endif  // ZEDBASE_MEMORY_WEAK_PTR_INTERNAL_H_

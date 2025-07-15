@@ -9,44 +9,19 @@ TaskSource::~TaskSource() {
 }
 
 void TaskSource::ShutDown() {
-  primary_task_queue_ = {};
-  secondary_task_queue_ = {};
+  task_queue_ = {};
 }
 
 void TaskSource::RegisterTask(const DelayedTask& task) {
-  switch (task.GetTaskSourceGrade()) {
-    case TaskSourceGrade::kUserInteraction:
-      primary_task_queue_.push(task);
-      break;
-    case TaskSourceGrade::kUnspecified:
-      primary_task_queue_.push(task);
-      break;
-    case TaskSourceGrade::kDartEventLoop:
-      secondary_task_queue_.push(task);
-      break;
-  }
+  task_queue_.push(task);
 }
 
-void TaskSource::PopTask(TaskSourceGrade grade) {
-  switch (grade) {
-    case TaskSourceGrade::kUserInteraction:
-      primary_task_queue_.pop();
-      break;
-    case TaskSourceGrade::kUnspecified:
-      primary_task_queue_.pop();
-      break;
-    case TaskSourceGrade::kDartEventLoop:
-      secondary_task_queue_.pop();
-      break;
-  }
+void TaskSource::PopTask() {
+  task_queue_.pop();
 }
 
 size_t TaskSource::GetNumPendingTasks() const {
-  size_t size = primary_task_queue_.size();
-  if (secondary_pause_requests_ == 0) {
-    size += secondary_task_queue_.size();
-  }
-  return size;
+  return task_queue_.size();
 }
 
 bool TaskSource::IsEmpty() const {
@@ -55,42 +30,11 @@ bool TaskSource::IsEmpty() const {
 
 TaskSource::TopTask TaskSource::Top() const {
   ZED_CHECK(!IsEmpty());
-  if (secondary_pause_requests_ > 0 || secondary_task_queue_.empty()) {
-    const auto& primary_top = primary_task_queue_.top();
-    return {
-        .task_queue_id = task_queue_id_,
-        .task = primary_top,
-    };
-  } else if (primary_task_queue_.empty()) {
-    const auto& secondary_top = secondary_task_queue_.top();
-    return {
-        .task_queue_id = task_queue_id_,
-        .task = secondary_top,
-    };
-  } else {
-    const auto& primary_top = primary_task_queue_.top();
-    const auto& secondary_top = secondary_task_queue_.top();
-    if (primary_top > secondary_top) {
-      return {
-          .task_queue_id = task_queue_id_,
-          .task = secondary_top,
-      };
-    } else {
-      return {
-          .task_queue_id = task_queue_id_,
-          .task = primary_top,
-      };
-    }
-  }
-}
-
-void TaskSource::PauseSecondary() {
-  secondary_pause_requests_++;
-}
-
-void TaskSource::ResumeSecondary() {
-  secondary_pause_requests_--;
-  ZED_DCHECK(secondary_pause_requests_ >= 0);
+  const auto& top = task_queue_.top();
+  return {
+      .task_queue_id = task_queue_id_,
+      .task = top,
+  };
 }
 
 }  // namespace zedbase

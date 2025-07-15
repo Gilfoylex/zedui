@@ -1,5 +1,4 @@
-#ifndef ZEDBASE_UNIQUE_OBJECT_H_
-#define ZEDBASE_UNIQUE_OBJECT_H_
+#pragma once
 
 #include <utility>
 #include "zedbase/logging.h"
@@ -127,5 +126,3 @@ bool operator!=(const T& value, const UniqueObject<T, Traits>& object) {
 }
 
 }  // namespace zedbase
-
-#endif  // ZEDBASE_UNIQUE_OBJECT_H_

@@ -1,5 +1,4 @@
-#ifndef ZEDBASE_UI_TASK_RUNNER_H_
-#define ZEDBASE_UI_TASK_RUNNER_H_
+#pragma once
 
 #include <windows.h>
 
@@ -67,5 +66,3 @@ class UITaskRunner : public TaskRunnerWindow::Delegate {
 };
 
 }  // namespace zedbase
-
-#endif  // ZEDBASE_UI_TASK_RUNNER_H_

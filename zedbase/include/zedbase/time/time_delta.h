@@ -1,5 +1,4 @@
-#ifndef TIME_DELTA_H_
-#define TIME_DELTA_H_
+#pragma once
 
 #include <chrono>
 #include <cstdint>
@@ -124,5 +123,3 @@ class TimeDelta {
 };
 
 }  // namespace zedbase
-
-#endif  // TIME_DELTA_H_

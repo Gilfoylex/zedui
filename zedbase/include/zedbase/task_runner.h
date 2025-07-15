@@ -1,5 +1,4 @@
-#ifndef ZEDBASE_TASK_RUNNER_H_
-#define ZEDBASE_TASK_RUNNER_H_
+#pragma once
 
 #include "zedbase/closure.h"
 #include "zedbase/macros.h"
@@ -84,5 +83,3 @@ class TaskRunner : public zedbase::RefCountedThreadSafe<TaskRunner>,
 };
 
 }  // namespace zedbase
-
-#endif  // ZEDBASE_TASK_RUNNER_H_

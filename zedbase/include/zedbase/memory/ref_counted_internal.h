@@ -1,5 +1,4 @@
-#ifndef ZEDBASE_MEMORY_REF_COUNTED_INTERNAL_H_
-#define ZEDBASE_MEMORY_REF_COUNTED_INTERNAL_H_
+#pragma once
 
 #include <atomic>
 
@@ -94,5 +93,3 @@ inline RefCountedThreadSafeBase::~RefCountedThreadSafeBase() {
 }
 }  // namespace internal
 }  // namespace zedbase
-
-#endif  // ZEDBASE_MEMORY_REF_COUNTED_INTERNAL_H_

@@ -2,8 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef ZEDBASE_MESSAGE_LOOP_IMPL_H_
-#define ZEDBASE_MESSAGE_LOOP_IMPL_H_
+#pragma once
 
 #include <atomic>
 #include <deque>
@@ -75,5 +74,3 @@ class MessageLoopImpl : public Wakeable,
 };
 
 }  // namespace zedbase
-
-#endif  // ZEDBASE_MESSAGE_LOOP_IMPL_H_

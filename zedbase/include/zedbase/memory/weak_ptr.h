@@ -5,8 +5,7 @@
 // This file provides weak pointers and weak pointer factories that work like
 // Chromium's |base::WeakPtr<T>| and |base::WeakPtrFactory<T>|.
 
-#ifndef ZEDBASE_MEMORY_WEAK_PTR_H_
-#define ZEDBASE_MEMORY_WEAK_PTR_H_
+#pragma once
 
 #include <utility>
 
@@ -324,5 +323,3 @@ class TaskRunnerAffineWeakPtrFactory {
 };
 
 }  // namespace zedbase
-
-#endif  // ZEDBASE_MEMORY_WEAK_PTR_H_

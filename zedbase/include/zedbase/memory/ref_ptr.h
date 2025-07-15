@@ -1,5 +1,4 @@
-#ifndef ZEDBASE_MEMORY_REF_PTR_H_
-#define ZEDBASE_MEMORY_REF_PTR_H_
+#pragma once
 
 #include <cstddef>
 #include <functional>
@@ -255,5 +254,3 @@ struct hash<zedbase::RefPtr<T>> {
   }
 };
 }  // namespace std
-
-#endif  // ZEDBASE_MEMORY_REF_PTR_H_

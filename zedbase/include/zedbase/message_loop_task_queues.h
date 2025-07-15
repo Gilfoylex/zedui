@@ -1,5 +1,4 @@
-#ifndef ZEDBASE_MESSAGE_LOOP_TASK_QUEUES_H
-#define ZEDBASE_MESSAGE_LOOP_TASK_QUEUES_H
+#pragma once
 
 #include <map>
 #include <memory>
@@ -17,8 +16,6 @@
 
 namespace zedbase {
 
-static const TaskQueueId kUnmerged = TaskQueueId(TaskQueueId::kUnmerged);
-
 /// A collection of tasks and observers associated with one TaskQueue.
 ///
 /// Often a TaskQueue has a one-to-one relationship with a fml::MessageLoop,
@@ -30,14 +27,6 @@ class TaskQueueEntry {
   Wakeable* wakeable;
   TaskObservers task_observers;
   std::unique_ptr<TaskSource> task_source;
-
-  /// Set of the TaskQueueIds which is owned by this TaskQueue. If the set is
-  /// empty, this TaskQueue does not own any other TaskQueues.
-  std::set<TaskQueueId> owner_of;
-
-  /// Identifies the TaskQueue that subsumes this TaskQueue. If it is kUnmerged
-  /// it indicates that this TaskQueue is not owned by any other TaskQueue.
-  TaskQueueId subsumed_by;
 
   TaskQueueId created_for;
 
@@ -72,19 +61,15 @@ class MessageLoopTaskQueues {
 
   // Tasks methods.
 
-  void RegisterTask(
-      TaskQueueId queue_id,
-      const closure& task,
-      TimePoint target_time,
-      TaskSourceGrade task_source_grade = TaskSourceGrade::kUnspecified);
+  void RegisterTask(TaskQueueId queue_id,
+                    const closure& task,
+                    TimePoint target_time);
 
   bool HasPendingTasks(TaskQueueId queue_id) const;
 
   closure GetNextTaskToRun(TaskQueueId queue_id, TimePoint from_time);
 
   size_t GetNumPendingTasks(TaskQueueId queue_id) const;
-
-  static TaskSourceGrade GetCurrentTaskSourceGrade();
 
   // Observers methods.
 
@@ -96,41 +81,7 @@ class MessageLoopTaskQueues {
 
   std::vector<closure> GetObserversToNotify(TaskQueueId queue_id) const;
 
-  // Misc.
-
   void SetWakeable(TaskQueueId queue_id, Wakeable* wakeable);
-
-  // Invariants for merge and un-merge
-  //  1. RegisterTask will always submit to the queue_id that is passed
-  //     to it. It is not aware of whether a queue is merged or not. Same with
-  //     task observers.
-  //  2. When we get the tasks to run now, we look at both the queue_ids
-  //     for the owner and the subsumed task queues.
-  //  3. One TaskQueue can subsume multiple other TaskQueues. A TaskQueue can be
-  //     in exactly one of the following three states:
-  //     a. Be an owner of multiple other TaskQueues.
-  //     b. Be subsumed by a TaskQueue (an owner can never be subsumed).
-  //     c. Be independent, i.e, neither owner nor be subsumed.
-  //
-  //  Methods currently aware of the merged state of the queues:
-  //  HasPendingTasks, GetNextTaskToRun, GetNumPendingTasks
-  bool Merge(TaskQueueId owner, TaskQueueId subsumed);
-
-  // Will return false if the owner has not been merged before, or owner was
-  // subsumed by others, or subsumed wasn't subsumed by others, or owner
-  // didn't own the given subsumed queue id.
-  bool Unmerge(TaskQueueId owner, TaskQueueId subsumed);
-
-  /// Returns \p true if \p owner owns the \p subsumed task queue.
-  bool Owns(TaskQueueId owner, TaskQueueId subsumed) const;
-
-  // Returns the subsumed task queue if any or |TaskQueueId::kUnmerged|
-  // otherwise.
-  std::set<TaskQueueId> GetSubsumedTaskQueueId(TaskQueueId owner) const;
-
-  void PauseSecondarySource(TaskQueueId queue_id);
-
-  void ResumeSecondarySource(TaskQueueId queue_id);
 
  private:
   class MergedQueuesRunner;
@@ -158,5 +109,3 @@ class MessageLoopTaskQueues {
 };
 
 }  // namespace zedbase
-
-#endif  // ZEDBASE_MESSAGE_LOOP_TASK_QUEUES_H

@@ -1,13 +1,10 @@
-#include "zedbase/memory/task_runner_checker.h"
 #include "zedbase/logging.h"
+#include "zedbase/memory/task_runner_checker.h"
 
 namespace zedbase {
 
 TaskRunnerChecker::TaskRunnerChecker()
-    : initialized_queue_id_(InitTaskQueueId()),
-      subsumed_queue_ids_(
-          MessageLoopTaskQueues::GetInstance()->GetSubsumedTaskQueueId(
-              initialized_queue_id_)) {};
+    : initialized_queue_id_(InitTaskQueueId()) {};
 
 TaskRunnerChecker::~TaskRunnerChecker() = default;
 
@@ -17,11 +14,7 @@ bool TaskRunnerChecker::RunsOnCreationTaskRunner() const {
   if (RunsOnTheSameThread(current_queue_id, initialized_queue_id_)) {
     return true;
   }
-  for (auto& subsumed : subsumed_queue_ids_) {
-    if (RunsOnTheSameThread(current_queue_id, subsumed)) {
-      return true;
-    }
-  }
+
   return false;
 };
 
@@ -31,13 +24,6 @@ bool TaskRunnerChecker::RunsOnTheSameThread(TaskQueueId queue_a,
     return true;
   }
 
-  auto queues = MessageLoopTaskQueues::GetInstance();
-  if (queues->Owns(queue_a, queue_b)) {
-    return true;
-  }
-  if (queues->Owns(queue_b, queue_a)) {
-    return true;
-  }
   return false;
 };
 

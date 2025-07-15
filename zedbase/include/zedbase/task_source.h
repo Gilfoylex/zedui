@@ -1,9 +1,7 @@
-#ifndef ZEDBASE_TASK_SOURCE_H_
-#define ZEDBASE_TASK_SOURCE_H_
+#pragma once
 
 #include "zedbase/delayed_task.h"
 #include "zedbase/task_queue_id.h"
-#include "zedbase/task_source_grade.h"
 
 namespace zedbase {
 
@@ -48,7 +46,7 @@ class TaskSource {
   void RegisterTask(const DelayedTask& task);
 
   /// Pops the task heap corresponding to the `TaskSourceGrade`.
-  void PopTask(TaskSourceGrade grade);
+  void PopTask();
 
   /// Returns the number of pending tasks. Excludes the tasks from the secondary
   /// heap if it's paused.
@@ -61,21 +59,11 @@ class TaskSource {
   /// the secondary heap has been paused or not.
   TopTask Top() const;
 
-  /// Pause providing tasks from secondary task heap.
-  void PauseSecondary();
-
-  /// Resume providing tasks from secondary task heap.
-  void ResumeSecondary();
-
  private:
   const TaskQueueId task_queue_id_;
-  DelayedTaskQueue primary_task_queue_;
-  DelayedTaskQueue secondary_task_queue_;
-  int secondary_pause_requests_ = 0;
+  DelayedTaskQueue task_queue_;
 
   ZED_DISALLOW_COPY_ASSIGN_AND_MOVE(TaskSource);
 };
 
 }  // namespace zedbase
-
-#endif  // ZEDBASE_TASK_SOURCE_H_

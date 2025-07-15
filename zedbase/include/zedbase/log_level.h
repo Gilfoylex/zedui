@@ -1,5 +1,4 @@
-#ifndef ZEDBASE_LOG_LEVEL_H_
-#define ZEDBASE_LOG_LEVEL_H_
+#pragma once
 
 namespace zedbase {
 // Default log levels. Negative values can be used for verbose log levels.
@@ -28,5 +27,3 @@ const LogSeverity kLogDFatal = kLogError;
 const LogSeverity kLogDFatal = kLogFatal;
 #endif
 }  // namespace zedbase
-
-#endif  // ZEDBASE_LOG_LEVEL_H_

@@ -1,5 +1,4 @@
-#ifndef ZEBASE_MEMORY_REF_COUNTED_H_
-#define ZEBASE_MEMORY_REF_COUNTED_H_
+#pragma once
 
 #include "zedbase/macros.h"
 #include "zedbase/memory/ref_counted_internal.h"
@@ -125,5 +124,3 @@ class RefCountedThreadSafe : public internal::RefCountedThreadSafeBase {
 #define ZED_FRIEND_MAKE_REF_COUNTED(T) \
   friend class ::zedbase::internal::MakeRefCountedHelper<T>
 }  // namespace zedbase
-
-#endif  // ZEBASE_MEMORY_REF_COUNTED_H_

@@ -1,5 +1,4 @@
-#ifndef ZEDBASE_CLOSURE_H_
-#define ZEDBASE_CLOSURE_H_
+#pragma once
 
 #include <functional>
 #include "zedbase/macros.h"
@@ -67,5 +66,3 @@ class ScopedCleanupClosure final {
 };
 
 }  // namespace zedbase
-
-#endif  // ZEDBASE_CLOSURE_H_

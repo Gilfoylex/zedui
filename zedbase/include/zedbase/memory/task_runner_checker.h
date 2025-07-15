@@ -1,5 +1,4 @@
-#ifndef ZEDBASE_MEMORY_TASK_RUNNER_CHECKER_H_
-#define ZEDBASE_MEMORY_TASK_RUNNER_CHECKER_H_
+#pragma once
 
 #include "zedbase/message_loop.h"
 #include "zedbase/task_runner.h"
@@ -17,7 +16,6 @@ class TaskRunnerChecker final {
 
  private:
   TaskQueueId initialized_queue_id_;
-  std::set<TaskQueueId> subsumed_queue_ids_;
 
   TaskQueueId InitTaskQueueId();
 };
@@ -32,5 +30,3 @@ class TaskRunnerChecker final {
 #endif
 
 }  // namespace zedbase
-
-#endif  // ZEDBASE_MEMORY_TASK_RUNNER_CHECKER_H_

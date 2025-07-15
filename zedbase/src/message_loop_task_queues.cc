@@ -15,30 +15,11 @@
 #include "zedbase/make_copyable.h"
 #include "zedbase/task_source.h"
 
-
 namespace zedbase {
 
-const size_t TaskQueueId::kUnmerged = ULONG_MAX;
-
-namespace {
-
-// iOS prior to version 9 prevents c++11 thread_local and __thread specifier,
-// having us resort to boxed enum containers.
-class TaskSourceGradeHolder {
- public:
-  TaskSourceGrade task_source_grade;
-
-  explicit TaskSourceGradeHolder(TaskSourceGrade task_source_grade_arg)
-      : task_source_grade(task_source_grade_arg) {}
-};
-}  // namespace
-
-static thread_local std::unique_ptr<TaskSourceGradeHolder>
-    tls_task_source_grade;
-
 TaskQueueEntry::TaskQueueEntry(TaskQueueId created_for_arg)
-    : subsumed_by(kUnmerged), created_for(created_for_arg) {
-  wakeable = NULL;
+    : created_for(created_for_arg) {
+  wakeable = nullptr;
   task_observers = TaskObservers();
   task_source = std::make_unique<TaskSource>(created_for);
 }
@@ -56,21 +37,13 @@ TaskQueueId MessageLoopTaskQueues::CreateTaskQueue() {
   return loop_id;
 }
 
-MessageLoopTaskQueues::MessageLoopTaskQueues() : order_(0) {
-  tls_task_source_grade.reset(
-      new TaskSourceGradeHolder{TaskSourceGrade::kUnspecified});
-}
+MessageLoopTaskQueues::MessageLoopTaskQueues() : order_(0) {}
 
 MessageLoopTaskQueues::~MessageLoopTaskQueues() = default;
 
 void MessageLoopTaskQueues::Dispose(TaskQueueId queue_id) {
   std::lock_guard guard(queue_mutex_);
   const auto& queue_entry = queue_entries_.at(queue_id);
-  ZED_DCHECK(queue_entry->subsumed_by == kUnmerged);
-  auto& subsumed_set = queue_entry->owner_of;
-  for (auto& subsumed : subsumed_set) {
-    queue_entries_.erase(subsumed);
-  }
   // Erase owner queue_id at last to avoid &subsumed_set from being invalid
   queue_entries_.erase(queue_id);
 }
@@ -78,34 +51,17 @@ void MessageLoopTaskQueues::Dispose(TaskQueueId queue_id) {
 void MessageLoopTaskQueues::DisposeTasks(TaskQueueId queue_id) {
   std::lock_guard guard(queue_mutex_);
   const auto& queue_entry = queue_entries_.at(queue_id);
-  ZED_DCHECK(queue_entry->subsumed_by == kUnmerged);
-  auto& subsumed_set = queue_entry->owner_of;
   queue_entry->task_source->ShutDown();
-  for (auto& subsumed : subsumed_set) {
-    queue_entries_.at(subsumed)->task_source->ShutDown();
-  }
 }
 
-TaskSourceGrade MessageLoopTaskQueues::GetCurrentTaskSourceGrade() {
-  return tls_task_source_grade.get()->task_source_grade;
-}
-
-void MessageLoopTaskQueues::RegisterTask(
-    TaskQueueId queue_id,
-    const zedbase::closure& task,
-    zedbase::TimePoint target_time,
-    zedbase::TaskSourceGrade task_source_grade) {
+void MessageLoopTaskQueues::RegisterTask(TaskQueueId queue_id,
+                                         const zedbase::closure& task,
+                                         zedbase::TimePoint target_time) {
   std::lock_guard guard(queue_mutex_);
   size_t order = order_++;
   const auto& queue_entry = queue_entries_.at(queue_id);
-  queue_entry->task_source->RegisterTask(
-      {order, task, target_time, task_source_grade});
+  queue_entry->task_source->RegisterTask({order, task, target_time});
   TaskQueueId loop_to_wake = queue_id;
-  if (queue_entry->subsumed_by != kUnmerged) {
-    loop_to_wake = queue_entry->subsumed_by;
-  }
-
-  // This can happen when the secondary tasks are paused.
   if (HasPendingTasksUnlocked(loop_to_wake)) {
     WakeUpUnlocked(loop_to_wake, GetNextWakeTimeUnlocked(loop_to_wake));
   }
@@ -135,9 +91,6 @@ zedbase::closure MessageLoopTaskQueues::GetNextTaskToRun(
     return nullptr;
   }
   zedbase::closure invocation = top.task.GetTask();
-  const auto task_source_grade = top.task.GetTaskSourceGrade();
-  queue_entries_.at(top.task_queue_id)->task_source->PopTask(task_source_grade);
-  tls_task_source_grade.reset(new TaskSourceGradeHolder{task_source_grade});
   return invocation;
 }
 
@@ -151,18 +104,9 @@ void MessageLoopTaskQueues::WakeUpUnlocked(TaskQueueId queue_id,
 size_t MessageLoopTaskQueues::GetNumPendingTasks(TaskQueueId queue_id) const {
   std::lock_guard guard(queue_mutex_);
   const auto& queue_entry = queue_entries_.at(queue_id);
-  if (queue_entry->subsumed_by != kUnmerged) {
-    return 0;
-  }
 
   size_t total_tasks = 0;
   total_tasks += queue_entry->task_source->GetNumPendingTasks();
-
-  auto& subsumed_set = queue_entry->owner_of;
-  for (auto& subsumed : subsumed_set) {
-    const auto& subsumed_entry = queue_entries_.at(subsumed);
-    total_tasks += subsumed_entry->task_source->GetNumPendingTasks();
-  }
   return total_tasks;
 }
 
@@ -185,19 +129,8 @@ std::vector<zedbase::closure> MessageLoopTaskQueues::GetObserversToNotify(
   std::lock_guard guard(queue_mutex_);
   std::vector<zedbase::closure> observers;
 
-  if (queue_entries_.at(queue_id)->subsumed_by != kUnmerged) {
-    return observers;
-  }
-
   for (const auto& observer : queue_entries_.at(queue_id)->task_observers) {
     observers.push_back(observer.second);
-  }
-
-  auto& subsumed_set = queue_entries_.at(queue_id)->owner_of;
-  for (auto& subsumed : subsumed_set) {
-    for (const auto& observer : queue_entries_.at(subsumed)->task_observers) {
-      observers.push_back(observer.second);
-    }
   }
 
   return observers;
@@ -211,150 +144,14 @@ void MessageLoopTaskQueues::SetWakeable(TaskQueueId queue_id,
   queue_entries_.at(queue_id)->wakeable = wakeable;
 }
 
-bool MessageLoopTaskQueues::Merge(TaskQueueId owner, TaskQueueId subsumed) {
-  if (owner == subsumed) {
-    return true;
-  }
-  std::lock_guard guard(queue_mutex_);
-  auto& owner_entry = queue_entries_.at(owner);
-  auto& subsumed_entry = queue_entries_.at(subsumed);
-  auto& subsumed_set = owner_entry->owner_of;
-  if (subsumed_set.find(subsumed) != subsumed_set.end()) {
-    return true;
-  }
-
-  // Won't check owner_entry->owner_of, because it may contains items when
-  // merged with other different queues.
-
-  // Ensure owner_entry->subsumed_by being kUnmerged
-  if (owner_entry->subsumed_by != kUnmerged) {
-    ZED_LOG(kLogWarning) << "Thread merging failed: owner_entry was already "
-                            "subsumed by others, owner="
-                         << owner << ", subsumed=" << subsumed
-                         << ", owner->subsumed_by=" << owner_entry->subsumed_by;
-    return false;
-  }
-  // Ensure subsumed_entry->owner_of being empty
-  if (!subsumed_entry->owner_of.empty()) {
-    ZED_LOG(kLogWarning)
-        << "Thread merging failed: subsumed_entry already owns others, owner="
-        << owner << ", subsumed=" << subsumed
-        << ", subsumed->owner_of.size()=" << subsumed_entry->owner_of.size();
-    return false;
-  }
-  // Ensure subsumed_entry->subsumed_by being kUnmerged
-  if (subsumed_entry->subsumed_by != kUnmerged) {
-    ZED_LOG(kLogWarning) << "Thread merging failed: subsumed_entry was already "
-                            "subsumed by others, owner="
-                         << owner << ", subsumed=" << subsumed
-                         << ", subsumed->subsumed_by="
-                         << subsumed_entry->subsumed_by;
-    return false;
-  }
-  // All checking is OK, set merged state.
-  owner_entry->owner_of.insert(subsumed);
-  subsumed_entry->subsumed_by = owner;
-
-  if (HasPendingTasksUnlocked(owner)) {
-    WakeUpUnlocked(owner, GetNextWakeTimeUnlocked(owner));
-  }
-
-  return true;
-}
-
-bool MessageLoopTaskQueues::Unmerge(TaskQueueId owner, TaskQueueId subsumed) {
-  std::lock_guard guard(queue_mutex_);
-  const auto& owner_entry = queue_entries_.at(owner);
-  if (owner_entry->owner_of.empty()) {
-    ZED_LOG(kLogWarning)
-        << "Thread unmerging failed: owner_entry doesn't own anyone, owner="
-        << owner << ", subsumed=" << subsumed;
-    return false;
-  }
-  if (owner_entry->subsumed_by != kUnmerged) {
-    ZED_LOG(kLogWarning)
-        << "Thread unmerging failed: owner_entry was subsumed by others, owner="
-        << owner << ", subsumed=" << subsumed
-        << ", owner_entry->subsumed_by=" << owner_entry->subsumed_by;
-    return false;
-  }
-  if (queue_entries_.at(subsumed)->subsumed_by == kUnmerged) {
-    ZED_LOG(kLogWarning) << "Thread unmerging failed: subsumed_entry wasn't "
-                            "subsumed by others, owner="
-                         << owner << ", subsumed=" << subsumed;
-    return false;
-  }
-  if (owner_entry->owner_of.find(subsumed) == owner_entry->owner_of.end()) {
-    ZED_LOG(kLogWarning)
-        << "Thread unmerging failed: owner_entry didn't own the "
-           "given subsumed queue id, owner="
-        << owner << ", subsumed=" << subsumed;
-    return false;
-  }
-
-  queue_entries_.at(subsumed)->subsumed_by = kUnmerged;
-  owner_entry->owner_of.erase(subsumed);
-
-  if (HasPendingTasksUnlocked(owner)) {
-    WakeUpUnlocked(owner, GetNextWakeTimeUnlocked(owner));
-  }
-
-  if (HasPendingTasksUnlocked(subsumed)) {
-    WakeUpUnlocked(subsumed, GetNextWakeTimeUnlocked(subsumed));
-  }
-
-  return true;
-}
-
-bool MessageLoopTaskQueues::Owns(TaskQueueId owner,
-                                 TaskQueueId subsumed) const {
-  std::lock_guard guard(queue_mutex_);
-  if (owner == kUnmerged || subsumed == kUnmerged) {
-    return false;
-  }
-  auto& subsumed_set = queue_entries_.at(owner)->owner_of;
-  return subsumed_set.find(subsumed) != subsumed_set.end();
-}
-
-std::set<TaskQueueId> MessageLoopTaskQueues::GetSubsumedTaskQueueId(
-    TaskQueueId owner) const {
-  std::lock_guard guard(queue_mutex_);
-  return queue_entries_.at(owner)->owner_of;
-}
-
-void MessageLoopTaskQueues::PauseSecondarySource(TaskQueueId queue_id) {
-  std::lock_guard guard(queue_mutex_);
-  queue_entries_.at(queue_id)->task_source->PauseSecondary();
-}
-
-void MessageLoopTaskQueues::ResumeSecondarySource(TaskQueueId queue_id) {
-  std::lock_guard guard(queue_mutex_);
-  queue_entries_.at(queue_id)->task_source->ResumeSecondary();
-  // Schedule a wake as needed.
-  if (HasPendingTasksUnlocked(queue_id)) {
-    WakeUpUnlocked(queue_id, GetNextWakeTimeUnlocked(queue_id));
-  }
-}
-
 // Subsumed queues will never have pending tasks.
 // Owning queues will consider both their and their subsumed tasks.
 bool MessageLoopTaskQueues::HasPendingTasksUnlocked(
     TaskQueueId queue_id) const {
   const auto& entry = queue_entries_.at(queue_id);
-  bool is_subsumed = entry->subsumed_by != kUnmerged;
-  if (is_subsumed) {
-    return false;
-  }
-
   if (!entry->task_source->IsEmpty()) {
     return true;
   }
-
-  auto& subsumed_set = entry->owner_of;
-  return std::any_of(
-      subsumed_set.begin(), subsumed_set.end(), [&](const auto& subsumed) {
-        return !queue_entries_.at(subsumed)->task_source->IsEmpty();
-      });
 }
 
 zedbase::TimePoint MessageLoopTaskQueues::GetNextWakeTimeUnlocked(
@@ -366,11 +163,6 @@ TaskSource::TopTask MessageLoopTaskQueues::PeekNextTaskUnlocked(
     TaskQueueId owner) const {
   ZED_DCHECK(HasPendingTasksUnlocked(owner));
   const auto& entry = queue_entries_.at(owner);
-  if (entry->owner_of.empty()) {
-    ZED_CHECK(!entry->task_source->IsEmpty());
-    return entry->task_source->Top();
-  }
-
   // Use optional for the memory of TopTask object.
   std::optional<TaskSource::TopTask> top_task;
 
@@ -387,10 +179,6 @@ TaskSource::TopTask MessageLoopTaskQueues::PeekNextTaskUnlocked(
   TaskSource* owner_tasks = entry->task_source.get();
   top_task_updater(owner_tasks);
 
-  for (TaskQueueId subsumed : entry->owner_of) {
-    TaskSource* subsumed_tasks = queue_entries_.at(subsumed)->task_source.get();
-    top_task_updater(subsumed_tasks);
-  }
   // At least one task at the top because PeekNextTaskUnlocked() is called after
   // HasPendingTasksUnlocked()
   ZED_CHECK(top_task.has_value());

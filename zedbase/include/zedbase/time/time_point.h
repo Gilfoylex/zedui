@@ -1,5 +1,4 @@
-#ifndef TIME_POINT_H_
-#define TIME_POINT_H_
+#pragma once
 
 #include <cstdint>
 #include <functional>
@@ -73,5 +72,3 @@ class TimePoint {
 };
 
 }  // namespace zedbase
-
-#endif  // TIME_POINT_H_

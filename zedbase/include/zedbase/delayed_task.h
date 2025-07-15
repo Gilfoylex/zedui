@@ -3,16 +3,12 @@
 
 #include <queue>
 #include "zedbase/closure.h"
-#include "zedbase/task_source_grade.h"
 #include "zedbase/time/time_point.h"
 
 namespace zedbase {
 class DelayedTask {
  public:
-  DelayedTask(size_t order,
-              const closure& task,
-              TimePoint target_time,
-              TaskSourceGrade task_source_grade);
+  DelayedTask(size_t order, const closure& task, TimePoint target_time);
 
   DelayedTask(const DelayedTask& other);
 
@@ -22,15 +18,12 @@ class DelayedTask {
 
   TimePoint GetTargetTime() const;
 
-  TaskSourceGrade GetTaskSourceGrade() const;
-
   bool operator>(const DelayedTask& other) const;
 
  private:
   size_t order_;
   closure task_;
   TimePoint target_time_;
-  TaskSourceGrade task_source_grade_;
 };
 
 using DelayedTaskQueue = std::priority_queue<DelayedTask,

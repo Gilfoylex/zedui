@@ -1,6 +1,4 @@
-#ifndef ZEDBASE_MEMORY_THREAD_CHECKER_H_
-#define ZEDBASE_MEMORY_THREAD_CHECKER_H_
-
+#pragma once
 // #include "flutter/fml/build_config.h"
 #include "zedbase/logging.h"
 #include "zedbase/macros.h"
@@ -95,5 +93,3 @@ class ThreadChecker final {
 #endif
 
 }  // namespace zedbase
-
-#endif  // ZEDBASE_MEMORY_THREAD_CHECKER_H_

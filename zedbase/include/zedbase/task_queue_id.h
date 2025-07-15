@@ -1,5 +1,4 @@
-#ifndef ZEBASE_TASK_QUEUE_ID_H_
-#define ZEBASE_TASK_QUEUE_ID_H_
+#pragma once
 
 #include "zedbase/logging.h"
 
@@ -9,10 +8,6 @@ namespace zedbase {
  */
 class TaskQueueId {
  public:
-  /// This constant indicates whether a task queue has been subsumed by a task
-  /// runner.
-  static const size_t kUnmerged;
-
   /// Intializes a task queue with the given value as it's ID.
   explicit TaskQueueId(size_t value) : value_(value) {}
 
@@ -21,9 +16,7 @@ class TaskQueueId {
   }
 
  private:
-  size_t value_ = kUnmerged;
+  size_t value_ = 0;
 };
 
 }  // namespace zedbase
-
-#endif  // ZEBASE_TASK_QUEUE_ID_H_

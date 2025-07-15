@@ -1,5 +1,4 @@
-#ifndef ZEDBASE_WAKEABLE_H_
-#define ZEDBASE_WAKEABLE_H_
+#pragma once
 
 #include "zedbase/time/time_point.h"
 
@@ -13,5 +12,3 @@ class Wakeable {
 };
 
 }  // namespace zedbase
-
-#endif  // ZEDBASE_WAKEABLE_H_

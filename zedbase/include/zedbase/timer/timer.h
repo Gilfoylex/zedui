@@ -1,5 +1,4 @@
-#ifndef ZEDBASE_TIMER_ELAPSED_TIMER_H_
-#define ZEDBASE_TIMER_ELAPSED_TIMER_H_
+#pragma once
 
 #include "zedbase/closure.h"
 #include "zedbase/macros.h"
@@ -63,5 +62,3 @@ class ThreadTimer final : public internal::DelayTimerBase {
 };
 
 }  // namespace zedbase
-
-#endif  // ZEDBASE_TIMER_ELAPSED_TIMER_H_

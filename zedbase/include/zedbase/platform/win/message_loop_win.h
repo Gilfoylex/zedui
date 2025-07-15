@@ -2,8 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef ZEDBASE_PLATFORM_WIN_MESSAGE_LOOP_WIN_H_
-#define ZEDBASE_PLATFORM_WIN_MESSAGE_LOOP_WIN_H_
+#pragma once
 
 #include <windows.h>
 
@@ -43,5 +42,3 @@ class MessageLoopWin : public MessageLoopImpl {
 };
 
 }  // namespace zedbase
-
-#endif  // ZEDBASE_PLATFORM_WIN_MESSAGE_LOOP_WIN_H_

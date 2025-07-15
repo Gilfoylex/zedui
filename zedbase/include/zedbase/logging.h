@@ -1,5 +1,4 @@
-#ifndef ZEDBASE_LOGGING_H_
-#define ZEDBASE_LOGGING_H_
+#pragma once
 
 #include <sstream>
 #include "zedbase/log_level.h"
@@ -126,5 +125,3 @@ constexpr bool ShouldCreateLogMessageConstexpr(LogSeverity severity,
     ZED_LOG(kLogError) << "Reached unreachable code."; \
     ::zedbase::KillProcessConstexpr(true);                 \
   }
-
-#endif  // ZEDBASE_LOGGING_H_

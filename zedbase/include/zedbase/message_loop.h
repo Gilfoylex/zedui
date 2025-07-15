@@ -1,5 +1,4 @@
-#ifndef MESSAGE_LOOP_H_
-#define MESSAGE_LOOP_H_
+#pragma once
 
 #include "zedbase/macros.h"
 #include "zedbase/task_runner.h"
@@ -66,5 +65,3 @@ class MessageLoop {
 };
 
 }  // namespace zedbase
-
-#endif  // MESSAGE_LOOP_H_

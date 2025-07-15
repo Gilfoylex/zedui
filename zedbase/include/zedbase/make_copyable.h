@@ -2,9 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef ZEDBASE_MAKE_COPYABLE_H_
-#define ZEDBASE_MAKE_COPYABLE_H_
-
+#pragma once
 #include <utility>
 
 #include "zedbase/memory/ref_counted.h"
@@ -59,5 +57,3 @@ internal::CopyableLambda<T> MakeCopyable(T lambda) {
 }
 
 }  // namespace zedbase
-
-#endif  // ZEDBASE_MAKE_COPYABLE_H_
