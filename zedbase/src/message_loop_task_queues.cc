@@ -91,6 +91,7 @@ zedbase::closure MessageLoopTaskQueues::GetNextTaskToRun(
     return nullptr;
   }
   zedbase::closure invocation = top.task.GetTask();
+  queue_entries_.at(queue_id)->task_source->PopTask();
   return invocation;
 }
 
@@ -152,6 +153,7 @@ bool MessageLoopTaskQueues::HasPendingTasksUnlocked(
   if (!entry->task_source->IsEmpty()) {
     return true;
   }
+  return false;
 }
 
 zedbase::TimePoint MessageLoopTaskQueues::GetNextWakeTimeUnlocked(
@@ -163,28 +165,10 @@ TaskSource::TopTask MessageLoopTaskQueues::PeekNextTaskUnlocked(
     TaskQueueId owner) const {
   ZED_DCHECK(HasPendingTasksUnlocked(owner));
   const auto& entry = queue_entries_.at(owner);
-  // Use optional for the memory of TopTask object.
-  std::optional<TaskSource::TopTask> top_task;
-
-  std::function<void(const TaskSource*)> top_task_updater =
-      [&top_task](const TaskSource* source) {
-        if (source && !source->IsEmpty()) {
-          TaskSource::TopTask other_task = source->Top();
-          if (!top_task.has_value() || top_task->task > other_task.task) {
-            top_task.emplace(other_task);
-          }
-        }
-      };
-
-  TaskSource* owner_tasks = entry->task_source.get();
-  top_task_updater(owner_tasks);
-
   // At least one task at the top because PeekNextTaskUnlocked() is called after
   // HasPendingTasksUnlocked()
-  ZED_CHECK(top_task.has_value());
-  // Covered by FML_CHECK.
-  // NOLINTNEXTLINE(bugprone-unchecked-optional-access)
-  return top_task.value();
+  ZED_CHECK(!entry->task_source->IsEmpty());
+  return entry->task_source->Top();
 }
 
 }  // namespace zedbase
