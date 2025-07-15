@@ -1,12 +1,11 @@
 #include "zedbase/logging.h"
-#include "zedbase/task_runner_window.h"
-
+#include "zedui/utils/ui_task_runner_window.h"
 
 #include <algorithm>
 
-namespace zedbase {
+namespace zedui {
 
-TaskRunnerWindow::TaskRunnerWindow() {
+UITaskRunnerWindow::UITaskRunnerWindow() {
   WNDCLASS window_class = RegisterWindowClass();
   window_handle_ =
       CreateWindowEx(0, window_class.lpszClassName, L"", 0, 0, 0, 0, 0,
@@ -28,7 +27,7 @@ TaskRunnerWindow::TaskRunnerWindow() {
   }
 }
 
-TaskRunnerWindow::~TaskRunnerWindow() {
+UITaskRunnerWindow::~UITaskRunnerWindow() {
   if (window_handle_) {
     DestroyWindow(window_handle_);
     window_handle_ = nullptr;
@@ -36,37 +35,37 @@ TaskRunnerWindow::~TaskRunnerWindow() {
   UnregisterClass(window_class_name_.c_str(), nullptr);
 }
 
-std::shared_ptr<TaskRunnerWindow> TaskRunnerWindow::GetSharedInstance() {
-  static std::weak_ptr<TaskRunnerWindow> instance;
+std::shared_ptr<UITaskRunnerWindow> UITaskRunnerWindow::GetSharedInstance() {
+  static std::weak_ptr<UITaskRunnerWindow> instance;
   auto res = instance.lock();
   if (!res) {
     // can't use make_shared with private contructor
-    res.reset(new TaskRunnerWindow());
+    res.reset(new UITaskRunnerWindow());
     instance = res;
   }
   return res;
 }
 
-void TaskRunnerWindow::WakeUp() {
+void UITaskRunnerWindow::WakeUp() {
   if (!PostMessage(window_handle_, WM_NULL, 0, 0)) {
     ZED_LOG(kLogError) << "Failed to post message to main thread.";
   }
 }
 
-void TaskRunnerWindow::AddDelegate(Delegate* delegate) {
+void UITaskRunnerWindow::AddDelegate(Delegate* delegate) {
   delegates_.push_back(delegate);
-  SetTimer(TimeDelta::Zero());
+  SetTimer(zedbase::TimeDelta::Zero());
 }
 
-void TaskRunnerWindow::RemoveDelegate(Delegate* delegate) {
+void UITaskRunnerWindow::RemoveDelegate(Delegate* delegate) {
   auto i = std::find(delegates_.begin(), delegates_.end(), delegate);
   if (i != delegates_.end()) {
     delegates_.erase(i);
   }
 }
 
-void TaskRunnerWindow::ProcessTasks() {
-  auto next = TimeDelta::Max();
+void UITaskRunnerWindow::ProcessTasks() {
+  auto next = zedbase::TimeDelta::Max();
   auto delegates_copy(delegates_);
   for (auto delegate : delegates_copy) {
     // if not removed in the meanwhile
@@ -78,8 +77,8 @@ void TaskRunnerWindow::ProcessTasks() {
   SetTimer(next);
 }
 
-void TaskRunnerWindow::SetTimer(TimeDelta when) {
-  if (when == TimeDelta::Max()) {
+void UITaskRunnerWindow::SetTimer(zedbase::TimeDelta when) {
+  if (when == zedbase::TimeDelta::Max()) {
     KillTimer(window_handle_, 0);
   } else {
     auto millis = when.ToMilliseconds();
@@ -87,7 +86,7 @@ void TaskRunnerWindow::SetTimer(TimeDelta when) {
   }
 }
 
-WNDCLASS TaskRunnerWindow::RegisterWindowClass() {
+WNDCLASS UITaskRunnerWindow::RegisterWindowClass() {
   window_class_name_ = L"ZedUiTaskRunnerWindow";
 
   WNDCLASS window_class{};
@@ -106,9 +105,9 @@ WNDCLASS TaskRunnerWindow::RegisterWindowClass() {
 }
 
 LRESULT
-TaskRunnerWindow::HandleMessage(UINT const message,
-                                WPARAM const wparam,
-                                LPARAM const lparam) noexcept {
+UITaskRunnerWindow::HandleMessage(UINT const message,
+                                  WPARAM const wparam,
+                                  LPARAM const lparam) noexcept {
   switch (message) {
     case WM_TIMER:
     case WM_NULL:
@@ -118,11 +117,11 @@ TaskRunnerWindow::HandleMessage(UINT const message,
   return DefWindowProcW(window_handle_, message, wparam, lparam);
 }
 
-LRESULT TaskRunnerWindow::WndProc(HWND const window,
-                                  UINT const message,
-                                  WPARAM const wparam,
-                                  LPARAM const lparam) noexcept {
-  if (auto* that = reinterpret_cast<TaskRunnerWindow*>(
+LRESULT UITaskRunnerWindow::WndProc(HWND const window,
+                                    UINT const message,
+                                    WPARAM const wparam,
+                                    LPARAM const lparam) noexcept {
+  if (auto* that = reinterpret_cast<UITaskRunnerWindow*>(
           GetWindowLongPtr(window, GWLP_USERDATA))) {
     return that->HandleMessage(message, wparam, lparam);
   } else {
@@ -130,4 +129,4 @@ LRESULT TaskRunnerWindow::WndProc(HWND const window,
   }
 }
 
-}  // namespace zedbase
+}  // namespace zedui

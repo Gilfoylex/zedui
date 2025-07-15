@@ -7,7 +7,7 @@
 #include "zedbase/macros.h"
 #include "zedbase/thread.h"
 #include "zedbase/timer/timer.h"
-#include "zedbase/ui_task_runner.h"
+#include "zedui/utils/ui_task_runner.h"
 
 
 namespace zedui {
@@ -18,7 +18,7 @@ class App {
  public:
   App();
   ~App();
-  std::shared_ptr<zedbase::UITaskRunner> GetUITaskRunner();
+  std::shared_ptr<UITaskRunner> GetUITaskRunner();
   zedbase::RefPtr<zedbase::TaskRunner> GetRenderTaskRunner();
   void PostVsyncTask(zedbase::closure task);
   void Run();
@@ -28,7 +28,7 @@ class App {
 
  private:
   std::unique_ptr<zedbase::Thread> render_thread_;
-  std::shared_ptr<zedbase::UITaskRunner> ui_task_runner_;
+  std::shared_ptr<UITaskRunner> ui_task_runner_;
   std::unique_ptr<zedbase::ThreadTimer> vsync_timer_;
   std::mutex vsync_mutex_;
   std::queue<zedbase::closure> vsync_tasks_;

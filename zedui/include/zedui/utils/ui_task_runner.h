@@ -10,17 +10,17 @@
 
 #include "zedbase/closure.h"
 #include "zedbase/macros.h"
-#include "zedbase/task_runner_window.h"
 #include "zedbase/time/time_delta.h"
 #include "zedbase/time/time_point.h"
+#include "zedui/utils/ui_task_runner_window.h"
 
-namespace zedbase {
+namespace zedui {
 
 // A custom task runner that integrates with user32 GetMessage semantics so
 // that host app can own its own message loop and flutter still gets to process
 // tasks on a timely basis.
 
-class UITaskRunner : public TaskRunnerWindow::Delegate {
+class UITaskRunner : public UITaskRunnerWindow::Delegate {
  public:
   UITaskRunner();
 
@@ -36,7 +36,7 @@ class UITaskRunner : public TaskRunnerWindow::Delegate {
   }
   void PostDelayedTask(zedbase::closure task, const int64_t delay_ms);
 
-  TimeDelta ProcessTasks() override;
+  zedbase::TimeDelta ProcessTasks() override;
 
  private:
   struct Task {
@@ -55,14 +55,16 @@ class UITaskRunner : public TaskRunnerWindow::Delegate {
 
   void EnqueueTask(Task task);
   virtual void WakeUp();
-  virtual TimePoint GetCurrentTimeForTask() const { return TimePoint::Now(); }
+  virtual zedbase::TimePoint GetCurrentTimeForTask() const {
+    return zedbase::TimePoint::Now();
+  }
 
   std::mutex task_queue_mutex_;
   std::priority_queue<Task, std::deque<Task>, Task::Comparer> task_queue_;
   DWORD main_thread_id_;
-  std::shared_ptr<TaskRunnerWindow> task_runner_window_;
+  std::shared_ptr<UITaskRunnerWindow> task_runner_window_;
 
   ZED_DISALLOW_COPY_AND_ASSIGN(UITaskRunner);
 };
 
-}  // namespace zedbase
+}  // namespace zedui

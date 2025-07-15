@@ -1,7 +1,6 @@
 #pragma once
 
 namespace zedbase {
-    
 
 template <typename T>
 class RefPtr;

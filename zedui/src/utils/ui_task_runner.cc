@@ -1,13 +1,13 @@
-#include "zedbase/ui_task_runner.h"
+#include "zedui/utils/ui_task_runner.h"
 
 #include <atomic>
 #include <utility>
 
-namespace zedbase {
+namespace zedui {
 
 UITaskRunner::UITaskRunner() {
   main_thread_id_ = GetCurrentThreadId();
-  task_runner_window_ = TaskRunnerWindow::GetSharedInstance();
+  task_runner_window_ = UITaskRunnerWindow::GetSharedInstance();
   task_runner_window_->AddDelegate(this);
 }
 
@@ -19,13 +19,13 @@ void UITaskRunner::PostDelayedTask(zedbase::closure task,
                                    const int64_t delay_ms) {
   Task delayed_task;
   delayed_task.fire_time =
-      GetCurrentTimeForTask() + TimeDelta::FromMilliseconds(delay_ms);
+      GetCurrentTimeForTask() + zedbase::TimeDelta::FromMilliseconds(delay_ms);
   delayed_task.closure = std::move(task);
   EnqueueTask(std::move(delayed_task));
 }
 
-TimeDelta UITaskRunner::ProcessTasks() {
-  const TimePoint now = GetCurrentTimeForTask();
+zedbase::TimeDelta UITaskRunner::ProcessTasks() {
+  const zedbase::TimePoint now = GetCurrentTimeForTask();
 
   std::vector<Task> expired_tasks;
 
@@ -64,10 +64,10 @@ TimeDelta UITaskRunner::ProcessTasks() {
   // Calculate duration to sleep for on next iteration.
   {
     std::lock_guard<std::mutex> lock(task_queue_mutex_);
-    const auto next_wake =
-        task_queue_.empty() ? TimePoint::Max() : task_queue_.top().fire_time;
+    const auto next_wake = task_queue_.empty() ? zedbase::TimePoint::Max()
+                                               : task_queue_.top().fire_time;
 
-    return std::min(next_wake - now, TimeDelta::Max());
+    return std::min(next_wake - now, zedbase::TimeDelta::Max());
   }
 }
 
@@ -103,4 +103,4 @@ void UITaskRunner::WakeUp() {
   task_runner_window_->WakeUp();
 }
 
-}  // namespace zedbase
+}  // namespace zedui

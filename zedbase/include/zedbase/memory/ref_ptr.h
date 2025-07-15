@@ -4,8 +4,9 @@
 #include <functional>
 #include <utility>
 
-#include "zedbase/memory/ref_ptr_internal.h"
 #include "zedbase/logging.h"
+#include "zedbase/memory/ref_ptr_internal.h"
+
 
 namespace zedbase {
 // A smart pointer class for intrusively reference-counted objects (e.g., those

@@ -123,5 +123,5 @@ constexpr bool ShouldCreateLogMessageConstexpr(LogSeverity severity,
 #define ZED_UNREACHABLE()                              \
   {                                                    \
     ZED_LOG(kLogError) << "Reached unreachable code."; \
-    ::zedbase::KillProcessConstexpr(true);                 \
+    ::zedbase::KillProcessConstexpr(true);             \
   }

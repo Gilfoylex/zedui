@@ -9,26 +9,26 @@
 #include "zedbase/macros.h"
 #include "zedbase/time/time_delta.h"
 
-namespace zedbase {
+namespace zedui {
 
-class TaskRunnerWindow {
+class UITaskRunnerWindow {
  public:
   class Delegate {
    public:
-    virtual TimeDelta ProcessTasks() = 0;
+    virtual zedbase::TimeDelta ProcessTasks() = 0;
   };
 
-  static std::shared_ptr<TaskRunnerWindow> GetSharedInstance();
+  static std::shared_ptr<UITaskRunnerWindow> GetSharedInstance();
 
   void WakeUp();
 
   void AddDelegate(Delegate* delegate);
   void RemoveDelegate(Delegate* delegate);
 
-  ~TaskRunnerWindow();
+  ~UITaskRunnerWindow();
 
  private:
-  TaskRunnerWindow();
+  UITaskRunnerWindow();
 
   void ProcessTasks();
   void SetTimer(zedbase::TimeDelta when);
@@ -49,7 +49,7 @@ class TaskRunnerWindow {
   std::wstring window_class_name_;
   std::vector<Delegate*> delegates_;
 
-  ZED_DISALLOW_COPY_AND_ASSIGN(TaskRunnerWindow);
+  ZED_DISALLOW_COPY_AND_ASSIGN(UITaskRunnerWindow);
 };
 
-}  // namespace zedbase
+}  // namespace zedui
