@@ -72,22 +72,23 @@ void D2DRenderer::DestroyRenderTarget() {
 }
 
 void D2DRenderer::ExecuteDrawCommands(
-    Layer* key,
+    intptr_t key,
     Rect rect,
     const std::vector<std::shared_ptr<DrawCommand>>& commands) {
   auto cache_bitmap = GetLayerCache(key);
-  D2D1_RECT_F bitmap_rect = D2D1::RectF(rect.GetMinX(), rect.GetMinY(), rect.GetMaxX(), rect.GetMaxY());
-  if (cache_bitmap){
+  D2D1_RECT_F bitmap_rect = D2D1::RectF(rect.GetMinX(), rect.GetMinY(),
+                                        rect.GetMaxX(), rect.GetMaxY());
+  if (cache_bitmap) {
     render_target_->DrawBitmap(cache_bitmap.Get(), bitmap_rect);
     return;
   }
-  
+
   Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> bitmap_rt;
-  auto hr = render_target_->CreateCompatibleRenderTarget(D2D1::SizeF(rect.size.width, rect.size.height), &bitmap_rt);
+  auto hr = render_target_->CreateCompatibleRenderTarget(
+      D2D1::SizeF(rect.size.width, rect.size.height), &bitmap_rt);
   bitmap_rt->BeginDraw();
   Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> brush;
-  bitmap_rt->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Blue),
-                                        &brush);
+  bitmap_rt->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Blue), &brush);
   for (const auto& command : commands) {
     if (command->type == DrawType::Rect) {
       auto rectCommandPtr = std::dynamic_pointer_cast<DrawRectCommand>(command);
@@ -105,7 +106,7 @@ void D2DRenderer::ExecuteDrawCommands(
   CacheLayer(key, cache_bitmap);
 }
 
-void zedui::D2DRenderer::DeleteLayerCache(Layer* key) {
+void zedui::D2DRenderer::DeleteLayerCache(intptr_t key) {
   if (layer_caches_.empty()) {
     return;
   }
@@ -113,7 +114,7 @@ void zedui::D2DRenderer::DeleteLayerCache(Layer* key) {
   layer_caches_.erase(key);
 }
 
-Microsoft::WRL::ComPtr<ID2D1Bitmap> D2DRenderer::GetLayerCache(Layer* key) {
+Microsoft::WRL::ComPtr<ID2D1Bitmap> D2DRenderer::GetLayerCache(intptr_t key) {
   if (layer_caches_.empty()) {
     return nullptr;
   }
@@ -126,7 +127,7 @@ Microsoft::WRL::ComPtr<ID2D1Bitmap> D2DRenderer::GetLayerCache(Layer* key) {
   return it->second;
 }
 
-void zedui::D2DRenderer::CacheLayer(Layer* key,
+void zedui::D2DRenderer::CacheLayer(intptr_t key,
                                     Microsoft::WRL::ComPtr<ID2D1Bitmap> value) {
   layer_caches_[key] = value;
 }

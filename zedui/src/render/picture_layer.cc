@@ -1,16 +1,15 @@
-#include "zedui/render/picture_layer.h"
 #include "zedbase/task_runner.h"
 #include "zedui/app.h"
-#include "zedui/render/renderer.h"
 #include "zedui/geometry/rect.h"
-
+#include "zedui/render/picture_layer.h"
+#include "zedui/render/renderer.h"
 
 namespace zedui {
 PictureLayer::PictureLayer(float left, float top, float width, float height)
     : left_(left), top_(top), width_(width), height_(height) {}
 
 zedui::PictureLayer::~PictureLayer() {
-  auto key = this;
+  auto key = reinterpret_cast<intptr_t>(this);
   zedbase::TaskRunner::RunNowOrPostTask(
       App::Current->GetRenderTaskRunner(),
       [renderer = std::move(renderer_), key]() {
@@ -41,7 +40,9 @@ void PictureLayer::PushDrawCommand(
 
 void PictureLayer::RenderToScreen(std::shared_ptr<Renderer> renderer) {
   renderer_ = renderer;
-  renderer->ExecuteDrawCommands(this, Rect::MakeXYWH(left_, top_, width_, height_), draw_commands_);
+  renderer->ExecuteDrawCommands(reinterpret_cast<intptr_t>(this),
+                                Rect::MakeXYWH(left_, top_, width_, height_),
+                                draw_commands_);
 }
 
 }  // namespace zedui
