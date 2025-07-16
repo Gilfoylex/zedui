@@ -7,6 +7,8 @@
 #include <windows.h>
 #include <wrl/client.h>
 
+#include "zedbase/macros.h"
+#include "zedbase/memory/thread_checker.h"
 #include "zedui/geometry/rect.h"
 #include "zedui/render/container_layer.h"
 #include "zedui/render/renderer.h"
@@ -16,7 +18,8 @@ namespace zedui {
 
 class D2DRenderer : public Renderer {
  public:
-  D2DRenderer(HWND hwnd);
+  explicit D2DRenderer(HWND hwnd);
+  ~D2DRenderer() override = default;
 
  public:
   void CreateRenderTarget(Size size) override;
@@ -41,5 +44,9 @@ class D2DRenderer : public Renderer {
   Microsoft::WRL::ComPtr<ID2D1HwndRenderTarget> render_target_;
   std::unordered_map<intptr_t, Microsoft::WRL::ComPtr<ID2D1Bitmap>>
       layer_caches_;
+
+  ZED_DECLARE_THREAD_CHECKER(thread_checker_);
+
+  ZED_DISALLOW_COPY_ASSIGN_AND_MOVE(D2DRenderer);
 };
 }  // namespace zedui

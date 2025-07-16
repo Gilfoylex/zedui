@@ -5,6 +5,7 @@ namespace zedui {
 D2DRenderer::D2DRenderer(HWND hwnd) : hwnd_(hwnd) {}
 
 void D2DRenderer::EnsureFactory() {
+  ZED_DCHECK_CREATION_THREAD_IS_CURRENT(thread_checker_);
   if (!d2d_factory_) {
     D2D1_FACTORY_OPTIONS options = {};
 #ifdef _DEBUG
@@ -37,6 +38,7 @@ void D2DRenderer::CreateRenderTarget(Size size) {
 }
 
 void D2DRenderer::ResizeRenderTarget(Size size) {
+  ZED_DCHECK_CREATION_THREAD_IS_CURRENT(thread_checker_);
   if (render_target_) {
     RECT rc;
     GetClientRect(hwnd_, &rc);
@@ -47,6 +49,7 @@ void D2DRenderer::ResizeRenderTarget(Size size) {
 }
 
 void D2DRenderer::RenderFrame(std::shared_ptr<ContainerLayer> layer_tree) {
+  ZED_DCHECK_CREATION_THREAD_IS_CURRENT(thread_checker_);
   if (!render_target_)
     return;
 
@@ -75,6 +78,8 @@ void D2DRenderer::ExecuteDrawCommands(
     intptr_t key,
     Rect rect,
     const std::vector<std::shared_ptr<DrawCommand>>& commands) {
+  ZED_DCHECK_CREATION_THREAD_IS_CURRENT(thread_checker_);
+
   auto cache_bitmap = GetLayerCache(key);
   D2D1_RECT_F bitmap_rect = D2D1::RectF(rect.GetMinX(), rect.GetMinY(),
                                         rect.GetMaxX(), rect.GetMaxY());
@@ -107,6 +112,7 @@ void D2DRenderer::ExecuteDrawCommands(
 }
 
 void zedui::D2DRenderer::DeleteLayerCache(intptr_t key) {
+  ZED_DCHECK_CREATION_THREAD_IS_CURRENT(thread_checker_);
   if (layer_caches_.empty()) {
     return;
   }
@@ -115,6 +121,7 @@ void zedui::D2DRenderer::DeleteLayerCache(intptr_t key) {
 }
 
 Microsoft::WRL::ComPtr<ID2D1Bitmap> D2DRenderer::GetLayerCache(intptr_t key) {
+  ZED_DCHECK_CREATION_THREAD_IS_CURRENT(thread_checker_);
   if (layer_caches_.empty()) {
     return nullptr;
   }
@@ -129,6 +136,7 @@ Microsoft::WRL::ComPtr<ID2D1Bitmap> D2DRenderer::GetLayerCache(intptr_t key) {
 
 void zedui::D2DRenderer::CacheLayer(intptr_t key,
                                     Microsoft::WRL::ComPtr<ID2D1Bitmap> value) {
+  ZED_DCHECK_CREATION_THREAD_IS_CURRENT(thread_checker_);
   layer_caches_[key] = value;
 }
 
