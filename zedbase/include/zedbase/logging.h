@@ -84,11 +84,12 @@ constexpr bool ShouldCreateLogMessageConstexpr(LogSeverity severity,
 #define ZED_LAZY_STREAM(stream, condition) \
   !(condition) ? (void)0 : ::zedbase::LogMessageVoidify() & (stream)
 
-#define ZED_EAT_STREAM_PARAMETERS(ignored) \
-  true || (ignored)                        \
-      ? (void)0                            \
-      : ::zedbase::LogMessageVoidify() &   \
-            ::zedbase::LogMessage(::fml::kLogFatal, 0, 0, nullptr).stream()
+#define ZED_EAT_STREAM_PARAMETERS(ignored)                             \
+  true || (ignored)                                                    \
+      ? (void)0                                                        \
+      : ::zedbase::LogMessageVoidify() &                               \
+            ::zedbase::LogMessage(::zedbase::kLogFatal, 0, 0, nullptr) \
+                .stream()
 
 #define ZED_LOG_IS_ON(severity) \
   (::zedbase::ShouldCreateLogMessageConstexpr(::zedbase::##severity, true))

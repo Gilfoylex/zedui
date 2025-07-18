@@ -101,7 +101,8 @@ class WeakPtr {
   }
 
  protected:
-  explicit WeakPtr(T* ptr, fml::RefPtr<fml::internal::WeakPtrFlag>&& flag)
+  explicit WeakPtr(T* ptr,
+                   zedbase::RefPtr<zedbase::internal::WeakPtrFlag>&& flag)
       : ptr_(ptr), flag_(std::move(flag)) {}
 
   void CheckThreadSafety() const {
@@ -115,11 +116,11 @@ class WeakPtr {
   friend class WeakPtrFactory<T>;
 
   explicit WeakPtr(T* ptr,
-                   fml::RefPtr<fml::internal::WeakPtrFlag>&& flag,
+                   zedbase::RefPtr<zedbase::internal::WeakPtrFlag>&& flag,
                    const DebugThreadChecker& checker)
       : ptr_(ptr), flag_(std::move(flag)), checker_(checker) {}
   T* ptr_;
-  fml::RefPtr<fml::internal::WeakPtrFlag> flag_;
+  zedbase::RefPtr<zedbase::internal::WeakPtrFlag> flag_;
   DebugThreadChecker checker_;
 
   // Copy/move construction/assignment supported.
@@ -201,12 +202,12 @@ class TaskRunnerAffineWeakPtr {
 
   explicit TaskRunnerAffineWeakPtr(
       T* ptr,
-      fml::RefPtr<fml::internal::WeakPtrFlag>&& flag,
+      zedbase::RefPtr<zedbase::internal::WeakPtrFlag>&& flag,
       const DebugTaskRunnerChecker& checker)
       : ptr_(ptr), flag_(std::move(flag)), checker_(checker) {}
 
   T* ptr_;
-  fml::RefPtr<fml::internal::WeakPtrFlag> flag_;
+  zedbase::RefPtr<zedbase::internal::WeakPtrFlag> flag_;
   DebugTaskRunnerChecker checker_;
 };
 
@@ -256,7 +257,8 @@ template <typename T>
 class WeakPtrFactory {
  public:
   explicit WeakPtrFactory(T* ptr)
-      : ptr_(ptr), flag_(fml::MakeRefCounted<fml::internal::WeakPtrFlag>()) {
+      : ptr_(ptr),
+        flag_(zedbase::MakeRefCounted<zedbase::internal::WeakPtrFlag>()) {
     ZED_DCHECK(ptr_);
   }
 
@@ -275,7 +277,7 @@ class WeakPtrFactory {
   // Note: See weak_ptr_internal.h for an explanation of why we store the
   // pointer here, instead of in the "flag".
   T* const ptr_;
-  fml::RefPtr<fml::internal::WeakPtrFlag> flag_;
+  zedbase::RefPtr<zedbase::internal::WeakPtrFlag> flag_;
 
   void CheckThreadSafety() const {
     ZED_DCHECK_CREATION_THREAD_IS_CURRENT(checker_.checker);
@@ -292,7 +294,8 @@ template <typename T>
 class TaskRunnerAffineWeakPtrFactory {
  public:
   explicit TaskRunnerAffineWeakPtrFactory(T* ptr)
-      : ptr_(ptr), flag_(fml::MakeRefCounted<fml::internal::WeakPtrFlag>()) {
+      : ptr_(ptr),
+        flag_(zedbase::MakeRefCounted<zedbase::internal::WeakPtrFlag>()) {
     ZED_DCHECK(ptr_);
   }
 
@@ -311,7 +314,7 @@ class TaskRunnerAffineWeakPtrFactory {
   // Note: See weak_ptr_internal.h for an explanation of why we store the
   // pointer here, instead of in the "flag".
   T* const ptr_;
-  fml::RefPtr<fml::internal::WeakPtrFlag> flag_;
+  zedbase::RefPtr<zedbase::internal::WeakPtrFlag> flag_;
 
   void CheckThreadSafety() const {
     ZED_DCHECK_TASK_RUNNER_IS_CURRENT(checker_.checker);
