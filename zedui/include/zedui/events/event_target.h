@@ -15,6 +15,7 @@ class EventTarget {
   void RemovePreTargetHandler(EventHandler* handler);
   void AddPostTargetHandler(EventHandler* handler);
   void RemovePostTargetHandler(EventHandler* handler);
+  virtual EventTargeter* GetEventTargeter() = 0;
 
  protected:
   EventHandler* target_handler() { return target_handler_; }
