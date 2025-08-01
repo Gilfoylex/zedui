@@ -14,6 +14,10 @@ void RootView::NotifyParentForRedraw() {
   }
 }
 
+void RootView::OnEventFromSource(Event* event) {
+   // todo
+}
+
 std::shared_ptr<ContainerLayer> RootView::BuildLayerTree() {
   YGNodeCalculateLayout(node_, YGUndefined, YGUndefined, YGDirectionLTR);
   auto container_layer = std::make_shared<zedui::ContainerLayer>();

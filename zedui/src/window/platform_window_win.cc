@@ -1,4 +1,4 @@
-#include "zedui/windows/win32_window.h"
+#include "zedui/window/platform_window_win.h"
 
 #include <dwmapi.h>
 
@@ -57,7 +57,6 @@ void EnableFullDpiSupportIfAvailable(HWND hwnd) {
 }  // namespace
 
 namespace zedui {
-
 class WindowClassRegistrar {
  public:
   ~WindowClassRegistrar() = default;
@@ -100,7 +99,7 @@ const wchar_t* WindowClassRegistrar::GetWindowClass() {
     window_class.hIcon = nullptr;
     window_class.hbrBackground = 0;
     window_class.lpszMenuName = nullptr;
-    window_class.lpfnWndProc = Win32Window::WndProc;
+    window_class.lpfnWndProc = PlatformWindowWin::WndProc;
     RegisterClass(&window_class);
     class_registered_ = true;
   }
@@ -111,19 +110,18 @@ void WindowClassRegistrar::UnregisterWindowClass() {
   UnregisterClass(kWindowClassName, nullptr);
   class_registered_ = false;
 }
-
-Win32Window::Win32Window() {
+PlatformWindowWin::PlatformWindowWin(PlatformWindowDelegate* delegate)
+    : delegate_(delegate) {
   ++g_active_window_count;
 }
-
-Win32Window::~Win32Window() {
+PlatformWindowWin::~PlatformWindowWin() {
   --g_active_window_count;
   Destroy();
 }
 
-bool Win32Window::Create(const std::wstring& title,
-                         const Point& origin,
-                         const Size& size) {
+bool PlatformWindowWin::Create(const std::wstring& title,
+                               const Point& origin,
+                               const Size& size) {
   Destroy();
 
   const wchar_t* window_class =
@@ -150,24 +148,24 @@ bool Win32Window::Create(const std::wstring& title,
   return OnCreate();
 }
 
-bool Win32Window::Show() {
+bool PlatformWindowWin::Show() {
   return ShowWindow(window_handle_, SW_SHOWNORMAL);
 }
 
 // static
-LRESULT CALLBACK Win32Window::WndProc(HWND const window,
-                                      UINT const message,
-                                      WPARAM const wparam,
-                                      LPARAM const lparam) noexcept {
+LRESULT CALLBACK PlatformWindowWin::WndProc(HWND const window,
+                                            UINT const message,
+                                            WPARAM const wparam,
+                                            LPARAM const lparam) noexcept {
   if (message == WM_NCCREATE) {
     auto window_struct = reinterpret_cast<CREATESTRUCT*>(lparam);
     SetWindowLongPtr(window, GWLP_USERDATA,
                      reinterpret_cast<LONG_PTR>(window_struct->lpCreateParams));
 
-    auto that = static_cast<Win32Window*>(window_struct->lpCreateParams);
+    auto that = static_cast<PlatformWindowWin*>(window_struct->lpCreateParams);
     EnableFullDpiSupportIfAvailable(window);
     that->window_handle_ = window;
-  } else if (Win32Window* that = GetThisFromHandle(window)) {
+  } else if (PlatformWindowWin* that = GetThisFromHandle(window)) {
     return that->MessageHandler(window, message, wparam, lparam);
   }
 
@@ -175,10 +173,10 @@ LRESULT CALLBACK Win32Window::WndProc(HWND const window,
 }
 
 LRESULT
-Win32Window::MessageHandler(HWND hwnd,
-                            UINT const message,
-                            WPARAM const wparam,
-                            LPARAM const lparam) noexcept {
+PlatformWindowWin::MessageHandler(HWND hwnd,
+                                  UINT const message,
+                                  WPARAM const wparam,
+                                  LPARAM const lparam) noexcept {
   switch (message) {
     case WM_DESTROY:
       window_handle_ = nullptr;
@@ -200,9 +198,9 @@ Win32Window::MessageHandler(HWND hwnd,
     }
     case WM_SIZE: {
       RECT rect = GetClientArea();
-      if (window_delegate_)
-        window_delegate_->OnSizeChanged(rect.right - rect.left,
-                                    rect.bottom - rect.top);
+      if (delegate_)
+        delegate_->OnSizeChanged(rect.right - rect.left,
+                                 rect.bottom - rect.top);
       return 0;
     }
 
@@ -217,7 +215,7 @@ Win32Window::MessageHandler(HWND hwnd,
   return DefWindowProc(window_handle_, message, wparam, lparam);
 }
 
-void Win32Window::Destroy() {
+void PlatformWindowWin::Destroy() {
   OnDestroy();
 
   if (window_handle_) {
@@ -229,37 +227,38 @@ void Win32Window::Destroy() {
   }
 }
 
-Win32Window* Win32Window::GetThisFromHandle(HWND const window) noexcept {
-  return reinterpret_cast<Win32Window*>(
+PlatformWindowWin* PlatformWindowWin::GetThisFromHandle(
+    HWND const window) noexcept {
+  return reinterpret_cast<PlatformWindowWin*>(
       GetWindowLongPtr(window, GWLP_USERDATA));
 }
 
-RECT Win32Window::GetClientArea() {
+RECT PlatformWindowWin::GetClientArea() {
   RECT frame;
   GetClientRect(window_handle_, &frame);
   return frame;
 }
 
-HWND Win32Window::GetHandle() {
+HWND PlatformWindowWin::GetHandle() {
   return window_handle_;
 }
 
-void Win32Window::SetQuitOnClose(bool quit_on_close) {
+void PlatformWindowWin::SetQuitOnClose(bool quit_on_close) {
   quit_on_close_ = quit_on_close;
 }
 
-bool Win32Window::OnCreate() {
-  if (window_delegate_)
-    window_delegate_->OnCreated();
+bool PlatformWindowWin::OnCreate() {
+  if (delegate_)
+    delegate_->OnCreated();
   return true;
 }
 
-void Win32Window::OnDestroy() {
-  if (window_delegate_)
-    window_delegate_->OnDestroyed();
+void PlatformWindowWin::OnDestroy() {
+  if (delegate_)
+    delegate_->OnDestroyed();
 }
 
-void Win32Window::UpdateTheme(HWND const window) {
+void PlatformWindowWin::UpdateTheme(HWND const window) {
   DWORD light_mode;
   DWORD light_mode_size = sizeof(light_mode);
   LSTATUS result =
@@ -272,10 +271,6 @@ void Win32Window::UpdateTheme(HWND const window) {
     DwmSetWindowAttribute(window, DWMWA_USE_IMMERSIVE_DARK_MODE,
                           &enable_dark_mode, sizeof(enable_dark_mode));
   }
-}
-
-void zedui::Win32Window::SetWindowDelegate(WindowDelegate* window_delegate) {
-  window_delegate_ = window_delegate;
 }
 
 }  // namespace zedui

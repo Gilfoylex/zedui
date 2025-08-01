@@ -7,10 +7,10 @@
 #include <string>
 
 #include "zedbase/macros.h"
-#include "zedui/windows/window_delegate.h"
+#include "zedui/window/platform_window_delegate.h"
 
 namespace zedui {
-class Win32Window {
+class PlatformWindowWin {
  public:
   struct Point {
     unsigned int x;
@@ -25,8 +25,8 @@ class Win32Window {
         : width(width), height(height) {}
   };
 
-  Win32Window();
-  virtual ~Win32Window();
+  PlatformWindowWin(PlatformWindowDelegate* delegate);
+  virtual ~PlatformWindowWin();
 
   bool Create(const std::wstring& title, const Point& origin, const Size& size);
   bool Show();
@@ -34,7 +34,6 @@ class Win32Window {
   HWND GetHandle();
   void SetQuitOnClose(bool quit_on_close);
   RECT GetClientArea();
-  void SetWindowDelegate(WindowDelegate* window_delegate);
 
  protected:
   virtual LRESULT MessageHandler(HWND window,
@@ -50,12 +49,13 @@ class Win32Window {
                                   UINT const message,
                                   WPARAM const wparam,
                                   LPARAM const lparam) noexcept;
-  static Win32Window* GetThisFromHandle(HWND const window) noexcept;
+  static PlatformWindowWin* GetThisFromHandle(HWND const window) noexcept;
   static void UpdateTheme(HWND const window);
+  PlatformWindowDelegate* delegate_;
   bool quit_on_close_ = false;
   HWND window_handle_ = nullptr;
-  WindowDelegate* window_delegate_ = nullptr;
 
-  ZED_DISALLOW_COPY_ASSIGN_AND_MOVE(Win32Window);
+  ZED_DISALLOW_COPY_ASSIGN_AND_MOVE(PlatformWindowWin);
 };
-}  // namespace zedui
+
+} // namespace zedui
