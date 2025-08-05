@@ -3,8 +3,10 @@
 #include <memory>
 #include "yoga/Yoga.h"
 #include "zedbase/macros.h"
-#include "zedui/views/container_view.h"
+#include "zedui/events/event_handler.h"
+#include "zedui/events/event_target.h"
 #include "zedui/geometry/rect.h"
+#include "zedui/views/container_view.h"
 
 namespace zedui {
 
@@ -12,12 +14,12 @@ class PictureLayer;
 class ContainerLayer;
 class DrawContext;
 
-class View {
+class View : public EventTarget, public EventHandler {
  public:
   View();
-  virtual ~View();
+  virtual ~View() override;
 
-  std::shared_ptr<ContainerView> GetParent() const;
+  ContainerView* GetParent() const;
   YGNodeRef GetNode() const;
 
   float GetLeft() const;
@@ -43,12 +45,10 @@ class View {
  protected:
   bool is_dirty_;
   YGNodeRef node_;
-  std::weak_ptr<ContainerView> parent_;
 
  private:
-  void SetParent(std::shared_ptr<ContainerView> parent);
   friend class ContainerView;
-
+  ContainerView* parent_;
   ZED_DISALLOW_COPY_ASSIGN_AND_MOVE(View);
 };
 

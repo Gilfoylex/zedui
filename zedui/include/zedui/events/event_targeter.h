@@ -11,6 +11,12 @@ class EventTargeter {
   virtual ~EventTargeter() = default;
 
   virtual EventTarget* FindTargetForEvent(EventTarget* root, Event* event) = 0;
+  virtual EventTarget* FindNextBestTarget(EventTarget* previous_target,
+                                          Event* event) = 0;
+
+  virtual EventSink* GetNewEventSinkForEvent(const EventTarget* current_root,
+                                             EventTarget* target,
+                                             Event* in_out_event);
 
  private:
   friend class EventProcessor;

@@ -10,4 +10,8 @@ void EventProcessor::OnEventFromSource(Event* event) {
   ZED_CHECK(event->target());
   Event* event_to_dispatch = event;
 }
+
+void EventProcessor::OnEventProcessingStarted(Event* event) {}
+
+void EventProcessor::OnEventProcessingFinished(Event* event) {}
 }  // namespace zedui

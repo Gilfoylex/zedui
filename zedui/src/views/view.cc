@@ -12,8 +12,8 @@ View::~View() {
   }
 }
 
-std::shared_ptr<ContainerView> View::GetParent() const {
-  return parent_.lock();
+ContainerView* View::GetParent() const {
+  return parent_;
 }
 
 YGNodeRef View::GetNode() const {
@@ -69,10 +69,6 @@ void View::Invalidate() {
     parent->MarkDirty();
     parent->NotifyParentForRedraw();
   }
-}
-
-void View::SetParent(std::shared_ptr<ContainerView> parent) {
-  parent_ = parent;
 }
 
 bool View::IsDirty() const {

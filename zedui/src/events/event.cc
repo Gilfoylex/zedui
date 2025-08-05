@@ -4,7 +4,7 @@
 namespace zedui {
 
 Event::Event(EventType type, zedbase::TimePoint time_stamp)
-    : type_(type), timestamp_(time_stamp) {}
+    : type_(type), time_stamp_(time_stamp) {}
 
 CancelModeEvent* Event::AsCancelModeEvent() {
   ZED_CHECK(IsCancelModeEvent());

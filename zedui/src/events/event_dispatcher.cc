@@ -29,6 +29,9 @@ void EventDispatcherDelegate::PreDispatchEvent(EventTarget* target,
 void EventDispatcherDelegate::PostDispatchEvent(EventTarget* target,
                                                 const Event& event) {}
 
+void zedui::EventDispatcherDelegate::DispatchEventToTarget(EventTarget* target,
+                                                           Event* event) {}
+
 EventDispatcher::EventDispatcher(EventDispatcherDelegate* delegate)
     : delegate_(delegate) {}
 
@@ -43,8 +46,7 @@ void EventDispatcher::ProcessEvent(EventTarget* target, Event* event) {
     return;
   }
 
-  Event::DispatcherApi dispatcher_api(event);
-  dispatcher_api.set_target(target);
+  event->set_target(target);
 
   handler_list_.clear();
   target->GetPreTargetHandlers(&handler_list_);
