@@ -7,10 +7,12 @@
 #include <string>
 
 #include "zedbase/macros.h"
+#include "zedui/window/platform_window.h"
 #include "zedui/window/platform_window_delegate.h"
 
+
 namespace zedui {
-class PlatformWindowWin {
+class PlatformWindowWin : public PlatformWindow {
  public:
   struct Point {
     unsigned int x;
@@ -29,8 +31,8 @@ class PlatformWindowWin {
   virtual ~PlatformWindowWin();
 
   bool Create(const std::wstring& title, const Point& origin, const Size& size);
-  bool Show();
-  void Destroy();
+  bool Show() override;
+  void Destroy() override;
   HWND GetHandle();
   void SetQuitOnClose(bool quit_on_close);
   RECT GetClientArea();
@@ -40,8 +42,8 @@ class PlatformWindowWin {
                                  UINT const message,
                                  WPARAM const wparam,
                                  LPARAM const lparam) noexcept;
-  virtual bool OnCreate();
-  virtual void OnDestroy();
+  bool OnCreate();
+  void OnDestroy();
 
  private:
   friend class WindowClassRegistrar;
@@ -58,4 +60,4 @@ class PlatformWindowWin {
   ZED_DISALLOW_COPY_ASSIGN_AND_MOVE(PlatformWindowWin);
 };
 
-} // namespace zedui
+}  // namespace zedui

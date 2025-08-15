@@ -34,15 +34,15 @@ float PictureLayer::GetHeight() const {
 }
 
 void PictureLayer::PushDrawCommand(
-    const std::shared_ptr<DrawCommand>& command) {
-  draw_commands_.push_back(command);
+    std::unique_ptr<DrawCommand> command) {
+  draw_commands_.push_back(std::move(command));
 }
 
-void PictureLayer::RenderToScreen(std::shared_ptr<Renderer> renderer) {
-  renderer_ = renderer;
-  renderer->ExecuteDrawCommands(reinterpret_cast<intptr_t>(this),
-                                Rect::MakeXYWH(left_, top_, width_, height_),
-                                draw_commands_);
+void PictureLayer::RenderToScreen(zedbase::WeakPtr<Renderer> renderer) {
+  renderer_ = std::move(renderer);
+  renderer_->ExecuteDrawCommands(reinterpret_cast<intptr_t>(this),
+                                 Rect::MakeXYWH(left_, top_, width_, height_),
+                                 draw_commands_);
 }
 
 }  // namespace zedui

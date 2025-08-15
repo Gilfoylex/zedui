@@ -3,18 +3,19 @@
 #include <memory>
 #include <vector>
 
+#include "zedbase/memory/ref_ptr.h"
 #include "zedui/render/layer.h"
 
 namespace zedui {
 class ContainerLayer : public Layer {
  public:
-  void Add(std::shared_ptr<Layer> layer);
+  void Add(zedbase::RefPtr<Layer> layer);
 
  public:
-  void RenderToScreen(std::shared_ptr<Renderer> renderer) override;
+  void RenderToScreen(zedbase::WeakPtr<Renderer> renderer) override;
 
  protected:
-  std::vector<std::shared_ptr<Layer>> child_layers_;
+  std::vector<zedbase::RefPtr<Layer>> child_layers_;
 };
 
 }  // namespace zedui

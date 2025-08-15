@@ -16,6 +16,8 @@ class EventHandler {
   virtual void OnCancelMode(CancelModeEvent* event);
   virtual void OnMouseEvent(MouseEvent* event);
 
+  virtual std::string_view GetLogContext() const;
+
  private:
   friend class EventDispatcher;
   friend class EventTarget;

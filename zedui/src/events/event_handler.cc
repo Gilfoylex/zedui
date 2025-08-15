@@ -13,4 +13,8 @@ void EventHandler::OnEvent(Event* event) {
 void EventHandler::OnCancelMode(CancelModeEvent* event) {}
 void EventHandler::OnMouseEvent(MouseEvent* event) {}
 
+std::string_view EventHandler::GetLogContext() const {
+  return "(Unknown EventHandler)";  // Please override
+}
+
 }  // namespace zedui

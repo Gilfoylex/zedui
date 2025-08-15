@@ -13,7 +13,6 @@
 #include "zedui/render/container_layer.h"
 #include "zedui/render/renderer.h"
 
-
 namespace zedui {
 
 class D2DRenderer : public Renderer {
@@ -29,7 +28,7 @@ class D2DRenderer : public Renderer {
   void ExecuteDrawCommands(
       intptr_t key,
       Rect rect,
-      const std::vector<std::shared_ptr<DrawCommand>>& commands) override;
+      const std::vector<std::unique_ptr<DrawCommand>>& commands) override;
   void DeleteLayerCache(intptr_t key) override;
 
  private:

@@ -29,6 +29,7 @@ class EventTarget {
     kDefault,
   };
 
+  virtual bool CanAcceptEvent(const Event& event) = 0;
   virtual EventTarget* GetParentTarget() const = 0;
   virtual EventTargeter* GetEventTargeter() = 0;
 

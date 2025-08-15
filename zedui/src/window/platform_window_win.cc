@@ -255,7 +255,7 @@ bool PlatformWindowWin::OnCreate() {
 
 void PlatformWindowWin::OnDestroy() {
   if (delegate_)
-    delegate_->OnDestroyed();
+    delegate_->OnDestory();
 }
 
 void PlatformWindowWin::UpdateTheme(HWND const window) {

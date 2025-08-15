@@ -14,7 +14,7 @@ class PlatformWindowDelegate {
  public:
   virtual ~PlatformWindowDelegate() = default;
   virtual void OnCreated() = 0;
-  virtual void OnClosed() = 0;
+  virtual void OnDestory() = 0;
   virtual void OnSizeChanged(int width, int height) = 0;
   virtual void DispatchEvent(Event* event) = 0;
   virtual void OnWindowStateChanged(PlatformWindowState old_state,

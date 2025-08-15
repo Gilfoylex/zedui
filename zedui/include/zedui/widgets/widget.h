@@ -8,18 +8,13 @@
 #include "zedui/widgets/native_widget.h"
 #include "zedui/widgets/native_widget_delegate.h"
 
-
 namespace zedui {
-class Widget : public NativeWidgetDelegate,
-               public EventSource,
-               public RootViewDelegate {
+class Widget : public NativeWidgetDelegate, public EventSource {
  public:
   Widget();
   zedbase::WeakPtr<Widget> GetWeakPtr();
-  std::shared_ptr<RootView> GetContentView() const;
-
-  // RootViewDelegate overrides
-  void TriggerRedraw() override;
+  View* GetRootView();
+  const View* GetRootView() const;
 
   // NativeWidgetDelegate overrides
   Widget* AsWidget() override;
@@ -33,7 +28,7 @@ class Widget : public NativeWidgetDelegate,
 
  private:
   std::unique_ptr<NativeWidget> native_widget_;
-  std::shared_ptr<RootView> root_view_;
+  std::unique_ptr<RootView> root_view_;
   std::shared_ptr<Renderer> renderer_;
   zedbase::WeakPtrFactory<Widget> weak_ptr_factory_{this};
   ZED_DISALLOW_COPY_ASSIGN_AND_MOVE(Widget);

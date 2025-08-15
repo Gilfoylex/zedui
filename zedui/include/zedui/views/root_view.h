@@ -1,31 +1,22 @@
 #pragma once
 
 #include <memory>
-#include "zedui/events/event_sink.h"
-#include "zedui/views/container_view.h"
+#include "zedui/events/event_processor.h"
+#include "zedui/views/view.h"
 
 namespace zedui {
 class ContainerLayer;
-class RootViewDelegate {
+class RootView : public EventProcessor, public View {
  public:
-  virtual ~RootViewDelegate() = default;
-  virtual void TriggerRedraw() = 0;
-};
-
-class RootView : public EventSink, public ContainerView {
- public:
-  RootView(RootViewDelegate* delegate);
+  RootView();
   virtual ~RootView();
-  std::shared_ptr<ContainerLayer> BuildLayerTree();
 
   // EventSink overrides
   void OnEventFromSource(Event* event) override;
 
-  // View overrides 
-  void NotifyParentForRedraw() override;
-  void Build(std::shared_ptr<ContainerLayer> layer_tree) override;
+  // View overrides
+  void BuildScene(SceneBuilder* scene_builder) override;
 
  private:
-  RootViewDelegate* delegate_;
 };
 }  // namespace zedui

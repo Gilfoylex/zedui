@@ -4,11 +4,19 @@ namespace zedui {
 
 Widget::Widget() {
   native_widget_ = std::make_unique<NativeWidgetWin>(this);
-  root_view_ = std::make_shared<RootView>(this);
+  root_view_ = std::make_unique<RootView>(this);
 }
 
 zedbase::WeakPtr<Widget> Widget::GetWeakPtr() {
   return weak_ptr_factory_.GetWeakPtr();
+}
+
+View* Widget::GetRootView() {
+  return root_view_.get();
+}
+
+const View* Widget::GetRootView() const {
+  return root_view_.get();
 }
 
 Widget* Widget::AsWidget() {
@@ -16,10 +24,6 @@ Widget* Widget::AsWidget() {
 }
 const Widget* Widget::AsWidget() const {
   return this;
-}
-
-void Widget::TriggerRedraw() {
-  // todo
 }
 
 void Widget::OnNativeWidgetCreated() {
@@ -34,8 +38,8 @@ void Widget::OnNativeWidgetSizeChanged(const Size& new_size) {
   // todo
 }
 
-std::shared_ptr<RootView> Widget::GetContentView() const {
-  return root_view_;
+EventSink* Widget::GetEventSink() {
+  return root_view_.get();
 }
 
 

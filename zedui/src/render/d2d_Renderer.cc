@@ -57,7 +57,7 @@ void D2DRenderer::RenderFrame(std::shared_ptr<ContainerLayer> layer_tree) {
   render_target_->Clear(D2D1::ColorF(D2D1::ColorF::Red));
 
   if (layer_tree) {
-    layer_tree->RenderToScreen(shared_from_this());
+    layer_tree->RenderToScreen(GetWeakPtr());
   }
 
   HRESULT hr = render_target_->EndDraw();
@@ -77,7 +77,7 @@ void D2DRenderer::DestroyRenderTarget() {
 void D2DRenderer::ExecuteDrawCommands(
     intptr_t key,
     Rect rect,
-    const std::vector<std::shared_ptr<DrawCommand>>& commands) {
+    const std::vector<std::unique_ptr<DrawCommand>>& commands) {
   ZED_DCHECK_CREATION_THREAD_IS_CURRENT(thread_checker_);
 
   auto cache_bitmap = GetLayerCache(key);
@@ -96,7 +96,7 @@ void D2DRenderer::ExecuteDrawCommands(
   bitmap_rt->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Blue), &brush);
   for (const auto& command : commands) {
     if (command->type == DrawType::Rect) {
-      auto rectCommandPtr = std::dynamic_pointer_cast<DrawRectCommand>(command);
+      auto rectCommandPtr = dynamic_cast<DrawRectCommand*>(command.get());
       D2D1_RECT_F rect =
           D2D1::RectF(rectCommandPtr->left, rectCommandPtr->top,
                       rectCommandPtr->right, rectCommandPtr->bottom);

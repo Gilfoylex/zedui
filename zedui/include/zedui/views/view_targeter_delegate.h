@@ -15,7 +15,7 @@ class ViewTargeterDelegate {
   virtual bool DoesIntersectRect(const View* target, const Rect& rect) const;
 
   // Returns true if the event should be handled by the target view.
-  virtual View* TargetForRect(ContainerView* root, const Rect& rect);
+  virtual View* TargetForRect(View* root, const Rect& rect);
 };
 
 }  // namespace zedui

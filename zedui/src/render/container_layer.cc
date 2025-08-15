@@ -3,11 +3,11 @@
 
 namespace zedui {
 
-void ContainerLayer::Add(std::shared_ptr<Layer> layer) {
+void ContainerLayer::Add(zedbase::RefPtr<Layer> layer) {
   child_layers_.push_back(layer);
 }
 
-void ContainerLayer::RenderToScreen(std::shared_ptr<Renderer> renderer) {
+void ContainerLayer::RenderToScreen(zedbase::WeakPtr<Renderer> renderer) {
   for (const auto& layer : child_layers_) {
     layer->RenderToScreen(renderer);
   }
