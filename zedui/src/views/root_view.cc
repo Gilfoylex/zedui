@@ -13,6 +13,14 @@ void RootView::OnEventFromSource(Event* event) {
    // todo
 }
 
+EventTarget* RootView::GetRootForEvent(Event* event) {
+  return this;
+}
+
+EventTargeter* RootView::GetDefaultEventTargeter() {
+  return this->GetEventTargeter();
+}
+
 void RootView::BuildScene(SceneBuilder* scene_builder)
 {
   YGNodeCalculateLayout(node_, YGUndefined, YGUndefined, YGDirectionLTR);

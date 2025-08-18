@@ -1,9 +1,9 @@
 #pragma once
 
+#include "zedbase/memory/weak_ptr.h"
 #include "zedui/events/event_dispatcher.h"
 #include "zedui/events/event_sink.h"
 
-#include "zedbase/memory/weak_ptr.h"
 
 namespace zedui {
 

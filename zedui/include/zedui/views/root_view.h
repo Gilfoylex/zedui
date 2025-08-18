@@ -6,13 +6,17 @@
 
 namespace zedui {
 class ContainerLayer;
-class RootView : public EventProcessor, public View {
+class RootView : public View, public EventProcessor {
  public:
   RootView();
   virtual ~RootView();
 
   // EventSink overrides
   void OnEventFromSource(Event* event) override;
+
+  // EventProcessor overrides
+  EventTarget* GetRootForEvent(Event* event) override;
+  EventTargeter* GetDefaultEventTargeter() override;
 
   // View overrides
   void BuildScene(SceneBuilder* scene_builder) override;

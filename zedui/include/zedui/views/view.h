@@ -7,7 +7,6 @@
 #include "zedui/events/event_handler.h"
 #include "zedui/events/event_target.h"
 #include "zedui/geometry/rect.h"
-#include "zedui/render/picture_layer.h"
 #include "zedui/views/view_targeter.h"
 
 
@@ -16,6 +15,7 @@ class Widget;
 class ContainerLayer;
 class DrawContext;
 class SceneBuilder;
+class PictureLayer;
 
 class View : public EventTarget, public EventHandler {
  public:

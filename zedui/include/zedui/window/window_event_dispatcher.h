@@ -5,24 +5,19 @@
 namespace zedui {
 class EventTarget;
 class EventTargeter;
-class WindowTreeHost;
-class Window;
+class PlatformWindow;
 class WindowEventDispatcher : public EventProcessor {
  public:
  public:
-  explicit WindowEventDispatcher(WindowTreeHost* host);
+  explicit WindowEventDispatcher();
   ~WindowEventDispatcher() override = default;
-
-  WindowTreeHost* host() { return host_; }
 
   // EventSink overrides
   EventTarget* GetRootForEvent(Event* event) override;
   virtual EventTargeter* GetDefaultEventTargeter() override;
 
  private:
-  Window* window();
-  const Window* window() const;
-
-  WindowTreeHost* host_;
+  PlatformWindow* window();
+  const PlatformWindow* window() const;
 };
 }  // namespace zedui
